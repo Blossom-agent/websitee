@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>繁花 BLOSSOM AGENT ・ 入門須知</title>
+  <meta name="description" content="繁花經紀公司年齡認證入口" />
+  <meta name="robots" content="noindex, nofollow" />
+
+
+  <style>
+    :root {
+      --ink: #3f3435;
+      --ink-2: #5b4848;
+      --muted: #7f6e6c;
+      --paper: #fbf5ef;
+      --paper-2: #f7ede0;
+      --cream: #f6ebe1;
+      --cream-deep: #efe0d0;
+      --blush: #ecccc6;
+      --rose: #c47a7a;
+      --rose-d: #9a4a4f;
+      --seal: #a93538;
+      --seal-deep: #8c2a2d;
+      --gold: #b89865;
+      --gold-deep: #8a6e44;
+      --line: rgba(86, 62, 62, 0.2);
+      --shadow: 0 30px 80px rgba(81, 54, 50, 0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-weight: 300;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+      line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(ellipse at 75% 12%, rgba(236, 204, 198, 0.55) 0%, transparent 50%),
+        radial-gradient(ellipse at 15% 88%, rgba(196, 184, 144, 0.28) 0%, transparent 55%),
+        linear-gradient(165deg, #fbf5ef 0%, #f6ebe1 58%, #f3e3d3 100%);
+      position: relative;
+    }
+
+ 
+    .petals {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 1;
+      overflow: hidden;
+    }
+    .petals span {
+      position: absolute;
+      display: block;
+      width: 14px; height: 14px;
+      color: var(--blush);
+      opacity: 0;
+      animation: petalFall linear infinite;
+    }
+    .petals span svg { width: 100%; height: 100%; }
+
+    .petals span:nth-child(1)  { left: 6%;  animation-duration: 16s; animation-delay: 0s;   opacity: 0.55; }
+    .petals span:nth-child(2)  { left: 18%; animation-duration: 20s; animation-delay: -2s;  opacity: 0.4;  transform: scale(0.7); }
+    .petals span:nth-child(3)  { left: 28%; animation-duration: 14s; animation-delay: -5s;  opacity: 0.5;  }
+    .petals span:nth-child(4)  { left: 42%; animation-duration: 22s; animation-delay: -8s;  opacity: 0.35; transform: scale(1.2); }
+    .petals span:nth-child(5)  { left: 55%; animation-duration: 18s; animation-delay: -11s; opacity: 0.5;  }
+    .petals span:nth-child(6)  { left: 68%; animation-duration: 24s; animation-delay: -3s;  opacity: 0.4;  transform: scale(0.8); }
+    .petals span:nth-child(7)  { left: 78%; animation-duration: 16s; animation-delay: -14s; opacity: 0.55; }
+    .petals span:nth-child(8)  { left: 88%; animation-duration: 20s; animation-delay: -6s;  opacity: 0.4;  transform: scale(1.1); }
+    .petals span:nth-child(9)  { left: 33%; animation-duration: 18s; animation-delay: -9s;  opacity: 0.35; }
+    .petals span:nth-child(10) { left: 62%; animation-duration: 26s; animation-delay: -12s; opacity: 0.5;  }
+
+    @keyframes petalFall {
+      0%   { transform: translateY(-15vh) rotate(0deg);    opacity: 0; }
+      8%   { opacity: var(--target-opacity, 0.5); }
+      90%  { opacity: var(--target-opacity, 0.5); }
+      100% { transform: translateY(115vh) rotate(540deg); opacity: 0; }
+    }
+
+
+    .gate {
+      position: relative;
+      z-index: 5;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(1rem, 4vh, 2rem) clamp(1rem, 4vw, 1.5rem);
+    }
+
+    .gate-card {
+      position: relative;
+      width: 100%;
+      max-width: clamp(280px, 82vw, 480px);
+      padding:
+        clamp(2.2rem, 6vh, 3.6rem)
+        clamp(1.3rem, 5vw, 2.4rem)
+        clamp(1.7rem, 4.5vh, 2.4rem);
+      background: rgba(251, 245, 239, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      text-align: center;
+      animation: cardRise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    @keyframes cardRise {
+      from { opacity: 0; transform: translateY(30px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .gate-card::before,
+    .gate-card::after {
+      content: '';
+      position: absolute;
+      width: 28px; height: 28px;
+      border: 1px solid var(--gold);
+    }
+    .gate-card::before {
+      top: 14px; left: 14px;
+      border-right: none; border-bottom: none;
+    }
+    .gate-card::after {
+      bottom: 14px; right: 14px;
+      border-left: none; border-top: none;
+    }
+
+    .gate-arc {
+      position: absolute;
+      top: -20px; left: 50%;
+      transform: translateX(-50%);
+      width: clamp(200px, 54vw, 280px);
+      max-width: 90%;
+      opacity: 0.25;
+      color: var(--gold);
+      pointer-events: none;
+    }
+
+    .gate-seal {
+      width: clamp(64px, 14vw, 86px);
+      height: auto;
+      margin: 0 auto clamp(1.2rem, 2.6vh, 1.7rem);
+      position: relative;
+      z-index: 2;
+      animation: sealReveal 1.2s ease 0.3s both;
+    }
+
+    @keyframes sealReveal {
+      from { opacity: 0; transform: scale(0.7) rotate(-8deg); }
+      to   { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    .gate-seal-fallback {
+      display: none;
+      width: clamp(64px, 14vw, 82px);
+      aspect-ratio: 1;
+      margin: 0 auto clamp(1.2rem, 2.6vh, 1.7rem);
+      position: relative;
+      z-index: 2;
+      place-items: center;
+      color: #fdf4ed;
+      background: var(--seal);
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      writing-mode: vertical-rl;
+      border-radius: 3px;
+      box-shadow:
+        inset 0 0 0 3px #fdf4ed,
+        inset 0 0 0 5px var(--seal),
+        0 14px 28px rgba(81, 24, 26, 0.32);
+      animation: sealReveal 1.2s ease 0.3s both;
+    }
+    .gate-seal-fallback.is-shown { display: grid; }
+
+    .gate-eyebrow {
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--seal);
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      animation: fadeIn 0.8s ease 0.6s both;
+    }
+
+    .gate-title {
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-size: clamp(1.15rem, 5.2vw, 1.85rem);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      line-height: 1.7;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      white-space: nowrap;
+      animation: fadeIn 0.8s ease 0.75s both;
+    }
+    .gate-title em {
+      font-style: normal;
+      color: var(--seal);
+      font-weight: 600;
+    }
+
+    .gate-subtitle {
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--seal);
+      letter-spacing: 0.16em;
+      margin-bottom: 0.6rem;
+      animation: fadeIn 0.8s ease 0.85s both;
+    }
+
+    .gate-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 2rem auto;
+      position: relative;
+      animation: lineGrow 0.8s ease 1s both;
+    }
+    .gate-divider::before,
+    .gate-divider::after {
+      content: '✿';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blush);
+      font-size: 0.7rem;
+    }
+    .gate-divider::before { left: -1.2rem; }
+    .gate-divider::after  { right: -1.2rem; }
+
+    @keyframes lineGrow {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    .gate-note {
+      font-size: 0.88rem;
+      line-height: 2;
+      color: var(--ink-2);
+      max-width: 360px;
+      margin: 0 auto 2.4rem;
+      animation: fadeIn 0.8s ease 1.1s both;
+    }
+    .gate-note strong {
+      font-family: "Garamond Premier", "一點明體", serif;
+      color: var(--seal);
+      font-weight: 600;
+    }
+
+    .gate-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      max-width: 280px;
+      margin: 0 auto;
+      animation: fadeIn 0.8s ease 1.25s both;
+    }
+
+    .gate-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.78rem 1.5rem;
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 200ms ease, background 200ms ease, color 200ms ease, box-shadow 200ms ease;
+      border: 1px solid;
+      border-radius: 2px;
+      background: transparent;
+    }
+
+    .gate-btn-primary {
+      background: var(--seal);
+      color: #fff;
+      border-color: var(--seal);
+      box-shadow: 0 8px 22px rgba(169, 53, 56, 0.22);
+    }
+    .gate-btn-primary:hover {
+      background: var(--rose-d);
+      border-color: var(--rose-d);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(169, 53, 56, 0.32);
+    }
+
+    .gate-btn-ghost {
+      background: transparent;
+      color: var(--ink-2);
+      border-color: var(--line);
+    }
+    .gate-btn-ghost:hover {
+      color: var(--ink);
+      border-color: var(--ink-2);
+    }
+
+    .gate-btn .arrow {
+      font-style: normal;
+      transition: transform 0.3s ease;
+    }
+    .gate-btn-primary:hover .arrow { transform: translateX(3px); }
+    .gate-btn-ghost:hover .arrow   { transform: translateX(-3px); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .gate-warnings {
+      position: fixed;
+      left: 0; right: 0;
+      bottom: 1.5rem;
+      z-index: 4;
+      text-align: center;
+      animation: fadeIn 0.8s ease 1.5s both;
+    }
+
+    .gate-warnings-stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 1.4rem;
+      background: rgba(169, 53, 56, 0.08);
+      border: 1px solid rgba(169, 53, 56, 0.25);
+      border-radius: 2px;
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.4em;
+      color: var(--seal-deep);
+    }
+
+    .gate-warnings-stamp::before {
+      content: '⚠';
+      font-size: 0.9rem;
+      letter-spacing: 0;
+    }
+
+    .leave-overlay {
+      position: fixed; inset: 0; z-index: 50;
+      background: rgba(63, 52, 53, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      animation: fadeIn 0.4s ease both;
+    }
+    .leave-overlay.is-visible { display: flex; }
+
+    .leave-card {
+      max-width: 460px;
+      text-align: center;
+      color: var(--paper);
+      animation: cardRise 0.5s ease both;
+    }
+    .leave-card-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1.6rem;
+      color: var(--blush);
+    }
+    .leave-card h2 {
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.3em;
+      margin-bottom: 1.2rem;
+      font-weight: 500;
+    }
+    .leave-card p {
+      font-size: 0.95rem;
+      line-height: 2;
+      opacity: 0.85;
+      margin-bottom: 2rem;
+    }
+    .leave-card a {
+      color: var(--blush);
+      border-bottom: 1px solid var(--blush);
+      text-decoration: none;
+      padding-bottom: 2px;
+    }
+
+    @media (max-width: 560px) {
+      .gate-arc { top: -10px; }
+      .gate-title { letter-spacing: 0.1em; }
+      .gate-note { font-size: 0.85rem; padding: 0 0.5rem; }
+      .gate-btn { padding: 0.7rem 1.2rem; letter-spacing: 0.2em; font-size: 0.84rem; }
+      .gate-warnings-stamp { font-size: 0.7rem; letter-spacing: 0.3em; padding: 0.45rem 1rem; }
+    }
+
+    @media (max-height: 720px) {
+      .gate-divider { margin: 1.4rem auto; }
+      .gate-note { margin-bottom: 1.6rem; }
+    }
+
+    @media (max-height: 560px) {
+      .gate { padding: 0.75rem 1rem; }
+      .gate-card {
+        max-height: 94vh;
+        overflow-y: auto;
+        padding: 1.8rem 1.6rem;
+      }
+      .gate-divider { margin: 1rem auto; }
+      .gate-note { margin-bottom: 1.2rem; line-height: 1.7; }
+      .gate-warnings { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="petals" aria-hidden="true">
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+    <span><svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 0 Q4 5 0 7 Q4 9 7 14 Q10 9 14 7 Q10 5 7 0 Z"/></svg></span>
+  </div>
+
+  <main class="gate">
+    <div class="gate-card">
+
+      <svg class="gate-arc" viewBox="0 0 320 120" fill="none" stroke="currentColor" stroke-width="0.7" aria-hidden="true">
+
+        <path d="M10 120 L10 60 Q10 10 160 10 Q310 10 310 60 L310 120"/>
+        <path d="M26 120 L26 64 Q26 22 160 22 Q294 22 294 64 L294 120" opacity="0.6"/>
+        <rect x="152" y="6" width="16" height="20" fill="currentColor" opacity="0.4"/>
+        <line x1="50" y1="120" x2="50" y2="40" stroke-dasharray="2,4"/>
+        <line x1="270" y1="120" x2="270" y2="40" stroke-dasharray="2,4"/>
+      </svg>
+
+      <img src="assets/seal-fanhua.png" alt="繁花朱印" class="gate-seal"
+           onerror="this.style.display='none'; document.getElementById('gate-seal-fallback').classList.add('is-shown');" />
+      <div class="gate-seal-fallback" id="gate-seal-fallback" aria-hidden="true">繁花</div>
+
+      <div class="gate-eyebrow">— BLOSSOM AGENT ・ ENTRY GATE —</div>
+
+      <h1 class="gate-title">
+        妳 是 否 已 滿 <em>十 八 歲</em> ？
+      </h1>
+
+      <p class="gate-subtitle">Are you over 18 years old?</p>
+
+      <div class="gate-divider"></div>
+
+      <p class="gate-note">
+        繁花為酒店經紀公司<br />
+        因應<strong>未成年禁止飲酒</strong><br />
+        進入網站前，請確認妳已年滿 <strong>18 歲</strong>。<br />
+      </p>
+
+      <div class="gate-actions">
+        <button class="gate-btn gate-btn-primary" id="btn-enter" type="button">
+          <span>叩 門 入 內</span>
+          <span class="arrow">→</span>
+        </button>
+        <button class="gate-btn gate-btn-ghost" id="btn-leave" type="button">
+          <span class="arrow">←</span>
+          <span>轉 身 告 辭</span>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="gate-warnings">
+    <div class="gate-warnings-stamp">
+      <span>未 滿 十 八 歲 禁 止 進 入 ・ 禁 止 酒 駕</span>
+    </div>
+  </div>
+
+  <div class="leave-overlay" id="leave-overlay" role="dialog" aria-modal="true" aria-labelledby="leave-title">
+    <div class="leave-card">
+      <svg class="leave-card-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+        <circle cx="28" cy="28" r="22"/>
+        <path d="M20 28 Q28 22 36 28"/>
+        <circle cx="22" cy="24" r="1.2" fill="currentColor"/>
+        <circle cx="34" cy="24" r="1.2" fill="currentColor"/>
+      </svg>
+      <h2 id="leave-title">花 期 未 至</h2>
+      <p>
+        我們明白——並非每朵花都在此刻盛開。<br />
+        待妳滿十八歲後，繁花的門仍將為妳留著。<br />
+        <br />
+        在那之前，願妳被善待、被理解。
+      </p>
+      <a href="https://www.youtube.com/watch?v=ESKTiYwV7iA" rel="noopener">離 開 此 處 →</a>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = 'fanhua_age_verified';
+
+      try {
+        if (sessionStorage.getItem(STORAGE_KEY) === '1') {
+          window.location.replace('main.html');
+          return;
+        }
+      } catch (err) {
+      }
+
+      const enterBtn = document.getElementById('btn-enter');
+      enterBtn?.addEventListener('click', () => {
+        try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (_) {}
+        document.body.style.transition = 'opacity 0.5s ease';
+        document.body.style.opacity = '0';
+        setTimeout(() => {
+          window.location.href = 'main.html';
+        }, 480);
+      });
+
+      const leaveBtn = document.getElementById('btn-leave');
+      const overlay = document.getElementById('leave-overlay');
+      leaveBtn?.addEventListener('click', () => {
+        overlay?.classList.add('is-visible');
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay?.classList.contains('is-visible')) {
+          overlay.classList.remove('is-visible');
+        }
+        if (e.key === 'Enter' && !overlay?.classList.contains('is-visible')) {
+          enterBtn?.click();
+        }
+      });
+
+      overlay?.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.remove('is-visible');
+        }
+      });
+
+      document.querySelectorAll('.petals span').forEach((p) => {
+        p.style.setProperty('--target-opacity', (0.3 + Math.random() * 0.4).toFixed(2));
+      });
+    })();
+  </script>
+
+</body>
+</html>
