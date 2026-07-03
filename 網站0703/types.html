@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>花格類型介紹｜繁花 BLOSSOM AGENT</title>
+    <meta
+      name="description"
+      content="完整介紹 12 種花格人格：紅玫瑰、牡丹、桔梗、紫羅蘭、向日葵、蘭花、百合、茉莉、薰衣草、洋甘菊、梅花與櫻花。"
+    />
+    <style>
+      :root {
+        --ink: #3f3435;
+        --ink-2: #5b4848;
+        --muted: #7f6e6c;
+        --paper: #fbf5ef;
+        --cream: #f6ebe1;
+        --blush: #ecccc6;
+        --rose: #c47a7a;
+        --rose-d: #9a4a4f;
+        --sage: #9fb39a;
+        --moss: #5e7659;
+        --plum: #7d4f64;
+        --seal: #a93538;
+        --gold: #b89865;
+        --line: rgba(86, 62, 62, 0.14);
+        --shadow: 0 24px 70px rgba(81, 54, 50, 0.14);
+        --shadow-soft: 0 12px 28px rgba(81, 54, 50, 0.09);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        font-family: "Garamond Premier", "一點明體", "Noto Serif TC", serif;
+        font-weight: 300;
+        line-height: 1.85;
+        letter-spacing: 0.02em;
+        background:
+          radial-gradient(ellipse at 82% 0%, rgba(236, 204, 198, 0.42) 0%, transparent 42%),
+          radial-gradient(ellipse at 10% 100%, rgba(184, 152, 101, 0.22) 0%, transparent 48%),
+          linear-gradient(165deg, #fbf5ef 0%, #f6ebe1 55%, #f3e3d3 100%);
+        overflow-x: hidden;
+      }
+
+      a { color: inherit; text-decoration: none; }
+      img { display: block; max-width: 100%; }
+      h1, h2, h3, p { margin: 0; }
+
+      .petals { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+      .petals span {
+        position: absolute;
+        top: -8%;
+        width: 12px;
+        height: 12px;
+        background: radial-gradient(circle at 30% 30%, #fff0ed 0%, #f0c1bd 60%, #d99592 100%);
+        border-radius: 70% 0 70% 0;
+        opacity: 0;
+        animation: petalFall linear infinite;
+      }
+      .petals span:nth-child(1) { left: 8%;  animation-duration: 16s; animation-delay: 0s; }
+      .petals span:nth-child(2) { left: 22%; animation-duration: 19s; animation-delay: 2s; }
+      .petals span:nth-child(3) { left: 39%; animation-duration: 22s; animation-delay: 5s; }
+      .petals span:nth-child(4) { left: 56%; animation-duration: 17s; animation-delay: 1s; }
+      .petals span:nth-child(5) { left: 71%; animation-duration: 21s; animation-delay: 4s; }
+      .petals span:nth-child(6) { left: 88%; animation-duration: 18s; animation-delay: 7s; }
+      @keyframes petalFall {
+        0%   { transform: translateY(0) translateX(0) rotate(0); opacity: 0; }
+        8%   { opacity: 0.55; }
+        100% { transform: translateY(112vh) translateX(70px) rotate(540deg); opacity: 0; }
+      }
+
+      /* ===== 頁首橫幅 ===== */
+      .site-header {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 76px;
+        padding: 14px clamp(18px, 4vw, 54px);
+        background: rgba(251, 245, 239, 0.86);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        transition: background 240ms ease, box-shadow 240ms ease;
+      }
+      .site-header.is-scrolled {
+        background: rgba(251, 245, 239, 0.96);
+        box-shadow: 0 1px 20px rgba(81, 54, 50, 0.06);
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        font-family: "Garamond Premier", "一點明體", serif;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      .brand-mark {
+        width: 46px;
+        height: 46px;
+        object-fit: contain;
+      }
+      .brand-en {
+        color: var(--ink-2);
+        font-family: "Garamond Premier", "一點明體", serif;
+        font-size: 0.86rem;
+        letter-spacing: 0.18em;
+      }
+      .site-nav {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .nav-home {
+        padding: 9px 18px;
+        color: #fff;
+        background: var(--seal);
+        border-radius: 2px;
+        font-size: 0.94rem;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        transition: background 200ms ease, transform 200ms ease;
+      }
+      .nav-home:hover { background: var(--rose-d); color: #fff; transform: translateY(-1px); }
+      .nav-home.ghost {
+        color: var(--seal);
+        background: transparent;
+        border: 1px solid rgba(169, 53, 56, 0.35);
+      }
+      .nav-home.ghost:hover { background: rgba(169, 53, 56, 0.06); color: var(--seal); }
+
+      .page {
+        position: relative;
+        z-index: 1;
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: calc(76px + clamp(30px, 5vw, 56px)) 0 76px;
+      }
+
+      .hero {
+        position: relative;
+        text-align: center;
+        padding: clamp(20px, 4vw, 44px) clamp(8px, 3vw, 24px);
+      }
+      .eyebrow {
+        color: var(--seal);
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+      }
+      .hero h1 {
+        margin-top: 8px;
+        font-size: clamp(2rem, 5vw, 3.05rem);
+        font-weight: 600;
+        line-height: 1.25;
+        letter-spacing: 0.08em;
+      }
+      .hero .lead {
+        margin: 16px auto 0;
+        max-width: 780px;
+        color: var(--ink-2);
+        font-size: 1.04rem;
+      }
+      .hero-note {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 22px;
+      }
+      .note-chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: rgba(196, 122, 122, 0.12);
+        color: var(--rose-d);
+        font-size: 0.92rem;
+        font-weight: 500;
+      }
+
+      .quick-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 24px 0 0;
+      }
+      .quick-nav a {
+        padding: 7px 13px;
+        border: 1px solid rgba(169, 53, 56, 0.18);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.64);
+        color: var(--ink-2);
+        font-size: 0.92rem;
+        transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+      }
+      .quick-nav a:hover {
+        transform: translateY(-2px);
+        background: rgba(169, 53, 56, 0.09);
+        color: var(--seal);
+      }
+
+      .section {
+        margin-top: 34px;
+      }
+      .section-title {
+        margin-bottom: 18px;
+        font-size: 1.45rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+      }
+      /* 區塊標頭：英文標語 + 中文標題，置中（與 main 一致） */
+      .section-head { text-align: center; margin-bottom: 26px; }
+      .section-head .section-title { margin-bottom: 0; }
+      .section-kicker {
+        margin: 0 0 10px;
+        color: var(--seal);
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        text-align: center;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      /* 花格標籤（點擊切換） */
+      .type-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 26px;
+      }
+      .type-tab {
+        padding: 8px 16px;
+        border: 1px solid rgba(169, 53, 56, 0.18);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.64);
+        color: var(--ink-2);
+        font-family: inherit;
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        transition: transform 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
+      }
+      .type-tab:hover {
+        transform: translateY(-2px);
+        background: rgba(169, 53, 56, 0.09);
+        color: var(--seal);
+      }
+      .type-tab.is-active {
+        background: var(--seal);
+        color: #fff7ee;
+        border-color: var(--seal);
+      }
+      /* 單一花格面板：一次只顯示被選取的花格 */
+      .type-panels .card { display: none; max-width: 680px; margin: 0 auto; }
+      .type-panels .card.is-active { display: block; animation: fadeIn 360ms ease both; }
+      .card {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(20px, 3vw, 26px);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: rgba(255,255,255,0.8);
+        box-shadow: var(--shadow-soft);
+      }
+      .card-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .flower-icon {
+        flex: 0 0 auto;
+        width: 64px;
+        height: 76px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: var(--cream);
+        box-shadow: 0 4px 12px rgba(81, 54, 50, 0.10);
+      }
+      .flower-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .flower-title { flex: 1; }
+      .flower-title h3 {
+        font-size: 1.34rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+      }
+      .flower-title .en {
+        margin-top: 3px;
+        color: var(--gold);
+        font-size: 0.88rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+      .number {
+        display: inline-grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(169, 53, 56, 0.09);
+        color: var(--seal);
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .tagline {
+        margin-top: 14px;
+        color: var(--seal);
+        font-weight: 600;
+        font-size: 1.02rem;
+      }
+      .desc {
+        margin-top: 10px;
+        color: var(--ink-2);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 15px;
+      }
+      .chip {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(169, 53, 56, 0.08);
+        color: var(--rose-d);
+        font-size: 0.88rem;
+      }
+      .info-box {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-left: 3px solid var(--rose);
+        background: rgba(196, 122, 122, 0.10);
+        color: var(--ink);
+      }
+      .info-box strong {
+        color: var(--seal);
+        font-weight: 600;
+      }
+      .mini-quote {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: var(--cream);
+        color: var(--ink-2);
+      }
+
+      .map-card {
+        padding: clamp(22px, 3vw, 28px);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: rgba(255,255,255,0.78);
+        box-shadow: var(--shadow-soft);
+      }
+      .type-map {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .type-pill {
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(246, 235, 225, 0.78);
+        border: 1px solid rgba(86, 62, 62, 0.10);
+      }
+      .type-pill b {
+        display: block;
+        color: var(--seal);
+        font-size: 0.98rem;
+        letter-spacing: 0.08em;
+      }
+      .type-pill span {
+        display: block;
+        margin-top: 3px;
+        color: var(--ink-2);
+        font-size: 0.9rem;
+      }
+
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      .cta-row .btn { border-radius: 2px; }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 11px 22px;
+        border-radius: 999px;
+        background: var(--seal);
+        color: #fff7ee;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+        box-shadow: 0 12px 24px rgba(169, 53, 56, 0.20);
+      }
+      .btn:hover { transform: translateY(-2px); background: var(--rose-d); }
+      .btn.ghost {
+        background: transparent;
+        color: var(--seal);
+        border: 1px solid rgba(169,53,56,0.35);
+        box-shadow: none;
+      }
+      .btn.ghost:hover { background: rgba(169, 53, 56, 0.06); }
+
+      /* ===== 網頁尾部（與 main 一致） ===== */
+      .site-footer {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 14px;
+        padding: 60px clamp(20px, 5vw, 76px) 40px;
+        background: #2b1f1f;
+        color: #d8c5c1;
+        text-align: center;
+      }
+      .site-footer .footer-seal { display: grid; place-items: center; }
+      .site-footer .footer-icon { width: clamp(84px, 12vw, 112px); height: auto; display: block; }
+      .site-footer .footer-tagline {
+        margin: 0;
+        font-family: "Garamond Premier", "一點明體", serif;
+        font-size: 1.15rem;
+        letter-spacing: 0.16em;
+        color: #ecd9d5;
+      }
+      .site-footer .footer-copy {
+        margin: 0;
+        color: #8a7572;
+        font-size: 0.84rem;
+        letter-spacing: 0.1em;
+      }
+
+      .fade-in { animation: fadeIn 520ms ease both; }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 780px) {
+        .grid { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 620px) {
+        .site-header { min-height: 64px; padding: 10px clamp(14px, 4vw, 24px); }
+        .brand { gap: 10px; }
+        .brand-mark { width: 40px; height: 40px; }
+        .brand-en { font-size: 0.74rem; }
+        .site-nav { gap: 8px; }
+        .nav-home { padding: 8px 12px; font-size: 0.84rem; }
+        .page { width: min(100% - 24px, 1120px); padding-top: calc(64px + 24px); }
+        .hero { border-radius: 24px; }
+        /* MBTI 對照表：手機版維持 4×4，縮小膠囊以塞入四欄 */
+        .type-map { gap: 8px; }
+        .type-pill { padding: 9px 7px; border-radius: 12px; text-align: center; }
+        .type-pill b { font-size: 0.82rem; letter-spacing: 0.02em; }
+        .type-pill span { font-size: 0.76rem; }
+      }
+      @media (max-width: 380px) {
+        .type-map { gap: 6px; }
+        .type-pill { padding: 7px 5px; }
+        .type-pill b { font-size: 0.74rem; }
+        .type-pill span { font-size: 0.7rem; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .petals span { animation: none; display: none; }
+        .fade-in { animation: none; }
+        .type-panels .card.is-active { animation: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="petals" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <header class="site-header" aria-label="主導覽">
+      <a class="brand" href="main_cultivate.html" aria-label="繁花首頁">
+        <img class="brand-mark" src="assets/Stamp_Vert.png" alt="繁花 BLOSSOM AGENT" />
+        <span class="brand-en">酒店經紀公司</span>
+      </a>
+      <nav class="site-nav">
+        <a href="main_cultivate.html" class="nav-home ghost">繁花首頁</a>
+        <a href="quiz.html" class="nav-home">花格測驗</a>
+      </nav>
+    </header>
+
+    <main class="page fade-in">
+      <section class="hero" aria-labelledby="guide-title">
+        <p class="eyebrow">FLOWER TYPE GUIDE</p>
+        <h1 id="guide-title">12 種花格人格，對應妳不同的綻放姿態</h1>
+        <p class="lead">
+          每一種花格都不是單純的性格標籤，而是一種氣質入口：妳如何在人群中被看見、如何愛人、如何面對壓力，又如何保留自己的內在世界。MBTI 對照僅作為趣味性的氣質參考，真正重要的是每一朵花背後的情緒、關係與生活姿態。
+        </p>
+        <div class="hero-note">
+          <span class="note-chip">12 種花格</span>
+          <span class="note-chip">花語 × 性格意象</span>
+          <span class="note-chip">MBTI 氣質參考</span>
+        </div>
+      </section>
+
+      <section class="section" id="types">
+        <div class="section-head">
+          <p class="section-kicker">FULL CATEGORY</p>
+          <h2 class="section-title">花格完整介紹</h2>
+        </div>
+        <div class="type-tabs" role="tablist" aria-label="花格標籤">
+          <button class="type-tab is-active" type="button" data-target="rose">紅玫瑰</button>
+          <button class="type-tab" type="button" data-target="peony">牡丹</button>
+          <button class="type-tab" type="button" data-target="bellflower">桔梗</button>
+          <button class="type-tab" type="button" data-target="violet">紫羅蘭</button>
+          <button class="type-tab" type="button" data-target="sunflower">向日葵</button>
+          <button class="type-tab" type="button" data-target="orchid">蘭花</button>
+          <button class="type-tab" type="button" data-target="lily">百合</button>
+          <button class="type-tab" type="button" data-target="jasmine">茉莉</button>
+          <button class="type-tab" type="button" data-target="lavender">薰衣草</button>
+          <button class="type-tab" type="button" data-target="chamomile">洋甘菊</button>
+          <button class="type-tab" type="button" data-target="plum">梅花</button>
+          <button class="type-tab" type="button" data-target="sakura">櫻花</button>
+        </div>
+        <div class="type-panels">
+          <article class="card is-active" id="rose">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-rose.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>紅玫瑰</h3>
+                <p class="en">Red Rose</p>
+              </div>
+              <span class="number">01</span>
+            </div>
+            <p class="tagline">妳不是等待被看見的人，妳本身就是焦點。</p>
+            <p class="desc">紅玫瑰型的人熱情、直接，擅長把情緒與吸引力大方展現出來。妳有很強的存在感，也不害怕主動靠近自己想要的人事物。妳的魅力不是安靜等待，而是用眼神、語氣與行動讓人記住妳。</p>
+            <div class="chips"><span class="chip">熱情</span><span class="chip">魅力</span><span class="chip">主動</span><span class="chip">存在感</span></div>
+            <div class="info-box"><strong>花語：</strong>熱烈的愛、自信魅力、主動追求。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>ENFJ / ESTP。擅長用外放能量帶動關係，也敢把喜歡與企圖心表達出來。</div>
+            <div class="mini-quote">像是走進房間後，不需要開口也會被注意到的人。</div>
+          </article>
+
+          <article class="card" id="peony">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-peony.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>牡丹</h3>
+                <p class="en">Peony</p>
+              </div>
+              <span class="number">02</span>
+            </div>
+            <p class="tagline">真正的氣場，不需要用力證明。</p>
+            <p class="desc">牡丹型的人有成熟而穩定的氣勢，做事有標準，也很清楚自己要什麼。妳不急著討好別人，而是用成果、格局與判斷力建立位置。妳的魅力來自一種穩穩坐在主位上的從容。</p>
+            <div class="chips"><span class="chip">大器</span><span class="chip">成熟</span><span class="chip">掌控</span><span class="chip">領袖感</span></div>
+            <div class="info-box"><strong>花語：</strong>富貴、大器、成熟氣場、領袖感。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>ENTJ / ESTJ。重視秩序、成果與方向感，能在關鍵時刻做出決定。</div>
+            <div class="mini-quote">像一場不張揚卻讓人一眼記住的盛裝。</div>
+          </article>
+
+          <article class="card" id="bellflower">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-bellflower.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>桔梗</h3>
+                <p class="en">Balloon Flower</p>
+              </div>
+              <span class="number">03</span>
+            </div>
+            <p class="tagline">妳的溫柔裡，有一種不會退讓的信念。</p>
+            <p class="desc">桔梗型的人重視真心與承諾，不喜歡浮誇的關係，也不願意違背自己的內在信念。妳看起來柔和，實際上很有原則；一旦認定某件事，就會安靜而堅定地守著。</p>
+            <div class="chips"><span class="chip">真誠</span><span class="chip">理想</span><span class="chip">承諾</span><span class="chip">內在信念</span></div>
+            <div class="info-box"><strong>花語：</strong>真誠的愛、永恆承諾、理想與等待。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>INFP。重視內在價值與情感真實性，比起熱鬧，更在意是否真心。</div>
+            <div class="mini-quote">像把一句承諾收在心裡，然後很久很久都沒有忘記的人。</div>
+          </article>
+
+          <article class="card" id="violet">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-violet.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>紫羅蘭</h3>
+                <p class="en">Violet</p>
+              </div>
+              <span class="number">04</span>
+            </div>
+            <p class="tagline">妳不需要被所有人理解，只需要被真正讀懂。</p>
+            <p class="desc">紫羅蘭型的人敏銳、內斂，常常能看見別人沒說出口的情緒。妳不輕易展開自己，但內在世界極深。妳的魅力像夜色裡的花，不張揚，卻讓真正靠近的人很難忘。</p>
+            <div class="chips"><span class="chip">神秘</span><span class="chip">深度</span><span class="chip">洞察</span><span class="chip">內斂</span></div>
+            <div class="info-box"><strong>花語：</strong>神秘、忠誠、深情、精神性的愛。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>INFJ。擅長理解人心，也習慣用較安靜的方式守護自己的世界。</div>
+            <div class="mini-quote">像夜色裡一朵不輕易綻放，但一旦綻放就很難忘的花。</div>
+          </article>
+
+          <article class="card" id="sunflower">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-sunflower.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>向日葵</h3>
+                <p class="en">Sunflower</p>
+              </div>
+              <span class="number">05</span>
+            </div>
+            <p class="tagline">妳把光帶到哪裡，哪裡就開始變得熱鬧。</p>
+            <p class="desc">向日葵型的人明亮、開放，擅長把希望與活力感染給周圍的人。妳不喜歡被困住，喜歡自由選擇，也喜歡讓生活保持新鮮感。妳的魅力是自然散發的熱度。</p>
+            <div class="chips"><span class="chip">明亮</span><span class="chip">自由</span><span class="chip">樂觀</span><span class="chip">感染力</span></div>
+            <div class="info-box"><strong>花語：</strong>陽光、自由、樂觀、追逐熱愛。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>ENFP / ESFP。充滿情緒感染力，擅長把當下變得有趣、熱烈而鮮活。</div>
+            <div class="mini-quote">像永遠知道光在哪裡，也願意把別人一起帶過去的人。</div>
+          </article>
+
+          <article class="card" id="orchid">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-orchid.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>蘭花</h3>
+                <p class="en">Orchid</p>
+              </div>
+              <span class="number">06</span>
+            </div>
+            <p class="tagline">妳的高級感，來自不輕易迎合。</p>
+            <p class="desc">蘭花型的人有獨特品味與清楚標準，不喜歡和別人一樣。妳可能帶有一點距離感，但那不是冷漠，而是妳對品質、界線與自我風格的堅持。越了解妳，越會發現妳的層次。</p>
+            <div class="chips"><span class="chip">獨特</span><span class="chip">聰明</span><span class="chip">高標準</span><span class="chip">疏離美</span></div>
+            <div class="info-box"><strong>花語：</strong>高雅、獨特、智慧、難以取代。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>INTJ / ENTP。思考獨立、標準清楚，魅力來自不可複製的個人風格。</div>
+            <div class="mini-quote">像一件少數人才看得懂，但一看懂就移不開眼的作品。</div>
+          </article>
+
+          <article class="card" id="lily">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-lily.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>百合</h3>
+                <p class="en">Lily</p>
+              </div>
+              <span class="number">07</span>
+            </div>
+            <p class="tagline">乾淨、端正、可靠，是妳最安靜的力量。</p>
+            <p class="desc">百合型的人重視秩序、界線與責任感。妳做事穩，做人端正，不喜歡太混亂或太浮誇的環境。妳的美不是強烈衝擊，而是越相處越讓人信任的清澈感。</p>
+            <div class="chips"><span class="chip">純粹</span><span class="chip">高雅</span><span class="chip">端莊</span><span class="chip">穩定</span></div>
+            <div class="info-box"><strong>花語：</strong>純粹、高雅、端莊、責任。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>ISTJ。重視原則與穩定，常用可靠的行動證明自己的價值。</div>
+            <div class="mini-quote">像一束乾淨的白色花，不爭搶，卻讓人很安心。</div>
+          </article>
+
+          <article class="card" id="jasmine">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-jasmine.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>茉莉</h3>
+                <p class="en">Jasmine</p>
+              </div>
+              <span class="number">08</span>
+            </div>
+            <p class="tagline">妳不張揚，卻有一種讓人想靠近的香氣。</p>
+            <p class="desc">茉莉型的人細膩、感性，擅長用生活美感與柔和氣質打動人。妳不一定喜歡成為全場焦點，但妳的自然、真實與舒適感，常常讓人越靠近越喜歡。</p>
+            <div class="chips"><span class="chip">細膩</span><span class="chip">感性</span><span class="chip">自然</span><span class="chip">柔和魅力</span></div>
+            <div class="info-box"><strong>花語：</strong>溫柔、親切、感性、自然魅力。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>ISFP。對美感與感受敏銳，魅力往往來自真實而不刻意的姿態。</div>
+            <div class="mini-quote">像傍晚空氣裡淡淡的香氣，不強迫，卻讓人忍不住記住。</div>
+          </article>
+
+          <article class="card" id="lavender">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-lavender.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>薰衣草</h3>
+                <p class="en">Lavender</p>
+              </div>
+              <span class="number">09</span>
+            </div>
+            <p class="tagline">妳的安靜不是空白，而是一整座正在運轉的宇宙。</p>
+            <p class="desc">薰衣草型的人冷靜、理性，喜歡保留自己的空間，也習慣先想清楚再行動。妳的節奏不急不躁，給人一種安定感。妳的魅力常常不是第一眼，而是長時間相處後的清醒與深度。</p>
+            <div class="chips"><span class="chip">冷靜</span><span class="chip">療癒</span><span class="chip">思考</span><span class="chip">安定</span></div>
+            <div class="info-box"><strong>花語：</strong>安定、療癒、等待、思考與沉澱。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>INTP。習慣從內在邏輯理解世界，享受獨處與思考的自由。</div>
+            <div class="mini-quote">像一個安靜的房間，裡面其實放著很多正在發光的想法。</div>
+          </article>
+
+          <article class="card" id="chamomile">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-chamomile.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>洋甘菊</h3>
+                <p class="en">Chamomile</p>
+              </div>
+              <span class="number">10</span>
+            </div>
+            <p class="tagline">妳像一杯溫熱的茶，讓疲憊的人慢慢放鬆。</p>
+            <p class="desc">洋甘菊型的人溫和、可靠，擅長照顧細節與穩定關係。妳不一定會大聲宣告自己的付出，但總會在重要時刻出現。妳的力量是讓人安心，也讓混亂慢慢恢復秩序。</p>
+            <div class="chips"><span class="chip">照顧</span><span class="chip">溫和</span><span class="chip">陪伴</span><span class="chip">安心感</span></div>
+            <div class="info-box"><strong>花語：</strong>逆境中的力量、安撫、陪伴、修復。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>ISFJ。擅長用細節與陪伴建立安全感，是關係裡穩定的照顧者。</div>
+            <div class="mini-quote">像在混亂的一天裡，替人留下一盞暖燈的人。</div>
+          </article>
+
+          <article class="card" id="plum">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-plum.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>梅花</h3>
+                <p class="en">Plum Blossom</p>
+              </div>
+              <span class="number">11</span>
+            </div>
+            <p class="tagline">越冷的時候，越看得出妳的韌性。</p>
+            <p class="desc">梅花型的人冷靜、耐壓，不喜歡多說，但真正遇到困難時很能扛。妳有自己的判斷，不容易被情緒牽著走，也擅長在混亂中快速找到方法。妳的美帶著一點冷感，卻非常有力量。</p>
+            <div class="chips"><span class="chip">堅韌</span><span class="chip">獨立</span><span class="chip">控場</span><span class="chip">沉著</span></div>
+            <div class="info-box"><strong>花語：</strong>堅忍、不屈、獨立、逆境中的盛開。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>ISTP。重視實際解法與行動效率，越在壓力中越能展現冷靜。</div>
+            <div class="mini-quote">像冬天裡開出的花，不需要熱鬧，也證明自己很強。</div>
+          </article>
+
+          <article class="card" id="sakura">
+            <div class="card-head">
+              <span class="flower-icon" aria-hidden="true"><img src="assets/flowers/flower-sakura.png" alt="" /></span>
+              <div class="flower-title">
+                <h3>櫻花</h3>
+                <p class="en">Sakura</p>
+              </div>
+              <span class="number">12</span>
+            </div>
+            <p class="tagline">妳讓相遇變得溫柔，也讓離別被人記住。</p>
+            <p class="desc">櫻花型的人親切、重視關係，擅長讓人感受到被歡迎與被記得。妳的魅力不是壓迫式的存在感，而是一種溫柔的氛圍；妳讓人想靠近，也讓人離開後仍然想念。</p>
+            <div class="chips"><span class="chip">親和</span><span class="chip">溫柔</span><span class="chip">關係感</span><span class="chip">短暫卻難忘</span></div>
+            <div class="info-box"><strong>花語：</strong>親和、溫柔、短暫之美、珍惜當下。</div>
+            <div class="info-box"><strong>MBTI 參考：</strong>ESFJ。重視互動、記得細節，擅長讓人感到被接住與被歡迎。</div>
+            <div class="mini-quote">像春天的花雨，停留不久，卻讓人一直想起。</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="mbti">
+        <div class="section-head">
+          <p class="section-kicker">MBTI COMPARISON</p>
+          <h2 class="section-title">MBTI 氣質對照總覽</h2>
+        </div>
+        <div class="map-card">
+          <p>
+            這份對照不是 MBTI 的正式分類，而是用來輔助理解花格氣質：外向型不一定都熱烈，內向型也不一定都安靜；花格更重視的是一個人在關係、壓力、愛情與自我表達中的「綻放方式」。
+          </p>
+          <div class="type-map" aria-label="MBTI 與花格對照">
+            <div class="type-pill"><b>ENFJ</b><span>紅玫瑰</span></div>
+            <div class="type-pill"><b>ESTP</b><span>紅玫瑰</span></div>
+            <div class="type-pill"><b>ENTJ</b><span>牡丹</span></div>
+            <div class="type-pill"><b>ESTJ</b><span>牡丹</span></div>
+            <div class="type-pill"><b>INFP</b><span>桔梗</span></div>
+            <div class="type-pill"><b>INFJ</b><span>紫羅蘭</span></div>
+            <div class="type-pill"><b>ENFP</b><span>向日葵</span></div>
+            <div class="type-pill"><b>ESFP</b><span>向日葵</span></div>
+            <div class="type-pill"><b>INTJ</b><span>蘭花</span></div>
+            <div class="type-pill"><b>ENTP</b><span>蘭花</span></div>
+            <div class="type-pill"><b>ISTJ</b><span>百合</span></div>
+            <div class="type-pill"><b>ISFP</b><span>茉莉</span></div>
+            <div class="type-pill"><b>INTP</b><span>薰衣草</span></div>
+            <div class="type-pill"><b>ISFJ</b><span>洋甘菊</span></div>
+            <div class="type-pill"><b>ISTP</b><span>梅花</span></div>
+            <div class="type-pill"><b>ESFJ</b><span>櫻花</span></div>
+          </div>
+          <div class="cta-row">
+            <a class="btn" href="quiz.html">開始花格測驗</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-seal" aria-hidden="true">
+        <img class="footer-icon" src="assets/Footer_ICON.png" alt="繁花 BLOSSOM AGENT" />
+      </div>
+      <p class="footer-tagline">讓每一朵花，盛開成自己。</p>
+      <p class="footer-copy">© <span id="year"></span> 繁花 BLOSSOM AGENT. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const header = document.querySelector('.site-header');
+      const onScroll = () => header && header.classList.toggle('is-scrolled', window.scrollY > 24);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      const year = document.getElementById('year');
+      if (year) year.textContent = new Date().getFullYear();
+
+      // 花格標籤：點擊切換，僅顯示對應花格的介紹
+      const tabs = document.querySelectorAll('.type-tab');
+      const panels = document.querySelectorAll('.type-panels .card');
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const target = tab.dataset.target;
+          tabs.forEach((t) => t.classList.toggle('is-active', t === tab));
+          panels.forEach((p) => p.classList.toggle('is-active', p.id === target));
+        });
+      });
+    </script>
+  </body>
+</html>

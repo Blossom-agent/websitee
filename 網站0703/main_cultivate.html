@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>繁花娛樂經紀公司｜BLOSSOM AGENT</title>
+    <meta
+      name="description"
+      content="繁花 BLOSSOM AGENT 以合作與培育的方式陪伴女公關成長，讓不同特質的妳，在屬於自己的夜場舞臺上盛開。"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="主導覽">
+      <a class="brand" href="#top" aria-label="繁花首頁">
+        <img class="brand-mark" src="assets/Stamp_Vert.png" alt="繁花 BLOSSOM AGENT" />
+        <span class="brand-en">酒店經紀公司</span>
+      </a> 
+      <button class="nav-toggle" type="button" aria-label="開啟選單" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav">
+        <a href="#video-carousel" class="flower-toggle" aria-label="前往影片輪播">影片</a>
+        <a href="#philosophy">成立理念</a>
+        <a href="#bloom-calculator">收入試算</a>
+        <a href="quiz.html">花格測驗</a>
+        <a href="#faq">相關問題</a>
+        <a href="index.html#purpose">回到規劃選擇</a>
+        <a href="#contact" class="nav-cta">聯絡資訊</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <!-- ========== 第一區：主頁 ========== -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-image" aria-hidden="true"></div>
+
+        <div class="hero-bouquet" role="img" aria-label="繁花花束">
+          <svg viewBox="0 0 360 600" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="petal-red" cx="40%" cy="40%" r="60%">
+                <stop offset="0%" stop-color="#f0a6a3" />
+                <stop offset="60%" stop-color="#c44a4a" />
+                <stop offset="100%" stop-color="#7a1f22" />
+              </radialGradient>
+              <radialGradient id="petal-blush" cx="40%" cy="40%" r="60%">
+                <stop offset="0%" stop-color="#fceeec" />
+                <stop offset="60%" stop-color="#e8a5b5" />
+                <stop offset="100%" stop-color="#b06978" />
+              </radialGradient>
+              <radialGradient id="petal-cream" cx="40%" cy="40%" r="60%">
+                <stop offset="0%" stop-color="#fff8ed" />
+                <stop offset="100%" stop-color="#e2c994" />
+              </radialGradient>
+              <linearGradient id="wrap-grad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#f0e2cc" />
+                <stop offset="100%" stop-color="#d0b890" />
+              </linearGradient>
+            </defs>
+
+            <!-- 包裝紙 -->
+            <g class="bouquet-wrap">
+              <path d="M 90 380 L 270 380 L 320 590 L 40 590 Z" fill="#c8b08a" opacity="0.7" />
+              <path d="M 105 380 L 255 380 L 295 580 L 65 580 Z" fill="url(#wrap-grad)" />
+              <path d="M 180 380 L 180 580" stroke="#a88e60" stroke-width="1" opacity="0.4" />
+              <path d="M 145 380 L 120 580" stroke="#a88e60" stroke-width="0.8" opacity="0.28" />
+              <path d="M 215 380 L 240 580" stroke="#a88e60" stroke-width="0.8" opacity="0.28" />
+              <path d="M 170 380 L 160 580" stroke="#a88e60" stroke-width="0.6" opacity="0.18" />
+              <path d="M 190 380 L 200 580" stroke="#a88e60" stroke-width="0.6" opacity="0.18" />
+            </g>
+
+            <!-- 緞帶 -->
+            <g class="bouquet-ribbon">
+              <rect x="70" y="365" width="220" height="20" fill="#c47a7a" />
+              <rect x="70" y="365" width="220" height="5" fill="#8a4a4f" opacity="0.32" />
+              <path d="M 165 355 Q 125 338, 128 372 Q 130 388, 165 378 Z" fill="#a85e63" />
+              <path d="M 195 355 Q 235 338, 232 372 Q 230 388, 195 378 Z" fill="#a85e63" />
+              <path d="M 128 358 Q 145 365, 165 365" stroke="#7a3a40" stroke-width="0.8" fill="none" />
+              <path d="M 232 358 Q 215 365, 195 365" stroke="#7a3a40" stroke-width="0.8" fill="none" />
+              <rect x="166" y="361" width="28" height="24" fill="#8a4a4f" rx="2" />
+              <path d="M 158 384 Q 145 420, 135 460" stroke="#c47a7a" stroke-width="7" stroke-linecap="round" fill="none" />
+              <path d="M 202 384 Q 215 420, 225 460" stroke="#c47a7a" stroke-width="7" stroke-linecap="round" fill="none" />
+              <path d="M 135 460 L 126 472" stroke="#c47a7a" stroke-width="7" stroke-linecap="round" />
+              <path d="M 225 460 L 234 472" stroke="#c47a7a" stroke-width="7" stroke-linecap="round" />
+            </g>
+
+            <!-- 後排葉子 -->
+            <g class="leaves-back" opacity="0.88">
+              <ellipse cx="50" cy="250" rx="32" ry="11" transform="rotate(-50 50 250)" fill="#7a8a68" />
+              <ellipse cx="310" cy="240" rx="34" ry="12" transform="rotate(40 310 240)" fill="#7a8a68" />
+              <ellipse cx="35" cy="170" rx="26" ry="9" transform="rotate(-65 35 170)" fill="#7a8a68" />
+              <ellipse cx="325" cy="160" rx="28" ry="10" transform="rotate(55 325 160)" fill="#7a8a68" />
+              <ellipse cx="180" cy="40" rx="24" ry="8" transform="rotate(-5 180 40)" fill="#8a9a78" />
+              <ellipse cx="120" cy="58" rx="20" ry="7" transform="rotate(-32 120 58)" fill="#8a9a78" />
+              <ellipse cx="240" cy="52" rx="22" ry="7" transform="rotate(28 240 52)" fill="#8a9a78" />
+              <ellipse cx="80" cy="320" rx="22" ry="8" transform="rotate(-25 80 320)" fill="#6e7e5c" />
+              <ellipse cx="285" cy="325" rx="24" ry="9" transform="rotate(22 285 325)" fill="#6e7e5c" />
+            </g>
+
+            <!-- 滿天星 -->
+            <g class="babys-breath" fill="#fffbf0">
+              <circle cx="85" cy="155" r="3" />
+              <circle cx="95" cy="180" r="2.5" />
+              <circle cx="72" cy="205" r="2.2" />
+              <circle cx="285" cy="170" r="3" />
+              <circle cx="295" cy="200" r="2.5" />
+              <circle cx="310" cy="225" r="2.2" />
+              <circle cx="155" cy="55" r="2.5" />
+              <circle cx="215" cy="60" r="3" />
+              <circle cx="180" cy="32" r="2.2" />
+              <circle cx="100" cy="120" r="2" />
+              <circle cx="268" cy="125" r="2.2" />
+              <circle cx="140" cy="305" r="2" />
+              <circle cx="225" cy="310" r="2.2" />
+            </g>
+
+            <!-- 主要花朵 -->
+            <g class="bouquet-flowers">
+              <!-- 後排 -->
+              <g transform="translate(115 150)">
+                <circle r="24" fill="url(#petal-blush)" />
+                <circle r="6" fill="#8a3a4a" />
+              </g>
+              <g transform="translate(250 155)">
+                <circle r="22" fill="url(#petal-cream)" />
+                <circle r="5" fill="#a88555" />
+              </g>
+
+              <!-- 中央大牡丹 -->
+              <g transform="translate(180 210)" class="flower-main">
+                <circle r="52" fill="#c44a4a" opacity="0.2" />
+                <circle r="40" fill="url(#petal-red)" />
+                <ellipse cx="-12" cy="-16" rx="16" ry="11" fill="#c44a4a" opacity="0.42" transform="rotate(-22)" />
+                <ellipse cx="16" cy="-14" rx="16" ry="11" fill="#c44a4a" opacity="0.42" transform="rotate(26)" />
+                <ellipse cx="0" cy="18" rx="16" ry="11" fill="#c44a4a" opacity="0.42" />
+                <circle r="11" fill="#5e0d12" />
+              </g>
+
+              <!-- 左下玫瑰 -->
+              <g transform="translate(95 285)">
+                <circle r="34" fill="#d97a8c" opacity="0.32" />
+                <circle r="26" fill="url(#petal-blush)" />
+                <circle r="13" fill="#a85e63" />
+                <circle r="5" fill="#5a2a35" />
+              </g>
+
+              <!-- 右下玫瑰 -->
+              <g transform="translate(275 290)">
+                <circle r="32" fill="#e8a5b5" opacity="0.4" />
+                <circle r="24" fill="url(#petal-blush)" />
+                <circle r="11" fill="#a85e63" />
+                <circle r="4" fill="#5a2a35" />
+              </g>
+
+              <!-- 右側中花 -->
+              <g transform="translate(245 220)">
+                <circle r="22" fill="url(#petal-cream)" />
+                <circle r="6" fill="#a88555" />
+              </g>
+
+              <!-- 左側中花 -->
+              <g transform="translate(125 235)">
+                <circle r="20" fill="#f0c1bd" opacity="0.85" />
+                <circle r="13" fill="#e89994" />
+                <circle r="4" fill="#a85e63" />
+              </g>
+
+              <!-- 頂端三朵小花 -->
+              <g transform="translate(180 90)">
+                <circle r="16" fill="url(#petal-cream)" />
+                <circle r="4" fill="#c9b270" />
+              </g>
+              <g transform="translate(148 108)">
+                <circle r="13" fill="#f5c6ce" />
+                <circle r="3.5" fill="#a85e63" />
+              </g>
+              <g transform="translate(218 105)">
+                <circle r="13" fill="#f5c6ce" />
+                <circle r="3.5" fill="#a85e63" />
+              </g>
+            </g>
+
+            <!-- 前層綴葉 -->
+            <g class="leaves-front" opacity="0.85">
+              <ellipse cx="155" cy="340" rx="22" ry="7.5" transform="rotate(-42 155 340)" fill="#8ea478" />
+              <ellipse cx="225" cy="345" rx="24" ry="8" transform="rotate(38 225 345)" fill="#8ea478" />
+            </g>
+          </svg>
+        </div>
+
+        <div class="hero-petals" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+
+        <div class="hero-content" data-reveal>
+          <p class="eyebrow">BLOSSOM AGENT</p>
+          <div class="hero-title-row">
+            <h1 id="hero-title">
+              <span class="title-line">繁花✿<br />はな</span>
+              <span class="title-line">酒店經紀公司</span>
+            </h1>
+          </div>
+          <p class="hero-copy">
+            繁花，落土於台北的一間專業經紀公司。<br />
+            陪伴妳一起成長改變
+            陪伴妳看見自己的特質，<br />
+            以獨有的姿態在夜場綻放。
+          </p>
+          <div class="hero-actions" aria-label="主要行動">
+            <a class="button primary" href="#contact">與繁花聯絡</a>
+          </div>
+        </div>
+
+        <!-- hero right-side video removed and relocated below homepage as carousel -->
+
+        <a href="#philosophy" class="scroll-cue" aria-label="向下捲動">
+          <span></span>
+        </a>
+        </section>
+
+        <section id="video-carousel" class="video-carousel-section section-band" aria-label="影片輪播">
+          <div class="section-inner">
+            <div class="video-head">
+              <p class="section-kicker">VIDEO · 窺見繁花</p>
+              <p>點擊左右看更多相關影片</p>
+            </div>
+
+            <div class="video-carousel-frame">
+              <button type="button" class="carousel-control carousel-control-prev" aria-label="上一支影片">‹</button>
+              <div class="video-carousel" role="list" tabindex="0" aria-roledescription="影片輪播">
+                <article class="video-slide" role="listitem">
+                  <video class="carousel-video" controls playsinline preload="metadata" src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></video>
+                </article>
+
+                <article class="video-slide" role="listitem">
+                  <video class="carousel-video" controls playsinline preload="metadata" src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></video>
+                </article>
+
+                <article class="video-slide" role="listitem">
+                  <video class="carousel-video" controls playsinline preload="metadata" src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></video>
+                </article>
+              </div>
+              <button type="button" class="carousel-control carousel-control-next" aria-label="下一支影片">›</button>
+            </div>
+
+          </div>
+        </section>
+
+   
+
+      <section id="philosophy" class="philosophy" aria-labelledby="philosophy-title">
+        <div class="philo-decor philo-decor-l" aria-hidden="true"></div>
+        <div class="philo-decor philo-decor-r" aria-hidden="true"></div>
+
+        <div class="quote-panel" data-reveal>
+          <p class="section-kicker" id="philosophy-title">PHILOSOPHY · 公司理念</p>
+          <blockquote class="hero-quote">
+            <span class="qmark qmark-l" aria-hidden="true">「</span>
+            <p class="qline">我們發現妳並陪伴妳成長。</p>
+            <p class="qline qline-em">看見，盛開成自己的姿態。</p>
+            <span class="qmark qmark-r" aria-hidden="true">」</span>
+          </blockquote>
+          <p class="quote-author">— 繁花 BLOSSOM AGENT</p>
+          <p class="quote-sub">
+            公關的價值，不只在外貌，更在氣質、談吐、分寸、記憶點，與那份只有妳能給的陪伴感。
+            繁花願做妳的花藝師，不急著定義妳，只陪妳辨認妳最值得被看見的地方。
+          </p>
+        </div>
+
+        <div class="philo-cta" data-reveal>
+          <a class="button primary" href="journey.html">詳細理念與培育流程</a>
+          <br />
+          <a class="button ghost" href="quiz.html" style="margin-top: 16px;">花格測驗</a>
+        </div>
+      </section>
+
+      <section id="bloom-calculator" class="bloom-calculator section-band" aria-labelledby="bloom-calculator-title" data-reveal>
+        <div class="section-inner">
+          <div class="bloom-divider" aria-hidden="true"><span>✿</span></div>
+          <div class="bloom-calculator-head">
+            <p class="section-kicker">BLOOM CALCULATOR · 花期試算</p>
+            <h3 id="bloom-calculator-title">盛開幾日，便有幾日的芬芳</h3>
+            <p>選擇妳願意綻放的日子，看看這一週繁花能與妳合作結出多少碩果。</p>
+          </div>
+
+          <div class="bloom-calculator-grid">
+            <img src="assets/Blossom_logo_transparent.png" alt="" class="bloom-seal-bg" aria-hidden="true" />
+            <div class="bloom-controls">
+              <div class="flower-week" aria-label="選擇本週綻放日">
+                <button class="flower-bud" type="button" aria-pressed="false" data-day="一" data-rate="weekday" style="--bloom-color:#e8d68a">
+                  <svg viewBox="0 0 80 100" aria-hidden="true">
+                    <g class="bud-state">
+                      <path d="M40 92 L40 35" />
+                      <ellipse cx="40" cy="27" rx="10" ry="18" />
+                    </g>
+                    <g class="bloom-state daisy">
+                      <path class="stem" d="M40 92 L40 54" />
+                      <ellipse cx="40" cy="32" rx="8" ry="17" />
+                      <ellipse cx="40" cy="32" rx="8" ry="17" transform="rotate(45 40 32)" />
+                      <ellipse cx="40" cy="32" rx="8" ry="17" transform="rotate(90 40 32)" />
+                      <ellipse cx="40" cy="32" rx="8" ry="17" transform="rotate(135 40 32)" />
+                      <circle cx="40" cy="32" r="8" />
+                    </g>
+                  </svg>
+                  <span class="day-label">一</span>
+                  <span class="sr-only">週一 雛菊 Daisy</span>
+                </button>
+                <button class="flower-bud" type="button" aria-pressed="false" data-day="二" data-rate="weekday" style="--bloom-color:#e6dcd0">
+                  <svg viewBox="0 0 80 100" aria-hidden="true">
+                    <g class="bud-state">
+                      <path d="M40 92 L40 35" />
+                      <ellipse cx="40" cy="27" rx="10" ry="18" />
+                    </g>
+                    <g class="bloom-state lily">
+                      <path class="stem" d="M40 92 C39 70 43 56 48 42" />
+                      <path class="stem" d="M40 76 C32 62 30 51 28 40" />
+                      <path d="M49 38 C39 38 39 55 49 58 C59 55 59 38 49 38 Z" />
+                      <path d="M28 37 C19 39 20 54 30 56 C39 52 38 36 28 37 Z" />
+                    </g>
+                  </svg>
+                  <span class="day-label">二</span>
+                  <span class="sr-only">週二 鈴蘭 Lily</span>
+                </button>
+                <button class="flower-bud" type="button" aria-pressed="false" data-day="三" data-rate="weekday" style="--bloom-color:#a89bc8">
+                  <svg viewBox="0 0 80 100" aria-hidden="true">
+                    <g class="bud-state">
+                      <path d="M40 92 L40 35" />
+                      <ellipse cx="40" cy="27" rx="10" ry="18" />
+                    </g>
+                    <g class="bloom-state violet">
+                      <path class="stem" d="M40 92 L40 58" />
+                      <circle cx="32" cy="31" r="11" />
+                      <circle cx="48" cy="31" r="11" />
+                      <circle cx="30" cy="47" r="11" />
+                      <circle cx="50" cy="47" r="11" />
+                      <ellipse cx="40" cy="39" rx="10" ry="13" />
+                      <circle cx="40" cy="40" r="5" />
+                    </g>
+                  </svg>
+                  <span class="day-label">三</span>
+                  <span class="sr-only">週三 紫羅蘭 Violet</span>
+                </button>
+                <button class="flower-bud" type="button" aria-pressed="false" data-day="四" data-rate="weekday" style="--bloom-color:#e5a8b2">
+                  <svg viewBox="0 0 80 100" aria-hidden="true">
+                    <g class="bud-state">
+                      <path d="M40 92 L40 35" />
+                      <ellipse cx="40" cy="27" rx="10" ry="18" />
+                    </g>
+                    <g class="bloom-state tulip">
+                      <path class="stem" d="M40 92 L40 55" />
+                      <path d="M22 24 C30 23 33 32 40 24 C47 32 50 23 58 24 L54 48 C51 62 29 62 26 48 Z" />
+                      <path class="leaf" d="M40 72 C27 63 22 55 20 44 C31 49 39 58 40 72 Z" />
+                    </g>
+                  </svg>
+                  <span class="day-label">四</span>
+                  <span class="sr-only">週四 鬱金香 Tulip</span>
+                </button>
+                <button class="flower-bud is-prime" type="button" aria-pressed="false" data-day="五" data-rate="prime" style="--bloom-color:#a8232b">
+                  <svg viewBox="0 0 80 100" aria-hidden="true">
+                    <g class="bud-state">
+                      <path d="M40 92 L40 35" />
+                      <ellipse cx="40" cy="27" rx="10" ry="18" />
+                    </g>
+                    <g class="bloom-state rose">
+                      <path class="stem" d="M40 92 L40 58" />
+                      <circle cx="40" cy="34" r="21" />
+                      <circle cx="40" cy="34" r="14" />
+                      <circle cx="40" cy="34" r="7" />
+                      <path class="leaf" d="M40 72 C50 62 58 60 64 62 C56 70 48 74 40 72 Z" />
+                    </g>
+                  </svg>
+                  <span class="day-label">五</span>
+                  <span class="sr-only">週五 紅玫瑰 Rose 黃金日</span>
+                </button>
+                <button class="flower-bud is-prime" type="button" aria-pressed="false" data-day="六" data-rate="prime" style="--bloom-color:#c44a4a">
+                  <svg viewBox="0 0 80 100" aria-hidden="true">
+                    <g class="bud-state">
+                      <path d="M40 92 L40 35" />
+                      <ellipse cx="40" cy="27" rx="10" ry="18" />
+                    </g>
+                    <g class="bloom-state peony">
+                      <path class="stem" d="M40 92 L40 60" />
+                      <circle cx="29" cy="31" r="14" />
+                      <circle cx="51" cy="31" r="14" />
+                      <circle cx="28" cy="49" r="14" />
+                      <circle cx="52" cy="49" r="14" />
+                      <circle cx="40" cy="40" r="17" />
+                      <circle cx="40" cy="40" r="6" />
+                    </g>
+                  </svg>
+                  <span class="day-label">六</span>
+                  <span class="sr-only">週六 牡丹 Peony 黃金日</span>
+                </button>
+                <button class="flower-bud" type="button" aria-pressed="false" data-day="日" data-rate="weekday" style="--bloom-color:#f5c6ce">
+                  <svg viewBox="0 0 80 100" aria-hidden="true">
+                    <g class="bud-state">
+                      <path d="M40 92 L40 35" />
+                      <ellipse cx="40" cy="27" rx="10" ry="18" />
+                    </g>
+                    <g class="bloom-state sakura">
+                      <path class="stem" d="M40 92 L40 58" />
+                      <path d="M40 40 C32 32 32 23 37 17 C38 21 42 21 43 17 C48 23 48 32 40 40 Z" />
+                      <path d="M40 40 C32 32 32 23 37 17 C38 21 42 21 43 17 C48 23 48 32 40 40 Z" transform="rotate(72 40 40)" />
+                      <path d="M40 40 C32 32 32 23 37 17 C38 21 42 21 43 17 C48 23 48 32 40 40 Z" transform="rotate(144 40 40)" />
+                      <path d="M40 40 C32 32 32 23 37 17 C38 21 42 21 43 17 C48 23 48 32 40 40 Z" transform="rotate(216 40 40)" />
+                      <path d="M40 40 C32 32 32 23 37 17 C38 21 42 21 43 17 C48 23 48 32 40 40 Z" transform="rotate(288 40 40)" />
+                      <circle cx="40" cy="40" r="5" />
+                    </g>
+                  </svg>
+                  <span class="day-label">日</span>
+                  <span class="sr-only">週日 櫻花 Sakura</span>
+                </button>
+              </div>
+
+              <div class="hours-control">
+                <div class="hours-head">
+                  <label for="hours">每日花期</label>
+                  <output id="hours-output" for="hours">8 小時</output>
+                </div>
+                <div class="hours-slider">
+                  <input id="hours" type="range" min="5" max="10" step="1" value="8" />
+                  <div class="hour-ticks" aria-hidden="true">
+                    <span style="--i:0"><i></i>5</span>
+                    <span style="--i:1"><i></i>6</span>
+                    <span style="--i:2"><i></i>7</span>
+                    <span style="--i:3"><i></i>8</span>
+                    <span style="--i:4"><i></i>9</span>
+                    <span style="--i:5"><i></i>10</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <aside class="bloom-result" aria-live="polite" aria-label="花期收入試算結果">
+              <p class="empty-note" id="empty-note">等妳選好日子，這裡就會長出數字</p>
+              <div class="result-row">
+                <span>本週綻放</span>
+                <strong><span id="bloom-days">0</span> 日 <span id="bloom-icons"></span></strong>
+              </div>
+              <div class="result-row">
+                <span>每日花期</span>
+                <strong><span id="result-hours">8</span> 小時</strong>
+              </div>
+              <div class="result-row">
+                <span>時薪</span>
+                <strong>NT$ <span id="hourly-rate">1,440</span></strong>
+              </div>
+              <p class="rate-note">此為兼職薪資，依屬性、能力與可合作天數等酌情調整</p>
+              <div class="result-total">
+                <span>本週預估收入</span>
+                <strong class="money" id="week-income">NT$ 0</strong>
+              </div>
+              <div class="result-month">
+                <span>每月預估約</span>
+                <strong class="money" id="month-income">NT$ 0</strong>
+              </div>
+              <p class="calc-note">※ 試算僅供參考，實際收入依合作店家、客源與分潤模式而定。</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+ 
+      <section id="faq" class="faq section-band" aria-labelledby="faq-title">
+        <div class="section-inner split">
+          <div data-reveal>
+            <p class="section-kicker">FAQ · 常見問答</p>
+            <h2 id="faq-title">妳心裡的問題，<br />繁花想先告訴妳答案。</h2>
+            <p class="faq-intro">
+              這些是我們最常被問到的問題。<br />
+              若還有任何未盡之處，歡迎隨時與我們聯繫。
+            </p>
+          </div>
+          <div class="faq-list">
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <svg class="faq-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+                  <g class="bud">
+                    <path d="M10 16 L10 8"/>
+                    <path d="M10 8 Q6 6 5 3 Q8 5 10 8"/>
+                    <path d="M10 8 Q14 6 15 3 Q12 5 10 8"/>
+                    <path d="M7 16 Q10 17 13 16"/>
+                  </g>
+                  <g class="bloom">
+                    <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+                    <ellipse cx="10" cy="4" rx="1.5" ry="3.5"/>
+                    <ellipse cx="10" cy="16" rx="1.5" ry="3.5"/>
+                    <ellipse cx="4" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="16" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="5.5" cy="5.5" rx="1.5" ry="3" transform="rotate(-45 5.5 5.5)"/>
+                    <ellipse cx="14.5" cy="5.5" rx="1.5" ry="3" transform="rotate(45 14.5 5.5)"/>
+                    <ellipse cx="5.5" cy="14.5" rx="1.5" ry="3" transform="rotate(45 5.5 14.5)"/>
+                    <ellipse cx="14.5" cy="14.5" rx="1.5" ry="3" transform="rotate(-45 14.5 14.5)"/>
+                  </g>
+                </svg>
+                <span class="faq-q-mark">問</span>
+                <span class="faq-q-text">完全沒有經驗，可以加入繁花嗎？</span>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <div class="faq-answer-line"></div>
+                  <div class="faq-answer-content">
+                    <div class="faq-a-mark">答</div>
+                    <div class="faq-a-text">
+                      <p>當然可以。繁花的核心理念就是「規劃」與「培育」，我們為新人準備完整的培訓系統——從儀態、談吐、酒桌應對到心理建設，會手把手陪妳走過每一步。比起經驗，我們更在意妳是否願意認識自己、好好成長。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <svg class="faq-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+                  <g class="bud">
+                    <path d="M10 16 L10 8"/>
+                    <path d="M10 8 Q6 6 5 3 Q8 5 10 8"/>
+                    <path d="M10 8 Q14 6 15 3 Q12 5 10 8"/>
+                    <path d="M7 16 Q10 17 13 16"/>
+                  </g>
+                  <g class="bloom">
+                    <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+                    <ellipse cx="10" cy="4" rx="1.5" ry="3.5"/>
+                    <ellipse cx="10" cy="16" rx="1.5" ry="3.5"/>
+                    <ellipse cx="4" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="16" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="5.5" cy="5.5" rx="1.5" ry="3" transform="rotate(-45 5.5 5.5)"/>
+                    <ellipse cx="14.5" cy="5.5" rx="1.5" ry="3" transform="rotate(45 14.5 5.5)"/>
+                    <ellipse cx="5.5" cy="14.5" rx="1.5" ry="3" transform="rotate(45 5.5 14.5)"/>
+                    <ellipse cx="14.5" cy="14.5" rx="1.5" ry="3" transform="rotate(-45 14.5 14.5)"/>
+                  </g>
+                </svg>
+                <span class="faq-q-mark">問</span>
+                <span class="faq-q-text">薪資怎麼計算？會有隱藏費用嗎？</span>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <div class="faq-answer-line"></div>
+                  <div class="faq-answer-content">
+                    <div class="faq-a-mark">答</div>
+                    <div class="faq-a-text">
+                      <p>採用透明的合作分潤制，比例會在面談時依妳選擇的合作模式（兼職／全職／店別）詳細說明。所有薪資細項都會解說，絕無事後加收、絕無隱藏條款。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <svg class="faq-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+                  <g class="bud">
+                    <path d="M10 16 L10 8"/>
+                    <path d="M10 8 Q6 6 5 3 Q8 5 10 8"/>
+                    <path d="M10 8 Q14 6 15 3 Q12 5 10 8"/>
+                    <path d="M7 16 Q10 17 13 16"/>
+                  </g>
+                  <g class="bloom">
+                    <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+                    <ellipse cx="10" cy="4" rx="1.5" ry="3.5"/>
+                    <ellipse cx="10" cy="16" rx="1.5" ry="3.5"/>
+                    <ellipse cx="4" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="16" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="5.5" cy="5.5" rx="1.5" ry="3" transform="rotate(-45 5.5 5.5)"/>
+                    <ellipse cx="14.5" cy="5.5" rx="1.5" ry="3" transform="rotate(45 14.5 5.5)"/>
+                    <ellipse cx="5.5" cy="14.5" rx="1.5" ry="3" transform="rotate(45 5.5 14.5)"/>
+                    <ellipse cx="14.5" cy="14.5" rx="1.5" ry="3" transform="rotate(-45 14.5 14.5)"/>
+                  </g>
+                </svg>
+                <span class="faq-q-mark">問</span>
+                <span class="faq-q-text">上班時間自由嗎？</span>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <div class="faq-answer-line"></div>
+                  <div class="faq-answer-content">
+                    <div class="faq-a-mark">答</div>
+                    <div class="faq-a-text">
+                      <p>時間由妳依自身狀況與直屬經紀人討論安排。學業、家庭、副業，繁花都尊重。不強制排班、不設綁約年限。因為我們相信：妳願意留下來，是因為這裡值得，而不是因為走不開。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <svg class="faq-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+                  <g class="bud">
+                    <path d="M10 16 L10 8"/>
+                    <path d="M10 8 Q6 6 5 3 Q8 5 10 8"/>
+                    <path d="M10 8 Q14 6 15 3 Q12 5 10 8"/>
+                    <path d="M7 16 Q10 17 13 16"/>
+                  </g>
+                  <g class="bloom">
+                    <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+                    <ellipse cx="10" cy="4" rx="1.5" ry="3.5"/>
+                    <ellipse cx="10" cy="16" rx="1.5" ry="3.5"/>
+                    <ellipse cx="4" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="16" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="5.5" cy="5.5" rx="1.5" ry="3" transform="rotate(-45 5.5 5.5)"/>
+                    <ellipse cx="14.5" cy="5.5" rx="1.5" ry="3" transform="rotate(45 14.5 5.5)"/>
+                    <ellipse cx="5.5" cy="14.5" rx="1.5" ry="3" transform="rotate(45 5.5 14.5)"/>
+                    <ellipse cx="14.5" cy="14.5" rx="1.5" ry="3" transform="rotate(-45 14.5 14.5)"/>
+                  </g>
+                </svg>
+                <span class="faq-q-mark">問</span>
+                <span class="faq-q-text">會被強迫灌酒，或做不願意的事嗎？</span>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <div class="faq-answer-line"></div>
+                  <div class="faq-answer-content">
+                    <div class="faq-a-mark">答</div>
+                    <div class="faq-a-text">
+                      <p>絕對不會。繁花尊重每位夥伴的底線，並提供完整的「酒局自保」培訓——如何婉拒、如何轉場、如何在不傷感情的前提下守住自己。妳的安全與意願，永遠是第一順位。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <svg class="faq-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+                  <g class="bud">
+                    <path d="M10 16 L10 8"/>
+                    <path d="M10 8 Q6 6 5 3 Q8 5 10 8"/>
+                    <path d="M10 8 Q14 6 15 3 Q12 5 10 8"/>
+                    <path d="M7 16 Q10 17 13 16"/>
+                  </g>
+                  <g class="bloom">
+                    <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+                    <ellipse cx="10" cy="4" rx="1.5" ry="3.5"/>
+                    <ellipse cx="10" cy="16" rx="1.5" ry="3.5"/>
+                    <ellipse cx="4" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="16" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="5.5" cy="5.5" rx="1.5" ry="3" transform="rotate(-45 5.5 5.5)"/>
+                    <ellipse cx="14.5" cy="5.5" rx="1.5" ry="3" transform="rotate(45 14.5 5.5)"/>
+                    <ellipse cx="5.5" cy="14.5" rx="1.5" ry="3" transform="rotate(45 5.5 14.5)"/>
+                    <ellipse cx="14.5" cy="14.5" rx="1.5" ry="3" transform="rotate(-45 14.5 14.5)"/>
+                  </g>
+                </svg>
+                <span class="faq-q-mark">問</span>
+                <span class="faq-q-text">個人隱私如何被保護？</span>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <div class="faq-answer-line"></div>
+                  <div class="faq-answer-content">
+                    <div class="faq-a-mark">答</div>
+                    <div class="faq-a-text">
+                      <p>所有合作資料嚴格保密，僅店家與核心經紀人員可接觸。藝名、工作圈與本名生活完全切分，絕不對外揭露。妳可以自在地工作，也自在地生活。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <svg class="faq-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+                  <g class="bud">
+                    <path d="M10 16 L10 8"/>
+                    <path d="M10 8 Q6 6 5 3 Q8 5 10 8"/>
+                    <path d="M10 8 Q14 6 15 3 Q12 5 10 8"/>
+                    <path d="M7 16 Q10 17 13 16"/>
+                  </g>
+                  <g class="bloom">
+                    <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+                    <ellipse cx="10" cy="4" rx="1.5" ry="3.5"/>
+                    <ellipse cx="10" cy="16" rx="1.5" ry="3.5"/>
+                    <ellipse cx="4" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="16" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="5.5" cy="5.5" rx="1.5" ry="3" transform="rotate(-45 5.5 5.5)"/>
+                    <ellipse cx="14.5" cy="5.5" rx="1.5" ry="3" transform="rotate(45 14.5 5.5)"/>
+                    <ellipse cx="5.5" cy="14.5" rx="1.5" ry="3" transform="rotate(45 5.5 14.5)"/>
+                    <ellipse cx="14.5" cy="14.5" rx="1.5" ry="3" transform="rotate(-45 14.5 14.5)"/>
+                  </g>
+                </svg>
+                <span class="faq-q-mark">問</span>
+                <span class="faq-q-text">培訓期需要先付費嗎？</span>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <div class="faq-answer-line"></div>
+                  <div class="faq-answer-content">
+                    <div class="faq-a-mark">答</div>
+                    <div class="faq-a-text">
+                      <p>繁花的成功來自妳的成功，培育時期提供初次髮妝補助，繁花也提供禮服、提包、高跟鞋等以供初入的夥伴們租借，不讓妳先自掏腰包。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <svg class="faq-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+                  <g class="bud">
+                    <path d="M10 16 L10 8"/>
+                    <path d="M10 8 Q6 6 5 3 Q8 5 10 8"/>
+                    <path d="M10 8 Q14 6 15 3 Q12 5 10 8"/>
+                    <path d="M7 16 Q10 17 13 16"/>
+                  </g>
+                  <g class="bloom">
+                    <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+                    <ellipse cx="10" cy="4" rx="1.5" ry="3.5"/>
+                    <ellipse cx="10" cy="16" rx="1.5" ry="3.5"/>
+                    <ellipse cx="4" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="16" cy="10" rx="3.5" ry="1.5"/>
+                    <ellipse cx="5.5" cy="5.5" rx="1.5" ry="3" transform="rotate(-45 5.5 5.5)"/>
+                    <ellipse cx="14.5" cy="5.5" rx="1.5" ry="3" transform="rotate(45 14.5 5.5)"/>
+                    <ellipse cx="5.5" cy="14.5" rx="1.5" ry="3" transform="rotate(45 5.5 14.5)"/>
+                    <ellipse cx="14.5" cy="14.5" rx="1.5" ry="3" transform="rotate(-45 14.5 14.5)"/>
+                  </g>
+                </svg>
+                <span class="faq-q-mark">問</span>
+                <span class="faq-q-text">如何開始？要準備什麼？</span>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <div class="faq-answer-line"></div>
+                  <div class="faq-answer-content">
+                    <div class="faq-a-mark">答</div>
+                    <div class="faq-a-text">
+                      <p>只需要透過下方聯絡方式預約一次面談，其他什麼都不用準備。第一次見面是輕鬆的對話，先讓妳了解繁花、也讓我們認識妳。一切的決定權，都在妳手上。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <a class="faq-more" href="faq.html">
+              <span class="faq-more-rule" aria-hidden="true"></span>
+              <span class="faq-more-text">
+                <span class="faq-more-kicker">MORE · 延伸閱讀</span>
+                <span class="faq-more-title">還有更多想問的？翻開完整常見問答</span>
+              </span>
+              <span class="faq-more-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact" aria-labelledby="contact-title">
+        <div class="contact-panel" data-reveal>
+          <p class="section-kicker">CONTACT · 聯絡我們</p>
+          <h2 id="contact-title">讓我們為妳泡一盞茶</h2>
+          <p>無論妳已經準備好，還是只想聊聊，繁花都在這裡。</p>
+            <a class="contact-card" href="https://line.me/R/ti/p/@262fpzyu" target="_blank" rel="noopener">
+              <span class="contact-icon">LINE</span>
+              <p class="contact-label">LINE 官方帳號</p>
+              <p class="contact-value">點擊查看更多</p>
+            </a>
+            <div class="replan-cta" data-reveal style="margin-top: 2.6rem; text-align: center;">
+              <p style="max-width: 480px; margin: 0 auto 1.4rem; color: var(--ink-2); line-height: 1.9;">繁花會為你量身規劃計劃，<strong style="color:#a58421;">兩種規劃方向都可以兼容並存</strong>，想看不同的規劃方向嗎？</p>
+              <a class="button primary" href="index.html#purpose" style="background:#a58421;border-color:#a58421;">回到規劃選擇</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-seal" aria-hidden="true">
+        <img class="footer-icon" src="assets/Footer_ICON.png" alt="繁花 BLOSSOM AGENT" />
+      </div>
+      <p class="footer-tagline">讓每一朵花，盛開成自己。</p>
+      <p class="footer-copy">© <span id="year"></span> 繁花 BLOSSOM AGENT. All rights reserved.</p>
+    </footer>
+
+    <a href="#contact" class="contact-float" aria-label="快速前往聯絡方式">
+      <span class="contact-float-icon" aria-hidden="true">✉</span>
+      <span class="contact-float-text">聯絡我們</span>
+    </a>
+
+    <script src="script.js"></script>
+  </body>
+</html>
