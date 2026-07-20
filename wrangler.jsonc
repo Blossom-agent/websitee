@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "websitee",
+  "compatibility_date": "2026-07-20",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "網站0717"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
