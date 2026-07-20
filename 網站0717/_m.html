@@ -1,9 +1,0 @@
-<!doctype html><html><head><meta charset="UTF-8"><style>body{margin:0;background:#888}iframe{border:0;display:block}</style></head><body>
-<iframe id="f" width="390"></iframe><script>
-const q=new URLSearchParams(location.search),f=document.getElementById('f');
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-f.height=q.get('h')||1500; f.src='http://localhost:8811/dice_games/'+q.get('p')+'.html';
-f.onload=async()=>{const d=f.contentDocument;await sleep(500);
- const b=[...d.querySelectorAll('.btn-primary')].filter(x=>!x.disabled)[0]; if(b)b.click();
- await sleep(9000);};
-</script></body></html>
