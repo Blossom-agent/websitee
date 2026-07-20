@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>繁花酒桌 ・ 骰子遊戲</title>
+  <meta name="description" content="以骰為席，以樂為交——繁花酒桌骰子遊戲集" />
+
+  <!-- =============================================
+       繁花酒桌骰子遊戲 ・ 首頁
+       六款經典酒桌骰子遊戲的選單入口
+       ============================================= -->
+
+  <style>
+    :root {
+      --ink: #3f3435;
+      --ink-2: #5b4848;
+      --muted: #7f6e6c;
+      --paper: #fbf5ef;
+      --paper-2: #f7ede0;
+      --cream: #f6ebe1;
+      --cream-deep: #efe0d0;
+      --blush: #ecccc6;
+      --rose-d: #9a4a4f;
+      --seal: #a93538;
+      --seal-deep: #8c2a2d;
+      --gold: #b89865;
+      --gold-deep: #8a6e44;
+      --line: rgba(86, 62, 62, 0.14);
+      --shadow-card: 0 30px 60px rgba(140, 42, 45, 0.08),
+                     0 10px 30px rgba(81, 54, 50, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Garamond Premier", "Noto Serif TC", "一點明體", serif;
+      font-weight: 300;
+      line-height: 1.85;
+      letter-spacing: 0.03em;
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(ellipse at 75% 12%, rgba(236, 204, 198, 0.4) 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 88%, rgba(196, 184, 144, 0.24) 0%, transparent 55%),
+        linear-gradient(165deg, #fbf5ef 0%, #f6ebe1 58%, #f3e3d3 100%);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ============ 頁面容器 ============ */
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    /* ============ Header ============ */
+    /* ============ Header（與 journey.html 一致） ============ */
+    body { padding-top: 76px; }
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      padding: 14px clamp(18px, 4vw, 54px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      transition: box-shadow 240ms ease;
+    }
+    /* 毛玻璃背景放在 ::before：避免 fixed 元素自身帶 backdrop-filter，
+       在 iOS Safari／部分 Android Chrome 上會導致頁首捲動時無法固定。 */
+    .site-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(251, 245, 239, 0.86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: background 240ms ease;
+    }
+    .site-header.is-scrolled::before { background: rgba(251, 245, 239, 0.96); }
+    .site-header.is-scrolled { box-shadow: 0 1px 20px rgba(81, 54, 50, 0.06); }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .brand-mark { width: 46px; height: 46px; object-fit: contain; }
+    .brand-en {
+      color: var(--ink-2);
+      font-size: 0.86rem;
+      letter-spacing: 0.18em;
+    }
+    .site-nav { display: flex; align-items: center; gap: 10px; }
+    .nav-home {
+      padding: 9px 18px;
+      color: #fff;
+      background: var(--seal);
+      border-radius: 2px;
+      font-size: 0.94rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      transition: background 200ms ease;
+    }
+    .nav-home:hover { background: var(--rose-d); color: #fff; }
+    @media (max-width: 620px) {
+      body { padding-top: 64px; }
+      .site-header { min-height: 64px; padding: 10px clamp(14px, 4vw, 24px); }
+      .brand-mark { width: 40px; height: 40px; }
+      .brand-en { font-size: 0.74rem; }
+      .nav-home, .rules-btn { padding: 7px 12px; font-size: 0.82rem; letter-spacing: 0.04em; }
+    }
+
+    /* ============ Hero ============ */
+    .hero {
+      text-align: center;
+      margin-bottom: 5rem;
+      position: relative;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.4rem;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--gold-deep);
+      letter-spacing: 0.45em;
+      margin-bottom: 1.4rem;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      width: 30px; height: 1px;
+      background: var(--gold);
+    }
+    .hero-title {
+      font-family: serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      line-height: 1.5;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--seal);
+      font-weight: 600;
+    }
+    .hero-lede {
+      max-width: 520px;
+      margin: 0 auto;
+      font-size: 0.98rem;
+      line-height: 2;
+      color: var(--ink-2);
+    }
+
+    /* 標題兩側骰子裝飾 */
+    .hero-dice {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 0.8rem;
+      vertical-align: middle;
+    }
+    .hero-dice .dot {
+      width: 5px; height: 5px;
+      background: var(--seal);
+      border-radius: 50%;
+      opacity: 0.7;
+    }
+
+    /* ============ 遊戲卡片網格 ============ */
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .game-card {
+      position: relative;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 2.4rem 2rem 2rem;
+      transition: all 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 320px;
+    }
+
+    /* 卡片左上/右下 L 形金線 */
+    .game-card::before,
+    .game-card::after {
+      content: '';
+      position: absolute;
+      width: 22px; height: 22px;
+      border: 1px solid var(--gold);
+      opacity: 0.6;
+      transition: opacity 0.4s ease, width 0.4s ease, height 0.4s ease;
+    }
+    .game-card::before {
+      top: 10px; left: 10px;
+      border-right: none; border-bottom: none;
+    }
+    .game-card::after {
+      bottom: 10px; right: 10px;
+      border-left: none; border-top: none;
+    }
+    .game-card:hover::before,
+    .game-card:hover::after {
+      width: 32px; height: 32px;
+      opacity: 1;
+    }
+
+    .game-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-card);
+      border-color: var(--gold);
+    }
+
+    /* 卡片編號 */
+
+    /* 卡片內的骰子 icon 群組 */
+    .game-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 1.4rem;
+      height: 40px;
+    }
+    .game-icon .die {
+      width: 30px; height: 30px;
+      background: var(--paper);
+      border: 1.2px solid var(--ink-2);
+      border-radius: 5px;
+      position: relative;
+      transition: transform 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .game-card:hover .game-icon .die:nth-child(1) { transform: rotate(-8deg) translateY(-2px); }
+    .game-card:hover .game-icon .die:nth-child(2) { transform: rotate(4deg) translateY(-4px); }
+    .game-card:hover .game-icon .die:nth-child(3) { transform: rotate(-3deg) translateY(-2px); }
+    .game-card:hover .game-icon .die:nth-child(4) { transform: rotate(5deg) translateY(-4px); }
+    .game-card:hover .game-icon .die:nth-child(5) { transform: rotate(-6deg) translateY(-2px); }
+
+    .die .face {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 2px;
+      width: 18px; height: 18px;
+    }
+    .face-dot {
+      width: 3px; height: 3px;
+      background: var(--ink);
+      border-radius: 50%;
+      align-self: center;
+      justify-self: center;
+    }
+    .face-dot.red { background: var(--seal); }
+
+    /* 卡片標題 */
+    .game-title {
+      font-family: serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+      text-align: center;
+    }
+
+    /* 卡片描述 */
+    .game-desc {
+      font-size: 0.88rem;
+      line-height: 1.9;
+      color: var(--ink-2);
+      text-align: center;
+      margin-bottom: 1.4rem;
+      flex: 1;
+    }
+
+    /* 狀態徽章 */
+    .badge {
+      position: absolute;
+      top: 14px; right: 14px;
+      padding: 0.28rem 0.7rem;
+      font-family: serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      background: var(--seal);
+      color: var(--paper);
+      border-radius: 2px;
+    }
+    .badge-soon {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .game-card.is-soon {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .game-card.is-soon:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--line);
+    }
+    .game-card.is-soon:hover::before,
+    .game-card.is-soon:hover::after {
+      width: 22px; height: 22px;
+      opacity: 0.6;
+    }
+
+    /* ============ 底部說明 ============ */
+    .footer-note {
+      margin-top: 5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 2;
+    }
+    .footer-note strong {
+      font-family: serif;
+      color: var(--seal);
+      font-weight: 500;
+    }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 2.5rem 1.2rem 4rem; }
+      .hero { margin-bottom: 3rem; }
+      .games { grid-template-columns: 1fr; gap: 1.2rem; }
+      .game-card { min-height: auto; padding: 2rem 1.6rem 1.6rem; }
+    }
+
+    /* ============ 手機版適配 ============ */
+    @media (max-width: 560px) {
+      .wrap { padding: 1.6rem 1rem 3.5rem; }
+      .hero { margin-bottom: 2.2rem; }
+      .hero-eyebrow { font-size: 0.62rem; letter-spacing: 0.28em; }
+      .hero-title { font-size: 1.75rem; letter-spacing: 0.16em; line-height: 1.6; }
+      .hero-lede { font-size: 0.85rem; line-height: 2; }
+      .games { grid-template-columns: 1fr; gap: 1rem; }
+      .game-card { padding: 1.6rem 1.2rem 1.3rem; }
+      .game-title { font-size: 1.3rem; letter-spacing: 0.2em; }
+      .game-desc { font-size: 0.82rem; line-height: 1.9; }
+    }
+
+    /* ============ Footer（與 faq.html 一致） ============ */
+    .site-footer {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      padding: 60px clamp(20px, 5vw, 76px) 40px;
+      background: #2b1f1f;
+      color: #d8c5c1;
+      text-align: center;
+    }
+    .site-footer .footer-seal { display: grid; place-items: center; }
+    .site-footer .footer-icon { width: clamp(84px, 12vw, 112px); height: auto; display: block; }
+    .site-footer .footer-tagline {
+      margin: 0;
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-size: 1.15rem;
+      letter-spacing: 0.16em;
+      color: #ecd9d5;
+    }
+    .site-footer .footer-copy {
+      margin: 0;
+      color: #8a7572;
+      font-size: 0.84rem;
+      letter-spacing: 0.1em;
+    }
+  
+    /* ============ 分類標題 ============ */
+    .cat-head {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      margin: 0 0 2rem;
+    }
+    .cat-head::before,
+    .cat-head::after {
+      content: "";
+      flex: 1 1 auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(184, 152, 101, 0.5));
+    }
+    .cat-head::after {
+      background: linear-gradient(90deg, rgba(184, 152, 101, 0.5), transparent);
+    }
+    .cat-head-inner {
+      flex: 0 0 auto;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .cat-title {
+      font-family: serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      letter-spacing: 0.34em;
+      text-indent: 0.34em;
+      color: var(--ink);
+      display: block;
+    }
+    .cat-en {
+      display: block;
+      margin-top: 0.2rem;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      color: var(--gold-deep);
+    }
+    /* 進階區與上一組拉開距離 */
+    .games + .cat-head { margin-top: 4.5rem; }
+
+    @media (max-width: 560px) {
+      .cat-head { gap: 0.7rem; margin-bottom: 1.3rem; }
+      .games + .cat-head { margin-top: 2.6rem; }
+      .cat-title { font-size: 1rem; letter-spacing: 0.2em; text-indent: 0.2em; }
+      .cat-en { font-size: 0.62rem; letter-spacing: 0.2em; text-indent: 0.2em; }
+    }
+  
+    /* ============ 範圍說明 + 經紀部聯絡 ============ */
+    .scope-note {
+      max-width: 640px;
+      margin: 1.8rem auto 0;
+      padding: 1.3rem 2.4rem;
+      /* 長方形、無邊框，底色往左右兩端淡出 */
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.62) 16%,
+        rgba(255, 255, 255, 0.62) 84%,
+        transparent 100%);
+      border: none;
+      border-radius: 0;
+      font-size: 0.86rem;
+      line-height: 2;
+      color: var(--ink-2);
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+    .scope-note em {
+      font-style: normal;
+      font-weight: 600;
+      color: var(--seal);
+    }
+    .scope-note .aside {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .scope-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0.55rem 1.35rem;
+      font-family: serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-indent: 0.2em;
+      color: var(--paper);
+      background: var(--seal);
+      border: 1px solid var(--seal);
+      border-radius: 2px;
+      text-decoration: none;
+      transition: all 0.4s ease;
+    }
+    .scope-cta .arrow {
+      font-size: 0.8rem;
+      letter-spacing: 0;
+      text-indent: 0;
+      transition: transform 0.4s ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .scope-cta:hover {
+        background: transparent;
+        color: var(--seal);
+      }
+      .scope-cta:hover .arrow { transform: translateX(4px); }
+    }
+    .scope-cta:focus { outline: none; }
+    .scope-cta:focus-visible { outline: 2px solid var(--seal); outline-offset: 3px; }
+
+    @media (max-width: 560px) {
+      .scope-note {
+        margin-top: 1.2rem;
+        padding: 1rem 1.2rem;
+        font-size: 0.8rem;
+        line-height: 1.95;
+        /* 窄螢幕把淡出區收窄，免得文字壓在漸層上 */
+        background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.62) 8%,
+          rgba(255, 255, 255, 0.62) 92%,
+          transparent 100%);
+      }
+      .scope-note .aside { font-size: 0.76rem; }
+      .scope-cta {
+        margin-top: 0.9rem;
+        padding: 0.5rem 1.1rem;
+        font-size: 0.76rem;
+        letter-spacing: 0.14em;
+        text-indent: 0.14em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <!-- Header -->
+    <header class="site-header" aria-label="主導覽">
+      <a class="brand" href="../index.html" aria-label="繁花首頁">
+        <img class="brand-mark" src="../assets/Stamp_Vert.png" alt="繁花 BLOSSOM AGENT" />
+        <span class="brand-en">酒 桌 骰 子</span>
+      </a>
+      <nav class="site-nav">
+        <a href="../index.html" class="nav-home">← 繁 花 首 頁</a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-eyebrow">DICE GAMES</div>
+      <h1 class="hero-title">
+        以 <em>骰</em> 為 席<br />
+        以 <em>樂</em> 為 交
+      </h1>
+      <p class="hero-lede">
+        經典酒桌骰子遊戲<br />人機對戰、<strong>規則說明</strong>、牌型辨識皆備。<br />
+        讓妳了解基礎的規則。
+      </p>
+
+      <div class="scope-note">
+        本頁面以<em>基礎</em>遊戲規則撰寫，不包含進階遊戲規則<span class="aside">（例如吹牛的齋、飛）</span>，<br />
+        內容也會跟隨客人有些許變化。<br />
+        <em>若想了解最詳細的酒桌遊戲，經紀部會詳細教學指導。</em>
+        <a class="scope-cta" href="../main_cultivate.html#contact">
+          私 訊 經 紀 部 <span class="arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 基礎遊戲 -->
+    <div class="cat-head">
+      <div class="cat-head-inner">
+        <span class="cat-title">基 礎 遊 戲</span>
+        <span class="cat-en">THE BASICS</span>
+      </div>
+    </div>
+
+    <section class="games">
+
+      <!-- 十八骰子 -->
+      <a href="game-18la.html" class="game-card">
+        <span class="badge">可 遊 玩</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span class="face-dot red"></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span class="face-dot red"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot red"></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span class="face-dot red"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+        </div>
+        <h3 class="game-title">十 八 骰 子</h3>
+        <p class="game-desc">
+          擲四骰，去重複算點數。<br />
+          比大、比小、比夾殺——酒桌最快分勝負的一局。
+        </p>
+      </a>
+
+      <!-- 話呸 -->
+      <a href="game-huapei.html" class="game-card">
+        <span class="badge">可 遊 玩</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="die"><div class="face"><span></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span></span></div></div>
+        </div>
+        <h3 class="game-title">話 呸</h3>
+        <p class="game-desc">
+          五骰比牌型：一色、順子、鐵支、葫蘆⋯⋯<br />
+          三次重骰的機會，看誰能扭轉手氣。
+        </p>
+      </a>
+
+      <!-- 紅黑單雙 -->
+      <a href="game-redblack.html" class="game-card">
+        <span class="badge">可 遊 玩</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot red"></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span class="face-dot red"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+        </div>
+        <h3 class="game-title">紅 黑 單 雙</h3>
+        <p class="game-desc">
+          擲五骰喊條件，輪流拿走符合的骰。<br />
+          先被拿光者輸——考驗判斷與運氣。
+        </p>
+      </a>
+
+      <!-- 吹牛 -->
+      <a href="game-liardice.html" class="game-card">
+        <span class="badge">可 遊 玩</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="die"><div class="face"><span></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+        </div>
+        <h3 class="game-title">吹 牛</h3>
+        <p class="game-desc">
+          蓋骰盅、喊數量、比膽識。<br />
+          「一」為萬能——經典的心理戰。
+        </p>
+      </a>
+
+      <!-- 拔牙 -->
+      <a href="game-toothpull.html" class="game-card">
+        <span class="badge">可 遊 玩</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot red"></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span class="face-dot red"></span></div></div>
+        </div>
+        <h3 class="game-title">拔 牙</h3>
+        <p class="game-desc">
+          雙方輪流喊點數、拔骰。<br />
+          最後一顆不能看——命運交給運氣。
+        </p>
+      </a>
+
+      <!-- 妞妞 -->
+      <a href="game-niuniu.html" class="game-card">
+        <span class="badge">可 遊 玩</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot red"></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span class="face-dot red"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+        </div>
+        <h3 class="game-title">妞 妞</h3>
+        <p class="game-desc">
+          三顆湊十，剩下兩顆比大小。<br />
+          十點稱「妞妞」——最富運氣的一款。
+        </p>
+      </a>
+
+    </section>
+
+    <!-- 進階遊戲 -->
+    <div class="cat-head">
+      <div class="cat-head-inner">
+        <span class="cat-title">進 階 遊 戲</span>
+        <span class="cat-en">THE NEXT ROUND</span>
+      </div>
+    </div>
+
+    <section class="games">
+
+      <!-- 7加8減9 -->
+      <div class="game-card is-soon">
+        <span class="badge">敬 請 期 待</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot red"></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span class="face-dot red"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+        </div>
+        <h3 class="game-title">7 加 8 減 9</h3>
+        <p class="game-desc">
+          進 階 玩 法 ・ 規 則 整 理 中
+        </p>
+      </div>
+
+      <!-- 烏骨雞 -->
+      <div class="game-card is-soon">
+        <span class="badge">敬 請 期 待</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+        </div>
+        <h3 class="game-title">烏 骨 雞</h3>
+        <p class="game-desc">
+          進 階 玩 法 ・ 規 則 整 理 中
+        </p>
+      </div>
+
+      <!-- 照相機 -->
+      <div class="game-card is-soon">
+        <span class="badge">敬 請 期 待</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span class="face-dot red"></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span class="face-dot red"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot red"></span><span></span><span class="face-dot red"></span><span></span><span></span><span></span><span class="face-dot red"></span><span></span><span class="face-dot red"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+        </div>
+        <h3 class="game-title">照 相 機</h3>
+        <p class="game-desc">
+          進 階 玩 法 ・ 規 則 整 理 中
+        </p>
+      </div>
+
+      <!-- 三百五 -->
+      <div class="game-card is-soon">
+        <span class="badge">敬 請 期 待</span>
+        <div class="game-icon">
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span><span></span><span class="face-dot"></span></div></div>
+          <div class="die"><div class="face"><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span><span></span><span></span><span></span><span class="face-dot"></span></div></div>
+        </div>
+        <h3 class="game-title">三 百 五</h3>
+        <p class="game-desc">
+          進 階 玩 法 ・ 規 則 整 理 中
+        </p>
+      </div>
+
+    </section>
+
+    <!-- 說明 -->
+    <div class="footer-note">
+      <strong>小酌怡情、大飲傷身。<br />注意飲酒節奏，氣氛勝於追酒</strong><br />
+      未滿十八歲禁止飲酒 ・ 開車不喝酒、喝酒不開車
+    </div>
+
+  </div>
+
+
+  <footer class="site-footer">
+    <div class="footer-seal" aria-hidden="true">
+      <img class="footer-icon" src="../assets/Footer_ICON.png" alt="繁花 BLOSSOM AGENT" />
+    </div>
+    <p class="footer-tagline">讓每一朵花，盛開成自己。</p>
+    <p class="footer-copy">© <span id="year"></span> 繁花 BLOSSOM AGENT. All rights reserved.</p>
+  </footer>
+
+  <script>
+    /* 頁首捲動陰影（與 journey.html 的 is-scrolled 行為一致） */
+    (() => {
+      const h = document.querySelector('.site-header');
+      if (!h) return;
+      const year = document.getElementById('year');
+      if (year) year.textContent = new Date().getFullYear();
+      const onScroll = () => h.classList.toggle('is-scrolled', window.scrollY > 10);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
+</body>
+</html>
