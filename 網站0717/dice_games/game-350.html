@@ -1,0 +1,1797 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>三 百 五 ・ 繁花酒桌</title>
+
+  <!-- =============================================
+       三百五
+       規則：
+         - 一個碗公、七顆骰子，四家輪流
+         - 擲骰後，點數 1 或 5 的骰子可以選擇拿進碗公
+             1 → 100 分、5 → 50 分
+         - 拿完之後接著丟「剩下的」骰子，分數累加
+         - 湊到 350 分以上 → 過關，換下家
+         - 四家都過關後，分數最低的再罰一杯，並由他起家開下一圈
+         - 一顆 1 或 5 都沒丟到 → 喝一杯
+         - 七顆都拿光卻還不到 350 → 喝一杯
+         - 罰完酒一律七顆全部重骰、分數歸零重來
+         - 「妳」單一輪喝到三杯就跳出節奏提醒
+       ============================================= -->
+
+  <style>
+
+    :root {
+      --ink: #3f3435;
+      --ink-2: #5b4848;
+      --muted: #7f6e6c;
+      --paper: #fbf5ef;
+      --paper-2: #f7ede0;
+      --cream: #f6ebe1;
+      --cream-deep: #efe0d0;
+      --blush: #ecccc6;
+      --rose-d: #9a4a4f;
+      --seal: #a93538;
+      --seal-deep: #8c2a2d;
+      --gold: #b89865;
+      --gold-deep: #8a6e44;
+      --moss: #5e7659;
+      --line: rgba(86, 62, 62, 0.14);
+      --line-strong: rgba(86, 62, 62, 0.3);
+      --shadow-card: 0 30px 60px rgba(140, 42, 45, 0.08),
+                     0 10px 30px rgba(81, 54, 50, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Garamond Premier", "Noto Serif TC", serif;
+      font-weight: 300; line-height: 1.85; letter-spacing: 0.03em;
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(ellipse at 75% 12%, rgba(236, 204, 198, 0.4) 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 88%, rgba(196, 184, 144, 0.24) 0%, transparent 55%),
+        linear-gradient(165deg, #fbf5ef 0%, #f6ebe1 58%, #f3e3d3 100%);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 1.4rem 1.5rem 2.4rem; }
+
+    /* ============ Header（與 journey.html 一致） ============ */
+    body { padding-top: 76px; }
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      padding: 14px clamp(18px, 4vw, 54px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      transition: box-shadow 240ms ease;
+    }
+    /* 毛玻璃背景放在 ::before：避免 fixed 元素自身帶 backdrop-filter，
+       在 iOS Safari／部分 Android Chrome 上會導致頁首捲動時無法固定。 */
+    .site-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(251, 245, 239, 0.86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: background 240ms ease;
+    }
+    .site-header.is-scrolled::before { background: rgba(251, 245, 239, 0.96); }
+    .site-header.is-scrolled { box-shadow: 0 1px 20px rgba(81, 54, 50, 0.06); }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .brand-mark { width: 46px; height: 46px; object-fit: contain; }
+    .brand-en {
+      color: var(--ink-2);
+      font-size: 0.86rem;
+      letter-spacing: 0.18em;
+    }
+    .site-nav { display: flex; align-items: center; gap: 10px; }
+    .nav-home {
+      padding: 9px 18px;
+      color: #fff;
+      background: var(--seal);
+      border-radius: 2px;
+      font-size: 0.94rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      transition: background 200ms ease;
+    }
+    .nav-home:hover { background: var(--rose-d); color: #fff; }
+    /* 規則說明鍵：沿用主站 .faq-more 的樣式語言 */
+    .rules-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 1.1rem;
+      padding: 11px 24px;
+      font-family: inherit;
+      font-size: 0.94rem;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+      background: linear-gradient(120deg, rgba(184, 152, 101, 0.10), rgba(255, 255, 255, 0.42));
+      border: 1px solid rgba(169, 53, 56, 0.16);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+    }
+    .rules-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(169, 53, 56, 0.07), transparent 62%);
+      opacity: 0;
+      transition: opacity 220ms ease;
+      pointer-events: none;
+    }
+    .rules-btn:hover,
+    .rules-btn:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(169, 53, 56, 0.34);
+      box-shadow: 0 10px 30px rgba(81, 54, 50, 0.08);
+      outline: none;
+      color: var(--ink);
+    }
+    .rules-btn:hover::before,
+    .rules-btn:focus-visible::before { opacity: 1; }
+    @media (max-width: 620px) {
+      body { padding-top: 64px; }
+      .site-header { min-height: 64px; padding: 10px clamp(14px, 4vw, 24px); }
+      .brand { gap: 10px; }
+      .brand-mark { width: 40px; height: 40px; }
+      .brand-en { font-size: 0.74rem; }
+      .nav-home, .rules-btn { padding: 7px 12px; font-size: 0.82rem; letter-spacing: 0.04em; }
+    }
+
+    .game-head { text-align: center; margin-bottom: 1.1rem; }
+    .game-head h1 {
+      font-family: serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 500; letter-spacing: 0.4em;
+      color: var(--ink); margin-bottom: 0.6rem;
+    }
+    .game-head h1 em { font-style: normal; color: var(--seal); font-weight: 600; }
+    .game-head-lede {
+      font-size: 0.9rem; color: var(--muted); letter-spacing: 0.15em;
+    }
+
+    .table {
+      background: radial-gradient(circle at 50% 40%, #fdf7ec 0%, #f4e7d3 100%);
+      border: 1px solid var(--gold);
+      border-radius: 24px;
+      padding: 1.5rem 1.8rem;
+      position: relative;
+      box-shadow: inset 0 0 40px rgba(184, 152, 101, 0.15), var(--shadow-card);
+      margin-bottom: 2rem;
+    }
+
+    .versus {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem; align-items: center; margin-bottom: 2rem;
+    }
+    .player-panel { text-align: center; }
+    .player-panel .name {
+      font-family: serif; font-size: 1.1rem;
+      font-weight: 500; letter-spacing: 0.3em;
+      color: var(--ink); margin-bottom: 0.5rem;
+    }
+    .player-panel .wins {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic; font-size: 0.82rem;
+      color: var(--muted); letter-spacing: 0.2em;
+    }
+    .player-panel .wins b {
+      color: var(--seal); font-family: serif; font-size: 1.1rem;
+    }
+    .versus-mark {
+      width: 30px;
+      height: 30px;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+      font-family: serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--gold-deep);
+      border: 1px solid rgba(184, 152, 101, 0.55);
+      border-radius: 50%;
+      background: linear-gradient(155deg, #fffdf9 0%, #f5ebda 100%);
+      box-shadow: 0 2px 7px rgba(140, 112, 60, 0.14),
+                  inset 0 0 0 3px rgba(255, 255, 255, 0.6);
+    }
+    @media (max-width: 720px) {
+      .pans { grid-template-columns: 1fr; }
+      .versus { grid-template-columns: 1fr; gap: 1rem; }
+      .versus-mark { margin: 0 auto; }
+    }
+
+    .dice-row {
+      display: flex; justify-content: center; align-items: center;
+      gap: 0.5rem; flex-wrap: wrap;
+      min-height: 60px; margin-bottom: 0.6rem;
+    }
+
+    .die {
+      width: 48px; height: 48px;
+      background: linear-gradient(145deg, #ffffff 0%, #f2ead9 100%);
+      border: 1.5px solid var(--ink);
+      border-radius: 9px;
+      box-shadow:
+        inset 0 -3px 0 rgba(0, 0, 0, 0.1),
+        inset 0 3px 0 rgba(255, 255, 255, 0.6),
+        0 4px 10px rgba(81, 54, 50, 0.15);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.5s ease;
+      position: relative;
+    }
+
+    .die-face {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 3px;
+      width: 28px; height: 28px;
+    }
+    .die-face .pip {
+      width: 7px; height: 7px;
+      background: var(--ink); border-radius: 50%;
+      align-self: center; justify-self: center;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    .die-face .pip.red { background: var(--seal); }
+
+    @keyframes diceRoll {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(360deg); }
+      100% { transform: translateY(0) rotate(720deg); }
+    }
+    .die.is-rolling { animation: diceRoll 0.6s ease; }
+
+    /* 動作 */
+    .actions {
+      display: flex; justify-content: center;
+      gap: 1rem; flex-wrap: wrap;
+      margin-top: 1.4rem;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.6rem;
+      padding: 0.95rem 2rem;
+      font-family: serif; font-size: 0.92rem;
+      letter-spacing: 0.32em;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      border: 1px solid; background: transparent;
+    }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary {
+      background: var(--seal); color: var(--paper);
+      border-color: var(--seal);
+    }
+    .btn-primary:not(:disabled):hover {
+      background: var(--seal-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(140, 42, 45, 0.25);
+    }
+    .btn-ghost { color: var(--ink); border-color: var(--ink-2); }
+    .btn-ghost:not(:disabled):hover { background: var(--ink); color: var(--paper); }
+
+    /* 訊息 */
+    .message-log {
+      max-width: 700px;
+      margin: 1.1rem auto 0;
+      padding: 1.5rem 2rem;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--line);
+      text-align: center; min-height: 60px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .message-log.is-result {
+      border-style: solid;
+      border-color: var(--seal);
+      background: rgba(252, 234, 230, 0.5);
+    }
+    .msg {
+      font-family: serif; font-size: 1rem;
+      color: var(--ink); letter-spacing: 0.12em; line-height: 1.9;
+    }
+    .msg strong { color: var(--seal); font-weight: 600; }
+    .msg em { font-style: normal; color: var(--gold-deep); }
+
+    /* 規則抽屜 */
+    .rules-drawer {
+      position: fixed; top: 0; right: 0;
+      width: 100%; max-width: 460px; height: 100vh;
+      background: var(--paper);
+      border-left: 1px solid var(--line-strong);
+      box-shadow: -20px 0 60px rgba(81, 54, 50, 0.15);
+      transform: translateX(100%);
+      transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+      z-index: 100; overflow-y: auto;
+      padding: 3rem 2.5rem;
+    }
+    .rules-drawer.is-open { transform: translateX(0); }
+    .rules-drawer .close {
+      position: absolute; top: 1.4rem; right: 1.4rem;
+      background: none; border: none;
+      font-size: 1.5rem; color: var(--ink-2); cursor: pointer;
+    }
+    .rules-drawer h2 {
+      font-family: serif; font-size: 1.4rem;
+      letter-spacing: 0.3em; color: var(--ink);
+      margin-bottom: 0.4rem; font-weight: 500;
+    }
+    .rule-section { margin-bottom: 1.6rem; }
+    .rule-section h3 {
+      font-family: serif; font-size: 0.95rem;
+      color: var(--seal); letter-spacing: 0.25em;
+      margin-bottom: 0.6rem; font-weight: 500;
+    }
+    .rule-section p {
+      font-size: 0.88rem; line-height: 2; color: var(--ink-2);
+    }
+
+    .backdrop {
+      position: fixed; inset: 0;
+      background: rgba(63, 52, 53, 0.4);
+      backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 99;
+    }
+    .backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+    /* ============ 手機版適配 ============ */
+    @media (max-width: 560px) {
+      .wrap { padding: 1.4rem 1rem 3rem; }
+
+      /* 標題區 */
+      .game-head { margin-bottom: 1.4rem; }
+      .game-head h1 { font-size: 1.7rem; letter-spacing: 0.2em; }
+      .game-head-lede { font-size: 0.8rem; letter-spacing: 0.1em; }
+      .rules-btn { margin-top: 0.9rem; }
+
+      /* 對戰列：手機上仍維持左右對峙，不拆成上下三段 */
+      .versus { grid-template-columns: 1fr auto 1fr; gap: 0.5rem; margin-bottom: 1.2rem; }
+      .versus-mark { width: 26px; height: 26px; font-size: 0.72rem; }
+      .player-panel .name { font-size: 0.95rem; letter-spacing: 0.1em; margin-bottom: 0.2rem; }
+      .player-panel .wins,
+      .player-panel .remaining { font-size: 0.72rem; letter-spacing: 0.08em; }
+      .player-panel .wins span { font-size: 0.95rem; }
+
+      /* 骰子縮小，五顆維持同一排 */
+      .dice-row { gap: 0.3rem; min-height: 46px; flex-wrap: nowrap; }
+      .die { width: 46px; height: 46px; border-radius: 8px; }
+      .die-face { width: 28px; height: 28px; gap: 3px; }
+      .die-face .pip { width: 6.5px; height: 6.5px; }
+
+      /* 檯面、按鈕、播報 */
+      .table { padding: 1.1rem 0.9rem; border-radius: 14px; }
+      .pans { gap: 1rem; margin-bottom: 1.2rem; }
+      .pan { padding: 1rem 0.7rem; }
+      .pan-label { font-size: 0.66rem; letter-spacing: 0.24em; }
+      .actions { flex-direction: column; align-items: stretch; gap: 0.6rem; margin-top: 1.2rem; }
+      .btn { width: 100%; padding: 0.85rem 1rem; font-size: 0.9rem; letter-spacing: 0.16em; }
+      .message-log, .msg { font-size: 0.85rem; line-height: 1.9; }
+
+      .pan { min-height: 120px; }
+      .bowl-area { min-height: 130px; }
+      /* 抽屜關閉鍵放大為可觸控尺寸 */
+      .rules-drawer .close {
+        top: 1rem; right: 1rem;
+        width: 44px; height: 44px;
+        display: grid; place-items: center;
+      }
+      /* 點數與牌名改為左右橫置 */
+      .score-display {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.7rem 0.5rem;
+        margin-top: 0.3rem;
+      }
+      .score-formula { flex: 1 0 100%; margin-bottom: 0.15rem; font-size: 0.74rem; }
+      .score-value { font-size: 1.6rem; margin-bottom: 0; }
+      /* 規則抽屜：手機上滿版 */
+      .rules-drawer { width: 100%; max-width: none; padding: 4.4rem 1.4rem 3rem; }
+    }
+
+    @media (max-width: 560px) {
+      .pan { min-height: auto; }
+    }
+
+    /* ============ Footer（與 faq.html 一致） ============ */
+    .site-footer {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      padding: 60px clamp(20px, 5vw, 76px) 40px;
+      background: #2b1f1f;
+      color: #d8c5c1;
+      text-align: center;
+    }
+    .site-footer .footer-seal { display: grid; place-items: center; }
+    .site-footer .footer-icon { width: clamp(84px, 12vw, 112px); height: auto; display: block; }
+    .site-footer .footer-tagline {
+      margin: 0;
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-size: 1.15rem;
+      letter-spacing: 0.16em;
+      color: #ecd9d5;
+    }
+    .site-footer .footer-copy {
+      margin: 0;
+      color: #8a7572;
+      font-size: 0.84rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ============ 罰酒計量：對戰標記兩側的威士忌杯 ============ */
+    .drink-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+    }
+    .glass {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+    .glass-body {
+      position: relative;
+      width: 22px;
+      height: 26px;
+      border: 1px solid rgba(91, 72, 72, 0.45);
+      border-top: none;
+      border-radius: 2px 2px 5px 5px;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.65), rgba(246, 235, 225, 0.35));
+      overflow: hidden;
+      box-shadow: inset 0 -1px 0 rgba(91, 72, 72, 0.18);
+    }
+    .glass-fill {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 0;
+      background: linear-gradient(180deg, #d89440 0%, #b06a1e 55%, #8a4c14 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 226, 176, 0.7);
+      transition: height 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .glass-shine {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 3px; height: 12px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.55);
+    }
+    .glass-foot {
+      width: 26px;
+      height: 2px;
+      margin-top: 1px;
+      border-radius: 1px;
+      background: rgba(91, 72, 72, 0.3);
+    }
+    .glass.is-full .glass-body { border-color: rgba(169, 53, 56, 0.5); }
+
+    .drink-note {
+      display: none;
+      margin: 0.9rem auto 0;
+      max-width: 34em;
+      text-align: center;
+      font-size: 0.86rem;
+      line-height: 1.9;
+      letter-spacing: 0.04em;
+      color: var(--seal);
+    }
+    .drink-note.is-shown { display: block; }
+    .drink-note span { display: block; }
+    .drink-note span + span { margin-top: 0.2rem; }
+
+    @media (max-width: 560px) {
+      .drink-row { gap: 0.45rem; }
+      .glass-body { width: 18px; height: 22px; }
+      .glass-foot { width: 21px; }
+      .drink-note { font-size: 0.78rem; line-height: 1.75; }
+    }
+  
+    /* ============ 勝利動畫（與話呸同一套） ============
+       收局時替贏的那一家加上 .is-won：
+       金光暈開 → 一道光掃過 → 骰子接力躍起 → 蓋上「勝」印。
+       只認 .is-won，不綁特定面板 class，各遊戲共用。 */
+    .is-won {
+      position: relative;
+      border-color: var(--gold) !important;
+      background: linear-gradient(155deg, rgba(255, 250, 238, 0.9), rgba(247, 235, 214, 0.75)) !important;
+      animation: winGlow 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes winGlow {
+      0%   { box-shadow: 0 0 0 0 rgba(184, 152, 101, 0); }
+      28%  { box-shadow: 0 0 0 5px rgba(184, 152, 101, 0.26),
+                         0 20px 48px rgba(184, 152, 101, 0.42); }
+      100% { box-shadow: 0 0 0 1px rgba(184, 152, 101, 0.32),
+                         0 10px 26px rgba(184, 152, 101, 0.18); }
+    }
+
+    /* 掃光：border-radius: inherit 讓它自然裁在各遊戲的圓角內 */
+    .is-won::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 1;
+      background: linear-gradient(115deg,
+        transparent 34%,
+        rgba(255, 248, 228, 0.9) 50%,
+        transparent 66%);
+      background-size: 260% 100%;
+      animation: winSweep 1.15s ease-out both;
+    }
+    @keyframes winSweep {
+      0%   { background-position: 150% 0; opacity: 0; }
+      18%  { opacity: 1; }
+      100% { background-position: -60% 0; opacity: 0; }
+    }
+
+    /* 骰子接力躍起 */
+    .is-won .die {
+      animation: winHop 0.6s cubic-bezier(0.25, 1.5, 0.45, 1) both;
+    }
+    .is-won .die:nth-child(1) { animation-delay: 0.10s; }
+    .is-won .die:nth-child(2) { animation-delay: 0.19s; }
+    .is-won .die:nth-child(3) { animation-delay: 0.28s; }
+    .is-won .die:nth-child(4) { animation-delay: 0.37s; }
+    .is-won .die:nth-child(5) { animation-delay: 0.46s; }
+    @keyframes winHop {
+      0%   { transform: translateY(0) rotate(0deg); }
+      45%  { transform: translateY(-16px) rotate(-7deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* 蓋印 */
+    .is-won::after {
+      content: "勝";
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 42px; height: 42px;
+      display: grid;
+      place-items: center;
+      z-index: 2;
+      font-family: serif;
+      font-size: 1.2rem;
+      letter-spacing: 0;
+      color: var(--paper);
+      background: var(--seal);
+      border-radius: 3px;
+      box-shadow: 0 6px 18px rgba(140, 42, 45, 0.34),
+                  inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+      animation: winStamp 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) 0.42s both;
+    }
+    @keyframes winStamp {
+      0%   { opacity: 0; transform: scale(2.3) rotate(-16deg); }
+      60%  { opacity: 1; transform: scale(0.9) rotate(-7deg); }
+      100% { opacity: 1; transform: scale(1) rotate(-7deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .is-won, .is-won::before, .is-won::after, .is-won .die {
+        animation-duration: 0.01ms;
+        animation-iteration-count: 1;
+      }
+    }
+    @media (max-width: 560px) {
+      .is-won::after { width: 34px; height: 34px; font-size: 1rem; top: 9px; right: 9px; }
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .guess-btn:not(:disabled):hover {
+        border-color: var(--seal); color: var(--seal);
+      }
+    }
+    @media (max-width: 560px) {
+      .trainer { padding: 1.3rem 0.9rem; margin-top: 1.6rem; }
+      .trainer-head { font-size: 0.95rem; letter-spacing: 0.16em; }
+      .trainer-lede { font-size: 0.75rem; }
+      .guess-btn { min-width: 2.2rem; padding: 0.4rem 0.35rem; font-size: 0.82rem; }
+      .trainer .actions { flex-direction: row; gap: 0.5rem; }
+      .trainer .actions .btn { letter-spacing: 0.1em; padding: 0.75rem 0.5rem; font-size: 0.84rem; }
+    }
+  
+    /* ============ 規則說明用的骰子圖示 ============
+       沿用遊戲廳卡片的骰子樣式，縮成可以塞進文字行內。
+       台灣骰：一點、四點為紅。 */
+    .d-ico {
+      display: inline-grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 1.5px;
+      width: 1.25em; height: 1.25em;
+      padding: 0.15em;
+      margin: 0 0.1em;
+      /* 對齊：inline-grid 的「基線」會落在第一列格子上，用 baseline 或負偏移
+         都會讓骰子整排往下掉（實測低約 7–11px）。改用 middle 對齊文字中線，
+         再以 top 微調補掉中日文字框與 x-height 的落差（實測誤差 <0.5px）。 */
+      vertical-align: middle;
+      position: relative;
+      top: -0.14em;
+      line-height: 1;
+      background: var(--paper);
+      border: 1px solid var(--ink-2);
+      border-radius: 0.22em;
+      box-sizing: border-box;
+    }
+    .d-ico > span { display: block; }
+    .d-ico > span.p {
+      width: 0.19em; height: 0.19em;
+      align-self: center; justify-self: center;
+      background: var(--ink);
+      border-radius: 50%;
+    }
+    .d-ico > span.p.red { background: var(--seal); }
+    /* 連著排的骰子之間留點空隙 */
+    .d-ico + .d-ico { margin-left: 0.18em; }
+  
+
+    /* 規則說明裡的舉例區塊 */
+    .rule-example {
+      margin-top: 0.6rem;
+      padding: 0.8rem 1rem;
+      background: var(--cream);
+      font-family: serif;
+      font-size: 0.85rem;
+      line-height: 2;
+      color: var(--ink);
+      border-left: 2px solid var(--gold);
+    }
+
+    /* ============ 碗公 ============ */
+    .bowl-stage {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 1.6rem;
+      padding: 0.9rem 1.4rem;
+      margin-bottom: 0.8rem;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    /* 碗公：與敲敲杯同一套——陶碗、金邊、碗口橢圓、圈足 */
+    .bowl-wrap {
+      position: relative;
+      width: 180px; height: 110px;
+      flex: 0 0 auto;
+      margin: 8px 0 10px;
+    }
+    .bowl {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 8%,
+        #fdf9f1 0%, #f2e6d2 46%, #e6d5ba 100%);
+      border: 1px solid var(--gold);
+      border-top-width: 0;
+      border-radius: 14px 14px 92px 92px / 10px 10px 78px 78px;
+      box-shadow:
+        inset 0 12px 22px rgba(140, 112, 60, 0.18),
+        inset 0 -6px 0 rgba(255, 255, 255, 0.5),
+        0 14px 30px rgba(140, 112, 60, 0.16);
+      overflow: hidden;
+      z-index: 1;
+    }
+    /* 舊版的金線與釉光改由碗身本體表現 */
+    .bowl::before, .bowl::after { content: none; }
+    /* 碗口的橢圓 */
+    .bowl-rim {
+      position: absolute;
+      left: -1px; right: -1px; top: -7px;
+      height: 15px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      background: linear-gradient(180deg, #fffdf8, #f3e7d3);
+      box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.9);
+      z-index: 3;
+      pointer-events: none;
+    }
+    .bowl-rim::after { content: none; }
+    /* 圈足 */
+    .bowl-foot {
+      position: absolute;
+      left: 50%; bottom: -5px;
+      width: 62px; height: 8px;
+      margin-left: -31px;
+      border: none;
+      border-radius: 0 0 8px 8px;
+      background: linear-gradient(180deg, #e6d5ba, #cbb794);
+      box-shadow: 0 4px 10px rgba(140, 112, 60, 0.22);
+      z-index: 0;
+    }
+    /* 碗內的骰子 */
+    .bowl-dice {
+      position: absolute;
+      left: 12px; right: 12px; bottom: 18px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      gap: 2px;
+      z-index: 2;
+    }
+    /* 一排骰子；上排比下排少，自然疊成一堆 */
+    .bowl-row { display: flex; justify-content: center; gap: 3px; }
+    .bowl-dice .die { width: 24px; height: 24px; border-radius: 5px; }
+    .bowl-dice .die-face { width: 14px; height: 14px; gap: 1.5px; }
+    .bowl-dice .die-face .pip { width: 3.2px; height: 3.2px; }
+    .bowl-empty {
+      position: absolute;
+      left: 0; right: 0; bottom: 18px;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic; font-size: 0.74rem;
+      letter-spacing: 0.18em; color: var(--muted);
+      z-index: 2;
+    }
+
+    .bowl-read { text-align: center; }
+    .bowl-label {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic; font-size: 0.74rem;
+      letter-spacing: 0.3em; color: var(--gold-deep);
+      margin-bottom: 0.4rem;
+    }
+    .bowl-score {
+      font-family: serif; font-size: 1.9rem; font-weight: 700;
+      color: var(--seal); line-height: 1;
+    }
+    .bowl-score small {
+      font-size: 0.9rem; font-weight: 400;
+      color: var(--muted); margin-left: 0.25rem;
+    }
+    .bowl-bar {
+      margin: 0.45rem auto 0; max-width: 240px;
+      height: 6px; border-radius: 3px;
+      background: rgba(91, 72, 72, 0.12); overflow: hidden;
+    }
+    .bowl-bar i {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--gold), var(--seal));
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+    .bowl-note {
+      margin-top: 0.4rem;
+      font-size: 0.78rem; line-height: 1.7; color: var(--ink-2);
+    }
+    .bowl-note b { color: var(--seal); }
+
+    /* ============ 手上的骰子 ============ */
+    .hand-area {
+      text-align: center;
+      padding: 0.8rem 1rem;
+      background: rgba(255, 255, 255, 0.42);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      margin-bottom: 0.8rem;
+    }
+    .hand-who {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic; font-size: 0.75rem;
+      letter-spacing: 0.28em; color: var(--gold-deep);
+      margin-bottom: 0.55rem;
+    }
+    .hand-dice {
+      display: flex; justify-content: center; align-items: center;
+      gap: 0.45rem; min-height: 52px; margin-bottom: 0.5rem; flex-wrap: wrap;
+    }
+    /* 可以拿出來的（1 或 5） */
+    .die.can-take { cursor: pointer; }
+    @media (hover: hover) and (pointer: fine) {
+      .die.can-take:not(.is-picked):hover { transform: translateY(-3px); }
+    }
+    .die.can-take::after {
+      content: attr(data-pts);
+      position: absolute;
+      top: -15px; left: 50%; transform: translateX(-50%);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 0.6rem; letter-spacing: 0.08em;
+      color: var(--gold-deep);
+      white-space: nowrap;
+    }
+    .die.is-picked {
+      transform: translateY(-7px);
+      border-color: var(--seal);
+      background: linear-gradient(145deg, #fffaf6 0%, #f7e4dd 100%);
+      box-shadow: 0 0 0 3px rgba(169, 53, 56, 0.16),
+                  0 6px 14px rgba(140, 42, 45, 0.2);
+    }
+    .die.is-picked::after { color: var(--seal); font-weight: 600; }
+    /* 這一手拿不出來的骰子（不是 1 也不是 5） */
+    .die.is-dud { opacity: 0.45; }
+
+    .hand-hint {
+      font-size: 0.84rem; line-height: 1.85;
+      color: var(--ink-2); letter-spacing: 0.04em;
+      min-height: 1.9em;
+    }
+    .hand-hint b { color: var(--seal); }
+    .hand-hint .warn { color: var(--seal); font-weight: 600; }
+
+    /* ============ 四家 ============ */
+    .seats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0.6rem; margin-bottom: 0.8rem;
+    }
+    .seat {
+      position: relative;
+      padding: 0.55rem 0.6rem 0.5rem;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      text-align: center;
+      transition: all 0.35s ease;
+    }
+    .seat.is-turn {
+      border-color: var(--seal);
+      background: rgba(252, 234, 230, 0.45);
+      box-shadow: 0 6px 18px rgba(140, 42, 45, 0.10);
+    }
+    .seat-name {
+      font-family: serif; font-size: 0.95rem;
+      letter-spacing: 0.16em; color: var(--ink);
+      margin-bottom: 0.35rem;
+    }
+    .seat.is-you .seat-name { color: var(--seal); font-weight: 600; }
+    .seat-cups {
+      font-family: serif; font-size: 1.5rem; font-weight: 700;
+      line-height: 1; color: var(--moss);
+    }
+    .seat-cups small {
+      font-size: 0.68rem; font-weight: 400;
+      color: var(--muted); margin-left: 0.15rem;
+    }
+    .seat[data-level="warn"] .seat-cups { color: var(--gold-deep); }
+    .seat[data-level="high"] .seat-cups { color: var(--seal); }
+    .seat-cap {
+      margin-top: 0.25rem;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic; font-size: 0.66rem;
+      letter-spacing: 0.14em; color: var(--muted);
+    }
+    /* 過關後在右上角掛上這一圈的分數 */
+    .seat-pass {
+      position: absolute; top: 5px; right: 5px;
+      font-family: serif; font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      color: var(--paper); background: var(--moss);
+      padding: 1px 5px; border-radius: 2px;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .seat.has-passed .seat-pass { opacity: 1; }
+
+    /* 這一圈的起家：左上角一枚小印 */
+    .seat.is-starter { border-color: var(--gold); }
+    .seat.is-starter::before {
+      content: "起";
+      position: absolute;
+      top: -7px; left: -7px;
+      width: 20px; height: 20px;
+      display: grid; place-items: center;
+      font-family: serif; font-size: 0.66rem;
+      color: var(--paper);
+      background: linear-gradient(140deg, var(--gold), var(--gold-deep));
+      border-radius: 50%;
+      box-shadow: 0 2px 7px rgba(140, 112, 60, 0.35),
+                  inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+      z-index: 5;
+    }
+
+    /* 這一圈分數最低、要罰酒的那家 */
+    .seat.is-loser {
+      border-color: var(--seal);
+      background: linear-gradient(125deg, rgba(252,234,230,0.8), rgba(255,255,255,0.5));
+      box-shadow: 0 0 0 1px rgba(169,53,56,0.18), 0 8px 20px rgba(140,42,45,0.12);
+    }
+    .seat.is-loser .seat-pass { background: var(--seal); }
+
+    /* ============ 罰酒動畫 ============
+       輪到誰喝，那一格就浮出一只小酒杯：
+       酒斟進去 → 舉杯傾倒 → 杯數跳一格。 */
+    /* 酒杯擺左側，不要壓到中間的杯數 */
+    .pour-fx {
+      position: absolute;
+      left: 8px; top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 4;
+    }
+    .seat.is-pouring .pour-fx { animation: pourFx 1.7s ease both; }
+    @keyframes pourFx {
+      0%   { opacity: 0; }
+      10%  { opacity: 1; }
+      82%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    /* 整格暖起來 */
+    .seat.is-pouring {
+      border-color: var(--gold);
+      animation: pourGlow 1.7s ease both;
+    }
+    @keyframes pourGlow {
+      0%   { box-shadow: 0 0 0 0 rgba(184, 152, 101, 0); }
+      25%  { box-shadow: 0 0 0 4px rgba(184, 152, 101, 0.28),
+                         0 10px 26px rgba(184, 152, 101, 0.35); }
+      100% { box-shadow: 0 0 0 0 rgba(184, 152, 101, 0); }
+    }
+    /* 杯身 */
+    .pour-glass {
+      position: relative;
+      display: block;          /* span 預設是 inline，寬高會失效 */
+      width: 22px; height: 27px;
+      border: 1.5px solid var(--ink-2);
+      border-top: none;
+      border-radius: 2px 2px 6px 6px;
+      background: linear-gradient(155deg, rgba(255,255,255,0.85), rgba(246,235,225,0.6));
+      transform-origin: 50% 100%;
+      animation: glassTip 1.7s ease both;
+      box-shadow: 0 4px 10px rgba(81,54,50,0.18);
+    }
+    @keyframes glassTip {
+      0%, 46%   { transform: rotate(0deg) translateY(0); }
+      60%       { transform: rotate(-30deg) translateY(-4px); }   /* 舉杯 */
+      78%       { transform: rotate(-46deg) translateY(-6px); }   /* 乾了 */
+      100%      { transform: rotate(0deg) translateY(0); }
+    }
+    /* 杯裡的酒 */
+    .pour-liquid {
+      position: absolute;
+      display: block;
+      left: 0; right: 0; bottom: 0;
+      height: 0;
+      background: linear-gradient(180deg, #d89440 0%, #b06a1e 60%, #8a4c14 100%);
+      border-radius: 0 0 5px 5px;
+      animation: liquidFill 1.7s ease both;
+    }
+    @keyframes liquidFill {
+      0%   { height: 0; }
+      34%  { height: 74%; }      /* 斟滿 */
+      52%  { height: 74%; }
+      74%  { height: 0; }        /* 喝乾 */
+      100% { height: 0; }
+    }
+    /* 從上方落下的那一注酒 */
+    .pour-stream {
+      position: absolute;
+      display: block;
+      left: 50%; top: -14px;
+      width: 2.5px; height: 14px;
+      margin-left: -1.25px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, rgba(216,148,64,0), #c8801f);
+      transform-origin: 50% 0;
+      animation: streamPour 1.7s ease both;
+    }
+    @keyframes streamPour {
+      0%   { transform: scaleY(0); opacity: 0; }
+      8%   { transform: scaleY(1); opacity: 1; }
+      32%  { transform: scaleY(1); opacity: 1; }
+      40%  { transform: scaleY(0); opacity: 0; }
+      100% { transform: scaleY(0); opacity: 0; }
+    }
+    /* 杯數跳一格 */
+    .seat.is-pouring .seat-cups { animation: cupBump 1.7s ease both; }
+    @keyframes cupBump {
+      0%, 70%  { transform: scale(1); }
+      80%      { transform: scale(1.35); }
+      100%     { transform: scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .seat.is-pouring .pour-fx, .seat.is-pouring,
+      .pour-glass, .pour-liquid, .pour-stream,
+      .seat.is-pouring .seat-cups { animation-duration: 0.01ms; }
+    }
+
+    /* ============ 節奏提醒 ============ */
+    .pace-alert {
+      position: fixed; inset: 0;
+      display: none; place-items: center; padding: 1.5rem;
+      background: rgba(63, 52, 53, 0.45);
+      backdrop-filter: blur(4px); z-index: 120;
+    }
+    .pace-alert.is-open { display: grid; }
+    .pace-card {
+      max-width: 26rem; padding: 2.2rem 2rem 1.8rem;
+      background: var(--paper); border: 1px solid var(--gold);
+      border-radius: 12px; text-align: center;
+      box-shadow: 0 30px 70px rgba(81, 54, 50, 0.28);
+      animation: paceIn 0.42s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+    }
+    @keyframes paceIn {
+      0% { opacity: 0; transform: translateY(14px) scale(0.96); }
+      100% { opacity: 1; transform: none; }
+    }
+    .pace-card .icon {
+      width: 46px; height: 46px; margin: 0 auto 1rem;
+      display: grid; place-items: center;
+      border: 1px solid var(--seal); border-radius: 50%;
+      color: var(--seal); font-family: serif; font-size: 1.3rem;
+    }
+    .pace-card p {
+      font-family: serif; font-size: 1rem; line-height: 2;
+      letter-spacing: 0.08em; color: var(--ink); margin-bottom: 1.3rem;
+    }
+
+    .actions { margin-top: 0.2rem; }
+
+    @media (max-width: 720px) {
+      .bowl-stage { grid-template-columns: 1fr; gap: 1rem; }
+      .bowl-wrap { margin: 0 auto; }
+      .seats { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+    }
+    @media (max-width: 560px) {
+      .bowl-wrap { width: 152px; height: 96px; }
+      .bowl-rim { height: 13px; top: -6px; }
+      .bowl-foot { width: 50px; height: 7px; margin-left: -25px; }
+      .bowl-dice { left: 9px; right: 9px; bottom: 15px; }
+      .bowl-row { gap: 2px; }
+      .bowl-dice .die { width: 20px; height: 20px; border-radius: 4px; }
+      .bowl-dice .die-face { width: 12px; height: 12px; gap: 1px; }
+      .bowl-dice .die-face .pip { width: 2.8px; height: 2.8px; }
+      .bowl-score { font-size: 1.8rem; }
+      .hand-dice { gap: 0.3rem; }
+      .seat { padding: 0.6rem 0.4rem 0.5rem; }
+      .seat-name { font-size: 0.84rem; letter-spacing: 0.06em; }
+      .seat-cups { font-size: 1.3rem; }
+      .pour-fx { left: 5px; }
+      .pour-glass { width: 18px; height: 22px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <header class="site-header" aria-label="主導覽">
+      <a class="brand" href="game-lobby.html" aria-label="繁花酒桌">
+        <img class="brand-mark" src="../assets/Stamp_Vert.png" alt="繁花 BLOSSOM AGENT" />
+        <span class="brand-en">酒 桌 骰 子</span>
+      </a>
+      <nav class="site-nav">
+        <a href="game-lobby.html" class="nav-home">← 返 回 遊 戲 廳</a>
+      </nav>
+    </header>
+
+    <div class="game-head">
+      <h1>三 <em>百</em> 五</h1>
+      <p class="game-head-lede">七 骰 一 碗 公 ・ 湊 滿 三 百 五</p>
+      <button class="rules-btn" id="rules-btn">規 則 說 明</button>
+    </div>
+
+    <div class="table">
+
+      <!-- 碗公 -->
+      <div class="bowl-stage">
+        <div class="bowl-wrap">
+          <span class="bowl-foot" aria-hidden="true"></span>
+          <div class="bowl">
+            <div class="bowl-empty" id="bowl-empty">碗 公 還 空 著</div>
+            <div class="bowl-dice" id="bowl-dice"></div>
+          </div>
+          <div class="bowl-rim" aria-hidden="true"></div>
+        </div>
+        <div class="bowl-read">
+          <div class="bowl-label">THE BOWL ・ 碗 公</div>
+          <div class="bowl-score" id="bowl-score">0<small>／350 分</small></div>
+          <div class="bowl-bar"><i id="bowl-bar"></i></div>
+          <p class="bowl-note">
+            <span class="d-ico" aria-label="1"><span></span><span></span><span></span><span></span><span class="p red"></span><span></span><span></span><span></span><span></span></span> 拿進碗公算 <b>100</b> 分、<span class="d-ico" aria-label="5"><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span></span> 算 <b>50</b> 分，<br />
+            其餘點數拿不出來，只能再丟一次。
+          </p>
+        </div>
+      </div>
+
+      <!-- 四家 -->
+      <div class="seats" id="seats"></div>
+
+      <!-- 手上的骰子 -->
+      <div class="hand-area">
+        <div class="hand-who" id="hand-who">準 備 開 始</div>
+        <div class="hand-dice" id="hand-dice"></div>
+        <div class="hand-hint" id="hand-hint"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="btn-roll">開 始 擲 骰</button>
+        <button class="btn btn-ghost" id="btn-take" disabled>拿 出</button>
+        <button class="btn btn-primary" id="btn-next" style="display:none;">下 一 家</button>
+        <button class="btn btn-ghost" id="btn-more" style="display:none;">繼 續 骰</button>
+        <button class="btn btn-ghost" id="btn-reset" style="display:none;">重 新 開 桌</button>
+      </div>
+
+    </div>
+
+    <div class="message-log" id="msg-log">
+      <div class="msg">一個碗公、七顆骰子——點「<strong>開始擲骰</strong>」由妳先來。</div>
+    </div>
+
+  </div>
+
+  <!-- 節奏提醒 -->
+  <div class="pace-alert" id="pace-alert" role="dialog" aria-modal="true" aria-labelledby="pace-text">
+    <div class="pace-card">
+      <div class="icon" aria-hidden="true">！</div>
+      <p id="pace-text">噢不，你好像喝太快了，<br />請注意節奏避免喝醉喔</p>
+      <button class="btn btn-primary" id="pace-ok">我 知 道 了</button>
+    </div>
+  </div>
+
+  <!-- 規則抽屜 -->
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="rules-drawer" id="rules-drawer">
+    <button class="close" id="close-rules">✕</button>
+    <h2>三 百 五 ・ 規 則</h2>
+
+    <div class="rule-section">
+      <h3>基 本 玩 法</h3>
+      <p>桌上一個<strong>碗公</strong>、手上<strong>七顆骰子</strong>，四家輪流來。</p>
+      <div class="rule-example">
+        擲出七顆 → 點數是 <span class="d-ico" aria-label="1"><span></span><span></span><span></span><span></span><span class="p red"></span><span></span><span></span><span></span><span></span></span> 或 <span class="d-ico" aria-label="5"><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span></span> 的可以<strong>拿進碗公</strong><br>
+        <span class="d-ico" aria-label="1"><span></span><span></span><span></span><span></span><span class="p red"></span><span></span><span></span><span></span><span></span></span> ＝ <b style="color:var(--seal);">100</b> 分　・　<span class="d-ico" aria-label="5"><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span></span> ＝ <b style="color:var(--seal);">50</b> 分<br>
+        拿完之後，接著丟<strong>剩下的</strong>骰子，分數一路累加
+      </div>
+      <p style="margin-top:0.8rem;">湊到 <b style="color:var(--seal);">350 分</b>以上就<strong>過關</strong>，可以繼續拼點數，也可以收手換下一家。</p>
+    </div>
+
+    <div class="rule-section">
+      <h3>一 圈 結 束 ・ 比 分 數</h3>
+      <p>四家<strong>都過了 350</strong> 之後，把各自的過關分數擺出來比——<strong style="color:var(--seal);">分數最低</strong>的那一家再<strong>罰一杯</strong>。</p>
+      <div class="rule-example">
+        妳 400　・　繁花 350　・　客Ａ 500　・　客Ｂ 450<br>
+        → 繁花最低，<strong>罰酒一杯</strong>
+      </div>
+      <p style="margin-top:0.8rem;">下一圈由<strong>輸家起家</strong>，座位順序照舊輪轉。起家的那一格左上角會蓋上一枚<b style="color:var(--gold-deep);">起</b>字金印。</p>
+      <p>所以剛好卡在 350 過關不一定划算——多拚一點分數，才不會在最後被追上。</p>
+    </div>
+
+    <div class="rule-section">
+      <h3>過 關 之 後 ・ 收 手 還 是 再 拚</h3>
+      <p>湊到 350 <strong>不必馬上換人</strong>。妳可以按「<strong>下一家</strong>」收手，也可以拿手上剩下的骰子<strong>再骰一次</strong>，把分數往上疊。</p>
+      <p style="margin-top:0.6rem;">追加的那一手若<strong>骰不出 1 也骰不出 5</strong>，<strong style="color:var(--moss);">不用罰酒、分數也不歸零</strong>——就停在已經湊到的分數，這一輪直接交給下一家。</p>
+      <div class="rule-example">
+        450 分了，手上剩 <b>2</b> 顆 → 決定再拚<br>
+        丟出 <span class="d-ico" aria-label="3"><span class="p"></span><span></span><span></span><span></span><span class="p"></span><span></span><span></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="6"><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span></span> → 拚不上去，<b style="color:var(--moss);">450 分算數</b>，換下一家
+      </div>
+      <p style="margin-top:0.8rem;">追加拚不到的機率（手上剩 n 顆是 (4/6)ⁿ）：剩 1 顆 <b style="color:var(--seal);">67%</b>、2 顆 <b style="color:var(--seal);">44%</b>、3 顆 <b style="color:var(--seal);">30%</b>、4 顆 <b style="color:var(--seal);">20%</b>、5 顆 <b style="color:var(--seal);">13%</b>。</p>
+      <p style="margin-top:0.8rem;">七顆<strong>全部拿光</strong>時沒得選，直接換下家。</p>
+      <p>因為拚不到也不虧，<strong>繁花與客人只要手上還有骰子就一定會拚</strong>——妳也一樣，沒有理由早收手。</p>
+    </div>
+
+    <div class="rule-section">
+      <h3>湊 不 到 三 百 五 ・ 直 接 判 輸</h3>
+      <p>還沒到 350 就<strong>丟不出半顆</strong> <span class="d-ico" aria-label="1"><span></span><span></span><span></span><span></span><span class="p red"></span><span></span><span></span><span></span><span></span></span> 或 <span class="d-ico" aria-label="5"><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span></span>，或是<strong>七顆全拿光了還不夠</strong>——兩種都算湊不到，<strong style="color:var(--seal);">當場判輸</strong>。</p>
+      <div class="rule-example">
+        丟出 <span class="d-ico" aria-label="2"><span class="p"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="3"><span class="p"></span><span></span><span></span><span></span><span class="p"></span><span></span><span></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="6"><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span></span> → 一顆都拿不出來 → <strong>判輸、罰酒一杯</strong><br>
+        這一圈<strong>到此結束</strong>，後面還沒丟的人不用丟了<br>
+        下一圈由<strong>輸的人起家</strong>
+      </div>
+      <p style="margin-top:0.8rem;">所以手上剩越少顆越危險——剩兩顆時有將近一半的機率丟空。<strong>什麼時候該收手，就是這個遊戲的全部。</strong></p>
+      <p style="margin-top:0.6rem;">只有四家<strong>都平安過關</strong>時，才會走到比分數、罰最低分那一家。</p>
+    </div>
+
+    <div class="rule-section">
+      <h3>拿 多 拿 少 ・ 取 捨</h3>
+      <p>拿出來的骰子就離場了，手上會越來越少；而<strong>手上越少，下一手丟空的機率越高</strong>。</p>
+      <div class="rule-example">
+        剩 7 顆丟空的機率　<b style="color:var(--seal);">5.9%</b><br>
+        剩 4 顆　<b style="color:var(--seal);">19.8%</b>　・　剩 2 顆　<b style="color:var(--seal);">44.4%</b>
+      </div>
+      <p style="margin-top:0.8rem;">所以有時候只收 <span class="d-ico" aria-label="1"><span></span><span></span><span></span><span></span><span class="p red"></span><span></span><span></span><span></span><span></span></span>、把 <span class="d-ico" aria-label="5"><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span></span> 留在手上再拚一次，反而喝得比較少。</p>
+    </div>
+
+    <div class="rule-section">
+      <h3>節 奏 提 醒</h3>
+      <p>只要<strong>妳</strong>在同一輪裡喝到 <b style="color:var(--seal);">3 杯</b>，畫面會跳出提醒。</p>
+      <p>這是遊戲，不是拚酒——真的坐在桌邊時，記得替自己留餘地。</p>
+    </div>
+
+    <div class="rule-section">
+      <h3>繁 花 版 本</h3>
+      <p>繁花與兩位客人會看「還差幾分」決定收多少：這一手就能過關就全收；還差得遠、手上骰子又多，就只收 <span class="d-ico" aria-label="1"><span></span><span></span><span></span><span></span><span class="p red"></span><span></span><span></span><span></span><span></span></span>、把 <span class="d-ico" aria-label="5"><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span></span> 留著再拚一次。</p>
+    </div>
+  </aside>
+
+  <!-- ============================================
+       遊戲邏輯
+       ============================================ -->
+  <script src="dice-core.js"></script>
+  <script>
+  (() => {
+    'use strict';
+
+    const Core = window.DiceCore;
+
+    /* ========== 規則參數 ========== */
+    const DICE_N   = 7;     // 碗公配七顆骰
+    const TARGET   = 350;   // 過關門檻
+    const PTS      = { 1: 100, 5: 50 };   // 只有 1 與 5 拿得出來
+    const FAST_CUP = 3;     // 「妳」連著這麼多圈被罰就提醒
+
+    const PIP = {
+      1: [5], 2: [1, 9], 3: [1, 5, 9],
+      4: [1, 3, 7, 9], 5: [1, 3, 5, 7, 9], 6: [1, 3, 4, 6, 7, 9],
+    };
+    const scorable = (v) => v === 1 || v === 5;
+    const BOWL_LOWER = 3;   // 碗裡下排放幾顆（其餘疊到上排）
+
+    /* ========== 狀態 ========== */
+    const state = {
+      seats: [
+        { key: 'you', name: '妳',      you: true  },
+        { key: 'cpu', name: '繁 花',   you: false },
+        { key: 'a',   name: '客 人 Ａ', you: false },
+        { key: 'b',   name: '客 人 Ｂ', you: false },
+      ],
+      cups: { you: 0, cpu: 0, a: 0, b: 0 },   // 總共喝了幾杯
+      passed: {},                              // 這一圈誰過關了
+      finals: {},                              // 這一圈各家的過關分數
+      losers: [],
+      starter: 0,                              // 這一圈由誰起家（上一圈的輸家）
+      done: 0,                                 // 這一圈已經有幾家過關
+      round: 1,
+      turn: 0,
+      hand: [],        // 手上還沒拿出來的骰子點數
+      picked: new Set(),
+      bowl: [],        // 已經拿進碗公的骰子
+      score: 0,
+      turnCups: 0,     // 這一輪喝了幾杯
+      youStreak: 0,    // 「妳」連著幾圈被罰
+      pushes: 0,       // 過關之後又追加骰了幾次
+      phase: 'idle',   // idle / rolled / over / done
+      busy: false,
+    };
+    const cur = () => state.seats[state.turn];
+
+    /* ========== UI ========== */
+    const els = {
+      bowlDice: document.getElementById('bowl-dice'),
+      bowlEmpty: document.getElementById('bowl-empty'),
+      bowlScore: document.getElementById('bowl-score'),
+      bowlBar: document.getElementById('bowl-bar'),
+      handWho: document.getElementById('hand-who'),
+      handDice: document.getElementById('hand-dice'),
+      handHint: document.getElementById('hand-hint'),
+      seats: document.getElementById('seats'),
+      btnRoll: document.getElementById('btn-roll'),
+      btnTake: document.getElementById('btn-take'),
+      btnNext: document.getElementById('btn-next'),
+      btnMore: document.getElementById('btn-more'),
+      btnReset: document.getElementById('btn-reset'),
+      msgLog: document.getElementById('msg-log'),
+      alert: document.getElementById('pace-alert'),
+      alertOk: document.getElementById('pace-ok'),
+    };
+
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const setMsg = (html, isResult = false) => {
+      els.msgLog.innerHTML = `<div class="msg">${html}</div>`;
+      els.msgLog.classList.toggle('is-result', isResult);
+    };
+    const nameOf = (s) => (s.you ? '<strong>妳</strong>' : `<em>${s.name}</em>`);
+
+    /* ========== 畫面 ========== */
+    const buildDie = (v, opts = {}) => {
+      const d = document.createElement('div');
+      d.className = 'die' + (opts.rolling ? ' is-rolling' : '')
+        + (opts.canTake ? ' can-take' : '')
+        + (opts.picked ? ' is-picked' : '')
+        + (opts.dud ? ' is-dud' : '');
+      if (opts.canTake) d.dataset.pts = `${PTS[v]}`;
+      const f = document.createElement('div');
+      f.className = 'die-face';
+      for (let i = 1; i <= 9; i++) {
+        const c = document.createElement('span');
+        if (PIP[v].includes(i)) c.className = 'pip' + (Core.isRed(v) ? ' red' : '');
+        f.appendChild(c);
+      }
+      d.appendChild(f);
+      return d;
+    };
+
+    const renderBowl = () => {
+      els.bowlDice.innerHTML = '';
+      // 碗裡的骰子疊成兩排：下排 3 顆、上排 4 顆
+      const lower = state.bowl.slice(0, BOWL_LOWER);
+      const upper = state.bowl.slice(BOWL_LOWER);
+      [upper, lower].forEach((row) => {           // 上排先進 DOM，才會排在上面
+        if (!row.length) return;
+        const r = document.createElement('div');
+        r.className = 'bowl-row';
+        row.forEach((v) => r.appendChild(buildDie(v)));
+        els.bowlDice.appendChild(r);
+      });
+      els.bowlEmpty.style.display = state.bowl.length ? 'none' : 'grid';
+      els.bowlScore.innerHTML = `${state.score}<small>／${TARGET} 分</small>`;
+      els.bowlBar.style.width = `${Math.min(100, (state.score / TARGET) * 100)}%`;
+    };
+
+    /* rolling：這一次是不是真的在擲骰 */
+    const renderHand = (rolling = false) => {
+      els.handDice.innerHTML = '';
+      const seat = cur();
+      state.hand.forEach((v, i) => {
+        const can = scorable(v) && seat.you && state.phase === 'rolled';
+        const el = buildDie(v, {
+          rolling,
+          canTake: can,
+          picked: state.picked.has(i),
+          dud: state.phase === 'rolled' && !scorable(v),
+        });
+        if (can) el.addEventListener('click', () => togglePick(i));
+        els.handDice.appendChild(el);
+      });
+    };
+
+    const levelOf = (n) => (n >= 5 ? 'high' : n >= 3 ? 'warn' : 'ok');
+    let pouring = null;      // 這一刻正在罰酒的是誰
+    const renderSeats = () => {
+      els.seats.innerHTML = '';
+      state.seats.forEach((s, i) => {
+        const n = state.cups[s.key];
+        const el = document.createElement('div');
+        el.className = 'seat' + (s.you ? ' is-you' : '')
+          + (i === state.turn && state.phase !== 'idle' ? ' is-turn' : '')
+          + (state.passed[s.key] ? ' has-passed' : '');
+        el.dataset.level = levelOf(n);
+        const fin = state.finals[s.key];
+        el.innerHTML = `<span class="seat-pass">${fin != null ? fin : '過'}</span>`
+          + `<div class="seat-name">${s.name}</div>`
+          + `<div class="seat-cups">${n}<small> 杯</small></div>`
+          + `<div class="seat-cap">累 計 罰 酒</div>`
+          + `<span class="pour-fx" aria-hidden="true">`
+          +   `<span class="pour-glass"><i class="pour-stream"></i><i class="pour-liquid"></i></span>`
+          + `</span>`;
+        if (i === state.starter) el.classList.add('is-starter');   // 這一圈的起家
+        if (state.losers.includes(s.key)) el.classList.add('is-loser');
+        if (pouring === s.key) el.classList.add('is-pouring');
+        els.seats.appendChild(el);
+      });
+    };
+    const renderAll = (rolling = false) => { renderBowl(); renderHand(rolling); renderSeats(); };
+
+    /* ========== 罰酒與節奏提醒 ========== */
+    let pendingAfterAlert = null;
+    const POUR_MS = 1700;         // 與 CSS 的罰酒動畫等長
+    const pourFor = async (seat) => {
+      state.cups[seat.key] += 1;
+      state.turnCups += 1;
+      pouring = seat.key;
+      renderSeats();                // 重畫時掛上 .is-pouring，動畫就會跑
+      await sleep(POUR_MS);
+      pouring = null;
+      renderSeats();
+    };
+    const checkPace = (seat) => {
+      if (!seat.you || state.youStreak < FAST_CUP) return false;
+      els.alert.classList.add('is-open');
+      els.alertOk.focus();
+      return true;
+    };
+
+    /* ========== 拿骰子 ========== */
+    const togglePick = (i) => {
+      if (state.phase !== 'rolled' || !cur().you) return;
+      if (state.picked.has(i)) state.picked.delete(i); else state.picked.add(i);
+      renderHand();
+      updateTakeBtn();
+    };
+
+    const pickedPoints = () =>
+      [...state.picked].reduce((n, i) => n + PTS[state.hand[i]], 0);
+
+    const updateTakeBtn = () => {
+      const n = state.picked.size;
+      els.btnTake.disabled = n === 0;
+      els.btnTake.textContent = n
+        ? `拿 出 ${n} 顆（＋${pickedPoints()} 分）`
+        : '拿 出';
+    };
+
+    /* 把選中的骰子放進碗公，然後接著丟剩下的 */
+    const takePicked = async (idxs) => {
+      const seat = cur();
+      const take = [...idxs].sort((a, b) => a - b);
+      const pts = take.reduce((n, i) => n + PTS[state.hand[i]], 0);
+      take.forEach((i) => state.bowl.push(state.hand[i]));
+      state.hand = state.hand.filter((_, i) => !idxs.has(i));
+      state.picked.clear();
+      state.score += pts;
+      state.phase = 'taking';
+      renderAll();
+      updateTakeBtn();
+
+      setMsg(`${nameOf(seat)}拿出 <strong>${take.length}</strong> 顆進碗公，`
+        + `＋<strong>${pts}</strong> 分——目前 <strong>${state.score}</strong> 分。`);
+      await sleep(850);
+
+      // 過了 350 就可以收手換下家，也可以再拚高分——除非七顆都拿光了
+      if (state.score >= TARGET) {
+        return state.hand.length ? offerPush(seat) : passTurn(seat);
+      }
+      if (state.hand.length === 0) return sweptShort(seat);
+      return continueRoll(seat);
+    };
+
+    /* ========== 過關之後：收手，還是再拚 ==========
+       結算時分數最低的那家才罰酒，所以「剛好過 350」很容易變成墊底。
+       但再骰一次若骰不出 1 也骰不出 5，就得喝一杯、分數歸零重來——
+       手上骰子越少，空手的機率越高（剩 n 顆是 (4/6)^n）。 */
+    const bustRisk = (n) => Math.pow(4 / 6, n);
+    const hidePushBtns = () => {
+      els.btnNext.style.display = 'none';
+      els.btnMore.style.display = 'none';
+    };
+
+    const offerPush = async (seat) => {
+      state.phase = 'over';
+      const n = state.hand.length;
+      const risk = Math.round(bustRisk(n) * 100);
+      renderAll();
+
+      if (!seat.you) {
+        setMsg(`${nameOf(seat)}已經 <strong>${state.score}</strong> 分——過關了，`
+          + `手上還剩 <strong>${n}</strong> 顆⋯⋯`);
+        await sleep(950);
+        return aiPush(seat) ? pushOn(seat) : passTurn(seat);
+      }
+
+      state.busy = false;
+      els.btnTake.disabled = true;
+      els.btnTake.style.display = 'none';        // 這時候沒得拿，換成兩個抉擇鍵
+      els.btnNext.style.display = 'inline-flex';
+      els.btnMore.style.display = 'inline-flex';
+      els.btnMore.textContent = `繼 續 骰 ${n} 顆`;
+      els.handHint.innerHTML = `已經 <b>${state.score}</b> 分，過關了——`
+        + `按「<b>下一家</b>」收手，或再骰這 <b>${n}</b> 顆拚高分。`
+        + `<br />追加骰不出 1 也骰不出 5 <b>不用罰酒</b>，就停在 <b>${state.score}</b> 分換人（機率 <b>${risk}%</b>）。`;
+      setMsg(`<strong>妳</strong>湊到 <strong>${state.score}</strong> 分，已經過關——`
+        + `結算時<strong>分數最低的那家才要喝</strong>，`
+        + `而追加失敗<strong>不罰酒</strong>，拚多少算多少。`, true);
+    };
+
+    const pushOn = async (seat) => {
+      hidePushBtns();
+      // 先把階段推進去：否則接下來 sleep 的這段時間裡 phase 還是 'over'，
+      // 「下一家」的守門條件依舊成立，兩條路徑會同時跑掉。
+      state.phase = 'rolling';
+      state.busy = true;
+      state.pushes += 1;
+      setMsg(`${nameOf(seat)}不收手，再骰手上這 <strong>${state.hand.length}</strong> 顆。`);
+      await sleep(500);
+      return rollDice(seat, state.hand.length);
+    };
+
+    /* 電腦要不要拚：追加失敗只是停在原分數換人、不罰酒，
+       所以拚是「賺到算賺到、賺不到也不虧」——手上還有骰子就一定拚。 */
+    const aiPush = (seat) => state.hand.length > 0;
+
+    /* 七顆全拿出來了卻還不到 350 → 一樣是湊不到，直接判輸 */
+    const sweptShort = (seat) =>
+      loseRound(seat, `${nameOf(seat)}七顆都拿出來了，卻只有 <strong>${state.score}</strong> 分`);
+
+    /* ========== 湊不到 350：直接判輸 ==========
+       這一圈到此結束，後面還沒丟的人不用丟了；
+       輸的人罰酒一杯，並由他起家開下一圈。 */
+    const loseRound = async (seat, why) => {
+      hidePushBtns();
+      state.phase = 'done';
+      state.busy = true;
+      state.losers = [seat.key];
+      renderAll();
+
+      setMsg(`${why}——<strong>湊不到 ${TARGET}，直接判輸</strong>，`
+        + `<strong>罰酒一杯</strong>，這一圈到此結束。`, true);
+      await sleep(1500);
+      await pourFor(seat);
+
+      state.youStreak = seat.you ? state.youStreak + 1 : 0;
+      state.starter = state.seats.findIndex((x) => x.key === seat.key);
+      state.turn = state.starter;
+      state.round += 1;
+      state.passed = {};
+      state.finals = {};
+      state.done = 0;
+      state.losers = [];
+      renderSeats();
+
+      setMsg(`第 <strong>${state.round}</strong> 圈——由 `
+        + `<strong>${seat.you ? '妳' : seat.name}</strong> 起家。`, true);
+      await sleep(1200);
+      if (checkPace(seat)) { pendingAfterAlert = () => beginRoll(cur()); return; }
+      return beginRoll(cur());
+    };
+
+    /* 過關，換下家 */
+    const passTurn = async (seat) => {
+      hidePushBtns();
+      state.passed[seat.key] = true;
+      state.finals[seat.key] = state.score;
+      state.done += 1;
+      state.phase = 'done';
+      renderSeats();
+      setMsg(`${nameOf(seat)}湊到 <strong>${state.score}</strong> 分——`
+        + `達標 ${TARGET}，<strong>過關</strong>。`, true);
+      await sleep(1300);
+
+      // 四家都過完了 → 比分數，最低的那家喝
+      if (state.done >= state.seats.length) return settleRound();
+
+      state.turn = (state.turn + 1) % state.seats.length;
+      return beginRoll(cur());
+    };
+
+    /* 一圈結束：四家都過了 350，比誰的分數最低——最低的罰酒，
+       並由他起家開下一圈。 */
+    const settleRound = async () => {
+      state.phase = 'done';
+      const scores = state.seats.map((s) => ({ s, v: state.finals[s.key] }));
+      const min = Math.min(...scores.map((x) => x.v));
+      const losers = scores.filter((x) => x.v === min);
+      const top = Math.max(...scores.map((x) => x.v));
+
+      state.losers = losers.map((x) => x.s.key);
+      renderSeats();
+
+      const line = scores.map((x) =>
+        `${x.s.you ? '妳' : x.s.name} <strong>${x.v}</strong>`).join('　・　');
+      const names = losers.map((x) => (x.s.you ? '妳' : x.s.name)).join('、');
+      setMsg(`第 <strong>${state.round}</strong> 圈結束——${line}<br />`
+        + `最高 <strong>${top}</strong> 分，<strong>${names}</strong> 只有 `
+        + `<strong>${min}</strong> 分，<strong>罰酒一杯</strong>。`, true);
+      await sleep(1500);
+
+      for (const x of losers) await pourFor(x.s);
+      state.youStreak = state.losers.includes('you') ? state.youStreak + 1 : 0;
+
+      // 下一圈由輸家起家（多家並列時取座位順序最前的）
+      const firstLoser = state.seats.findIndex((s) => state.losers.includes(s.key));
+      state.starter = firstLoser >= 0 ? firstLoser : state.starter;
+      state.turn = state.starter;
+      state.round += 1;
+      state.passed = {};
+      state.finals = {};
+      state.done = 0;
+      state.losers = [];
+      renderSeats();
+
+      const st = state.seats[state.starter];
+      setMsg(`第 <strong>${state.round}</strong> 圈——由 `
+        + `<strong>${st.you ? '妳' : st.name}</strong> 起家。`, true);
+      await sleep(1200);
+      return beginRoll(cur());
+    };
+
+    /* ========== 擲骰 ========== */
+    const beginRoll = async (seat) => {
+      state.hand = [];
+      state.bowl = [];
+      state.score = 0;
+      state.picked.clear();
+      state.turnCups = 0;
+      state.pushes = 0;
+      hidePushBtns();
+      state.phase = 'rolling';
+      renderAll();
+      els.handWho.textContent = seat.you ? '輪 到 妳' : `${seat.name.replace(/\s/g, '')} 的 回 合`;
+      setMsg(`輪到 ${nameOf(seat)}——七顆骰子，湊到 <strong>${TARGET}</strong> 分才過關。`);
+      await sleep(700);
+      return rollDice(seat, DICE_N);
+    };
+
+    const continueRoll = (seat) => rollDice(seat, state.hand.length);
+
+    const rollDice = async (seat, n) => {
+      if (n <= 0) return;            // 防呆：手上沒骰子不該走到這裡
+      state.busy = true;
+      hidePushBtns();
+      els.btnTake.style.display = 'inline-flex';
+      els.btnRoll.disabled = true;
+      els.btnTake.disabled = true;
+      state.phase = 'rolling';
+
+      state.hand = Array.from({ length: n }, () => Core.rollDie());
+      state.picked.clear();
+      renderHand(true);
+      els.handHint.textContent = '';
+      await sleep(650);
+
+      state.phase = 'rolled';
+      renderHand();
+
+      const good = state.hand.filter(scorable);
+      if (good.length === 0 && state.score >= TARGET) {
+        // 過關之後追加的那一手：骰不出點數不算輸，
+        // 就停在原本已經湊到的分數，這一輪直接交給下一家。
+        els.handHint.innerHTML = '<span class="warn">一顆 1 或 5 都沒有</span>'
+          + `——不罰酒，就停在 <b>${state.score}</b> 分換下一家。`;
+        setMsg(`${nameOf(seat)}追加的這手丟出 ${state.hand.join(' · ')}——`
+          + `<strong>沒有 1 也沒有 5</strong>，拚不上去了；`
+          + `已經過關的 <strong>${state.score}</strong> 分算數，<strong>換下一家</strong>。`, true);
+        await sleep(1500);
+        return passTurn(seat);
+      }
+      if (good.length === 0) {
+        // 還沒過關就一顆都拿不出來 → 湊不到 350，直接判輸
+        els.handHint.innerHTML = '<span class="warn">一顆 1 或 5 都沒有</span>'
+          + `——只有 <b>${state.score}</b> 分，湊不到 ${TARGET}。`;
+        return loseRound(seat,
+          `${nameOf(seat)}丟出 ${state.hand.join(' · ')}——`
+          + `<strong>沒有 1 也沒有 5</strong>，停在 <strong>${state.score}</strong> 分`);
+      }
+
+      const need = TARGET - state.score;
+      els.handHint.innerHTML = seat.you
+        ? `點選要拿進碗公的骰子（<b>1</b>＝100、<b>5</b>＝50），還差 <b>${need}</b> 分。`
+        : `${seat.name.replace(/\s/g, '')}正在挑要拿哪幾顆⋯⋯`;
+
+      if (seat.you) {
+        state.busy = false;
+        updateTakeBtn();
+        return;
+      }
+      await sleep(900);
+      return takePicked(aiPick(seat));
+    };
+
+    /* ========== 繁花與客人的取捨 ==========
+       手上骰子越少，下一手空手的機率越高（剩 2 顆就有 44%），
+       所以她們在「還差很多分」時會留些骰子在手上：
+       只拿 1（100 分），把 5 留著再拚；快到門檻時才全部收下。 */
+    const aiPick = (seat) => {
+      const idx = state.hand.map((v, i) => ({ v, i })).filter((d) => scorable(d.v));
+      const ones = idx.filter((d) => d.v === 1);
+      const fives = idx.filter((d) => d.v === 5);
+      const all = new Set(idx.map((d) => d.i));
+
+      const need = TARGET - state.score;
+      const allPts = idx.reduce((n, d) => n + PTS[d.v], 0);
+
+      // 這一手就能過關 → 全拿
+      if (allPts >= need) return all;
+      // 手上骰子還多、又有 1 可拿 → 只收 1，把 5 留在手上
+      if (state.hand.length >= 4 && ones.length) return new Set(ones.map((d) => d.i));
+      // 其餘情況全拿，免得越剩越少越容易空手
+      return all;
+    };
+
+    /* ========== 開始 / 重來 ========== */
+    const startGame = async () => {
+      Object.keys(state.cups).forEach((k) => { state.cups[k] = 0; });
+      state.passed = {};
+      state.finals = {};
+      state.losers = [];
+      state.done = 0;
+      state.round = 1;
+      state.starter = 0;
+      state.turn = 0;
+      state.turnCups = 0;
+      state.youStreak = 0;
+      pendingAfterAlert = null;
+      els.btnRoll.style.display = 'none';       // 開局後就用不到了
+      els.btnTake.style.display = 'inline-flex';
+      els.btnReset.style.display = 'inline-flex';
+      await beginRoll(cur());
+    };
+
+    /* ========== 事件 ========== */
+    els.btnRoll.addEventListener('click', async () => {
+      els.btnRoll.blur();
+      if (state.busy) return;
+      if (state.phase === 'idle') return startGame();
+    });
+
+    els.btnTake.addEventListener('click', async () => {
+      els.btnTake.blur();
+      if (state.phase !== 'rolled' || !state.picked.size) return;
+      await takePicked(new Set(state.picked));
+    });
+
+    els.btnNext.addEventListener('click', async () => {
+      els.btnNext.blur();
+      if (state.phase !== 'over' || !cur().you) return;
+      hidePushBtns();
+      await passTurn(cur());
+    });
+
+    els.btnMore.addEventListener('click', async () => {
+      els.btnMore.blur();
+      if (state.phase !== 'over' || !cur().you) return;
+      await pushOn(cur());
+    });
+
+    els.btnReset.addEventListener('click', async () => {
+      els.btnReset.blur();
+      await startGame();
+    });
+
+    els.alertOk.addEventListener('click', async () => {
+      els.alert.classList.remove('is-open');
+      state.youStreak = 0;                // 提醒過就重新計，不要每一圈都跳
+      const fn = pendingAfterAlert;
+      pendingAfterAlert = null;
+      if (fn) await fn();
+    });
+    els.alert.addEventListener('click', (e) => { if (e.target === els.alert) els.alertOk.click(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && els.alert.classList.contains('is-open')) els.alertOk.click();
+    });
+
+    /* ========== 規則抽屜 ========== */
+    const drawer = document.getElementById('rules-drawer');
+    const backdrop = document.getElementById('backdrop');
+    document.getElementById('rules-btn').addEventListener('click', () => {
+      drawer.classList.add('is-open'); backdrop.classList.add('is-open');
+    });
+    const closeDrawer = () => {
+      drawer.classList.remove('is-open'); backdrop.classList.remove('is-open');
+    };
+    document.getElementById('close-rules').addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+    /* 初始 */
+    renderAll();
+    updateTakeBtn();
+
+    window.Game350 = { state, startGame, rollDice, takePicked, aiPick, cur };
+  })();
+
+  </script>
+
+  <footer class="site-footer">
+    <div class="footer-seal" aria-hidden="true">
+      <img class="footer-icon" src="../assets/Footer_ICON.png" alt="繁花 BLOSSOM AGENT" />
+    </div>
+    <p class="footer-tagline">讓每一朵花，盛開成自己。</p>
+    <p class="footer-copy">© <span id="year"></span> 繁花 BLOSSOM AGENT. All rights reserved.</p>
+  </footer>
+
+  <script>
+    /* 頁首捲動陰影（與 journey.html 的 is-scrolled 行為一致） */
+    (() => {
+      const h = document.querySelector('.site-header');
+      if (!h) return;
+      const year = document.getElementById('year');
+      if (year) year.textContent = new Date().getFullYear();
+      const onScroll = () => h.classList.toggle('is-scrolled', window.scrollY > 10);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+  
+
+  })();
+  </script>
+</body>
+</html>

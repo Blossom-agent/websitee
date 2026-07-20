@@ -1,0 +1,1508 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>紅黑單雙 ・ 繁花酒桌</title>
+
+  <!-- =============================================
+       紅黑單雙 · Red / Black / Odd / Even
+       規則：
+         - 玩家與電腦各擲 5 顆骰子，以骰盅蓋著
+         - 進攻者開自己的盅，喊出六種條件之一：
+           紅（1、4）、黑（2、3、5、6）、單（1、3、5）、雙（2、4、6）
+           大（4、5、6）、小（1、2、3）
+         - 雙方符合條件的骰子一起被拿掉
+         - 手上還是滿的五顆：這一喊必須拿掉自己至少一顆
+         - 手上少於五顆：沒有這個限制，可以喊完全沒中自己的條件
+         - 輪到自己時對方的盅是蓋著的，喊定條件才掀開——雙方都是盲喊
+         - 兩邊都沒有符合的骰子＝空喊，白費一輪（每回合重搖，不會卡死）
+         - 每個回合結束，兩家都把剩下的骰子蓋起來重新搖過（點數全部重來）
+         - 生死關是「個人狀態」，只有剩下一顆的那一方進入：
+             1. 那顆蓋著，連自己都看不到點數＝盲喊
+             2. 輪到自己進攻時改成循序開盅，自己先開；先見底就直接輸，
+                對家連掀都不用掀
+           對家骰子還多時不受影響，輪到對家進攻仍是兩家同時開
+         - 繁花的最後一攻直接算勝率：P(贏)=(1-自爆率)×P(對家全中)，挑最高的喊
+         - 每回合輪流進攻
+         - 骰子先被拿光的一方輸；同時歸零則進攻者輸
+
+       備註：1 與 4 為紅色（傳統麻將骰）
+       ============================================= -->
+
+  <style>
+    :root {
+      --ink: #3f3435;
+      --ink-2: #5b4848;
+      --muted: #7f6e6c;
+      --paper: #fbf5ef;
+      --paper-2: #f7ede0;
+      --cream: #f6ebe1;
+      --cream-deep: #efe0d0;
+      --blush: #ecccc6;
+      --rose-d: #9a4a4f;
+      --seal: #a93538;
+      --seal-deep: #8c2a2d;
+      --gold: #b89865;
+      --gold-deep: #8a6e44;
+      --moss: #5e7659;
+      --line: rgba(86, 62, 62, 0.14);
+      --line-strong: rgba(86, 62, 62, 0.3);
+      --shadow-card: 0 30px 60px rgba(140, 42, 45, 0.08),
+                     0 10px 30px rgba(81, 54, 50, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Garamond Premier", "Noto Serif TC", serif;
+      font-weight: 300;
+      line-height: 1.85;
+      letter-spacing: 0.03em;
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(ellipse at 75% 12%, rgba(236, 204, 198, 0.4) 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 88%, rgba(196, 184, 144, 0.24) 0%, transparent 55%),
+        linear-gradient(165deg, #fbf5ef 0%, #f6ebe1 58%, #f3e3d3 100%);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* Header */
+    /* ============ Header（與 journey.html 一致） ============ */
+    body { padding-top: 76px; }
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      padding: 14px clamp(18px, 4vw, 54px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      transition: box-shadow 240ms ease;
+    }
+    /* 毛玻璃背景放在 ::before：避免 fixed 元素自身帶 backdrop-filter，
+       在 iOS Safari／部分 Android Chrome 上會導致頁首捲動時無法固定。 */
+    .site-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(251, 245, 239, 0.86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: background 240ms ease;
+    }
+    .site-header.is-scrolled::before { background: rgba(251, 245, 239, 0.96); }
+    .site-header.is-scrolled { box-shadow: 0 1px 20px rgba(81, 54, 50, 0.06); }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .brand-mark { width: 46px; height: 46px; object-fit: contain; }
+    .brand-en {
+      color: var(--ink-2);
+      font-size: 0.86rem;
+      letter-spacing: 0.18em;
+    }
+    .site-nav { display: flex; align-items: center; gap: 10px; }
+    .nav-home {
+      padding: 9px 18px;
+      color: #fff;
+      background: var(--seal);
+      border-radius: 2px;
+      font-size: 0.94rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      transition: background 200ms ease;
+    }
+    .nav-home:hover { background: var(--rose-d); color: #fff; }
+    /* 規則說明鍵：沿用主站 .faq-more 的樣式語言 */
+    .rules-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 1.1rem;
+      padding: 11px 24px;
+      font-family: inherit;
+      font-size: 0.94rem;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+      background: linear-gradient(120deg, rgba(184, 152, 101, 0.10), rgba(255, 255, 255, 0.42));
+      border: 1px solid rgba(169, 53, 56, 0.16);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+    }
+    .rules-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(169, 53, 56, 0.07), transparent 62%);
+      opacity: 0;
+      transition: opacity 220ms ease;
+      pointer-events: none;
+    }
+    .rules-btn:hover,
+    .rules-btn:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(169, 53, 56, 0.34);
+      box-shadow: 0 10px 30px rgba(81, 54, 50, 0.08);
+      outline: none;
+      color: var(--ink);
+    }
+    .rules-btn:hover::before,
+    .rules-btn:focus-visible::before { opacity: 1; }
+    @media (max-width: 620px) {
+      body { padding-top: 64px; }
+      .site-header { min-height: 64px; padding: 10px clamp(14px, 4vw, 24px); }
+      .brand { gap: 10px; }
+      .brand-mark { width: 40px; height: 40px; }
+      .brand-en { font-size: 0.74rem; }
+      .nav-home, .rules-btn { padding: 7px 12px; font-size: 0.82rem; letter-spacing: 0.04em; }
+    }
+
+    /* 標題 */
+    .game-head { text-align: center; margin-bottom: 2rem; }
+    .game-head h1 {
+      font-family: serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 500; letter-spacing: 0.4em;
+      color: var(--ink); margin-bottom: 0.6rem;
+    }
+    .game-head h1 em { font-style: normal; color: var(--seal); font-weight: 600; }
+    .game-head-lede {
+      font-size: 0.9rem; color: var(--muted); letter-spacing: 0.15em;
+    }
+
+    /* 桌 */
+    .table {
+      background: radial-gradient(circle at 50% 40%, #fdf7ec 0%, #f4e7d3 100%);
+      border: 1px solid var(--gold);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      box-shadow: inset 0 0 40px rgba(184, 152, 101, 0.15), var(--shadow-card);
+      margin-bottom: 2rem;
+    }
+
+    /* 對戰面板 */
+    .versus {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem; align-items: center;
+      margin-bottom: 2rem;
+    }
+    .player-panel { text-align: center; }
+    .player-panel .name {
+      font-family: serif; font-size: 1.1rem;
+      font-weight: 500; letter-spacing: 0.3em;
+      color: var(--ink); margin-bottom: 0.5rem;
+    }
+    .player-panel .remaining {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic; font-size: 0.82rem;
+      color: var(--muted); letter-spacing: 0.2em;
+    }
+    .player-panel .remaining b {
+      color: var(--seal); font-family: serif;
+      font-size: 1.4rem; margin-right: 0.2em;
+    }
+    .versus-mark {
+      width: 30px;
+      height: 30px;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+      font-family: serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--gold-deep);
+      border: 1px solid rgba(184, 152, 101, 0.55);
+      border-radius: 50%;
+      background: linear-gradient(155deg, #fffdf9 0%, #f5ebda 100%);
+      box-shadow: 0 2px 7px rgba(140, 112, 60, 0.14),
+                  inset 0 0 0 3px rgba(255, 255, 255, 0.6);
+    }
+
+    /* 骰盤 */
+    .pans {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 720px) {
+      .pans { grid-template-columns: 1fr; }
+      .versus { grid-template-columns: 1fr; gap: 1rem; }
+      .versus-mark { margin: 0 auto; }
+    }
+
+    .pan {
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.4rem 1.2rem;
+      text-align: center;
+      position: relative;
+      min-height: 180px;
+    }
+    .pan.is-turn {
+      border-color: var(--seal);
+      background: rgba(252, 234, 230, 0.4);
+    }
+    .pan-label {
+      font-family: serif;
+      font-style: normal;
+      font-size: 0.82rem;
+      color: var(--gold-deep);
+      letter-spacing: 0.24em;
+      margin-bottom: 1rem;
+    }
+
+    /* 骰子行 */
+    .dice-row {
+      display: flex; justify-content: center; align-items: center;
+      gap: 0.5rem; flex-wrap: wrap;
+      min-height: 60px;
+    }
+
+    .die {
+      width: 48px; height: 48px;
+      background: linear-gradient(145deg, #ffffff 0%, #f2ead9 100%);
+      border: 1.5px solid var(--ink);
+      border-radius: 9px;
+      box-shadow:
+        inset 0 -3px 0 rgba(0, 0, 0, 0.1),
+        inset 0 3px 0 rgba(255, 255, 255, 0.6),
+        0 4px 10px rgba(81, 54, 50, 0.15);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      transition: all 0.5s ease;
+    }
+    .die-face {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 3px;
+      width: 28px; height: 28px;
+    }
+    .die-face .pip {
+      width: 7px; height: 7px;
+      background: var(--ink);
+      border-radius: 50%;
+      align-self: center; justify-self: center;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    .die-face .pip.red { background: var(--seal); }
+
+    @keyframes diceRoll {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(360deg); }
+      100% { transform: translateY(0) rotate(720deg); }
+    }
+    .die.is-rolling { animation: diceRoll 0.6s ease; }
+
+    /* 被拿走的骰子（飛出動畫） */
+    @keyframes takeAway {
+      0% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-80px) rotate(-40deg) scale(0.5); opacity: 0; }
+    }
+    .die.is-taken {
+      animation: takeAway 0.6s ease forwards;
+      pointer-events: none;
+    }
+
+    /* 高亮符合條件的骰子 */
+    .die.is-matched {
+      border-color: var(--seal);
+      box-shadow:
+        0 0 0 3px rgba(169, 53, 56, 0.2),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.1),
+        inset 0 3px 0 rgba(255, 255, 255, 0.6);
+      transform: translateY(-4px);
+    }
+
+    /* 條件按鈕群 */
+    .conditions {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .conditions-label {
+      text-align: center;
+      font-family: serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.28em;
+      color: var(--ink-2);
+      margin-bottom: 1rem;
+    }
+    .conditions-label em { color: var(--seal); font-style: normal; }
+
+    .cond-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.5rem;
+    }
+    @media (max-width: 720px) {
+      .cond-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .cond-btn {
+      background: var(--paper);
+      border: 1.5px solid var(--ink-2);
+      padding: 0.9rem 0.5rem;
+      font-family: serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .cond-btn .cond-en {
+      display: block;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 0.68rem;
+      color: var(--gold-deep);
+      letter-spacing: 0.2em;
+      margin-top: 0.2rem;
+      font-weight: 400;
+    }
+    /* hover 只給真的有游標的裝置。
+       觸控螢幕點一下之後 :hover 會卡住不放，整顆鍵就一直填著深色——
+       (hover: hover) 讓手機／平板根本不套用這段。 */
+    @media (hover: hover) and (pointer: fine) {
+      .cond-btn:not(:disabled):hover {
+        background: var(--ink);
+        color: var(--paper);
+        border-color: var(--ink);
+        transform: translateY(-2px);
+      }
+      .cond-btn:not(:disabled):hover .cond-en { color: var(--gold-shimmer, #d4b688); }
+      .cond-btn.is-red:not(:disabled):hover {
+        background: var(--seal); color: var(--paper); border-color: var(--seal);
+      }
+    }
+    .cond-btn.is-red { color: var(--seal); border-color: var(--seal); }
+
+    /* 按下去的瞬間給個回饋就好，放開就恢復 */
+    .cond-btn:not(:disabled):active { transform: translateY(0); }
+
+    /* 點過的鍵不該留著填色的殘影；只有鍵盤操作才顯示焦點框 */
+    .cond-btn:focus { outline: none; }
+    .cond-btn:focus-visible {
+      outline: 2px solid var(--seal);
+      outline-offset: 2px;
+    }
+    .cond-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* 動作 */
+    .actions {
+      display: flex; justify-content: center;
+      gap: 1rem; flex-wrap: wrap;
+      margin-top: 1.4rem;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.6rem;
+      padding: 0.95rem 2rem;
+      font-family: serif;
+      font-size: 0.92rem;
+      letter-spacing: 0.32em;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      border: 1px solid;
+      background: transparent;
+    }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary {
+      background: var(--seal); color: var(--paper);
+      border-color: var(--seal);
+    }
+    .btn-primary:not(:disabled):hover {
+      background: var(--seal-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(140, 42, 45, 0.25);
+    }
+    .btn-ghost { color: var(--ink); border-color: var(--ink-2); }
+    .btn-ghost:not(:disabled):hover { background: var(--ink); color: var(--paper); }
+    .btn-small {
+      padding: 0.55rem 1.3rem; font-size: 0.78rem;
+      letter-spacing: 0.25em;
+    }
+
+    /* 訊息 */
+    .message-log {
+      max-width: 700px;
+      margin: 2rem auto 0;
+      padding: 1.5rem 2rem;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--line);
+      text-align: center; min-height: 60px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .message-log.is-result {
+      border-style: solid;
+      border-color: var(--seal);
+      background: rgba(252, 234, 230, 0.5);
+    }
+    .msg {
+      font-family: serif; font-size: 1rem;
+      color: var(--ink); letter-spacing: 0.12em; line-height: 1.9;
+    }
+    .msg strong { color: var(--seal); font-weight: 600; }
+    .msg em { font-style: normal; color: var(--gold-deep); }
+
+    /* 規則抽屜 */
+    .rules-drawer {
+      position: fixed; top: 0; right: 0;
+      width: 100%; max-width: 460px;
+      height: 100vh;
+      background: var(--paper);
+      border-left: 1px solid var(--line-strong);
+      box-shadow: -20px 0 60px rgba(81, 54, 50, 0.15);
+      transform: translateX(100%);
+      transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+      z-index: 100;
+      overflow-y: auto;
+      padding: 3rem 2.5rem;
+    }
+    .rules-drawer.is-open { transform: translateX(0); }
+    .rules-drawer .close {
+      position: absolute; top: 1.4rem; right: 1.4rem;
+      background: none; border: none;
+      font-size: 1.5rem; color: var(--ink-2); cursor: pointer;
+    }
+    .rules-drawer .close:hover { color: var(--seal); }
+    .rules-drawer h2 {
+      font-family: serif; font-size: 1.4rem;
+      letter-spacing: 0.3em; color: var(--ink);
+      margin-bottom: 0.4rem; font-weight: 500;
+    }
+    .rule-section { margin-bottom: 1.6rem; }
+    .rule-section h3 {
+      font-family: serif; font-size: 0.95rem;
+      color: var(--seal); letter-spacing: 0.25em;
+      margin-bottom: 0.6rem; font-weight: 500;
+    }
+    .rule-section p {
+      font-size: 0.88rem; line-height: 2; color: var(--ink-2);
+    }
+    .cond-key {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem; margin-top: 0.8rem;
+    }
+    .cond-key div {
+      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.5);
+      border-left: 2px solid var(--gold);
+      font-size: 0.85rem;
+    }
+    .cond-key div b { font-family: serif; color: var(--seal); letter-spacing: 0.15em; }
+
+    .backdrop {
+      position: fixed; inset: 0;
+      background: rgba(63, 52, 53, 0.4);
+      backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 99;
+    }
+    .backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+    /* ============ 手機版適配 ============ */
+    @media (max-width: 560px) {
+      .wrap { padding: 1.4rem 1rem 3rem; }
+
+      /* 標題區 */
+      .game-head { margin-bottom: 1.4rem; }
+      .game-head h1 { font-size: 1.7rem; letter-spacing: 0.2em; }
+      .game-head-lede { font-size: 0.8rem; letter-spacing: 0.1em; }
+      .rules-btn { margin-top: 0.9rem; }
+
+      /* 對戰列：手機上仍維持左右對峙，不拆成上下三段 */
+      .versus { grid-template-columns: 1fr auto 1fr; gap: 0.5rem; margin-bottom: 1.2rem; }
+      .versus-mark { width: 26px; height: 26px; font-size: 0.72rem; }
+      .player-panel .name { font-size: 0.95rem; letter-spacing: 0.1em; margin-bottom: 0.2rem; }
+      .player-panel .wins,
+      .player-panel .remaining { font-size: 0.72rem; letter-spacing: 0.08em; }
+      .player-panel .wins span { font-size: 0.95rem; }
+
+      /* 骰子縮小，五顆維持同一排 */
+      .dice-row { gap: 0.3rem; min-height: 46px; flex-wrap: nowrap; }
+      .die { width: 46px; height: 46px; border-radius: 8px; }
+      .die-face { width: 28px; height: 28px; gap: 3px; }
+      .die-face .pip { width: 6.5px; height: 6.5px; }
+
+      /* 檯面、按鈕、播報 */
+      .table { padding: 1.1rem 0.9rem; border-radius: 14px; }
+      .pans { gap: 1rem; margin-bottom: 1.2rem; }
+      .pan { padding: 1rem 0.7rem; }
+      .pan-label { font-size: 0.66rem; letter-spacing: 0.24em; }
+      .actions { flex-direction: column; align-items: stretch; gap: 0.6rem; margin-top: 1.2rem; }
+      .btn { width: 100%; padding: 0.85rem 1rem; font-size: 0.9rem; letter-spacing: 0.16em; }
+      .message-log, .msg { font-size: 0.85rem; line-height: 1.9; }
+
+      .pan { min-height: 120px; }
+      .bowl-area { min-height: 130px; }
+      /* 抽屜關閉鍵放大為可觸控尺寸 */
+      .rules-drawer .close {
+        top: 1rem; right: 1rem;
+        width: 44px; height: 44px;
+        display: grid; place-items: center;
+      }
+      /* 規則抽屜：手機上滿版 */
+      .rules-drawer { width: 100%; max-width: none; padding: 4.4rem 1.4rem 3rem; }
+    }
+
+    @media (max-width: 560px) {
+      .conditions { padding: 1rem 0.7rem; }
+      .conditions-label { font-size: 0.78rem; letter-spacing: 0.12em; }
+      .cond-grid { grid-template-columns: repeat(3, 1fr); gap: 0.45rem; }
+      .cond-btn { padding: 0.65rem 0.25rem; font-size: 0.94rem; }
+      .cond-key { font-size: 0.58rem; letter-spacing: 0.1em; }
+    }
+
+    /* ============ Footer（與 faq.html 一致） ============ */
+    .site-footer {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      padding: 60px clamp(20px, 5vw, 76px) 40px;
+      background: #2b1f1f;
+      color: #d8c5c1;
+      text-align: center;
+    }
+    .site-footer .footer-seal { display: grid; place-items: center; }
+    .site-footer .footer-icon { width: clamp(84px, 12vw, 112px); height: auto; display: block; }
+    .site-footer .footer-tagline {
+      margin: 0;
+      font-family: "Garamond Premier", "一點明體", serif;
+      font-size: 1.15rem;
+      letter-spacing: 0.16em;
+      color: #ecd9d5;
+    }
+    .site-footer .footer-copy {
+      margin: 0;
+      color: #8a7572;
+      font-size: 0.84rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ============ 罰酒計量：對戰標記兩側的威士忌杯 ============ */
+    .drink-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+    }
+    .glass {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+    .glass-body {
+      position: relative;
+      width: 22px;
+      height: 26px;
+      border: 1px solid rgba(91, 72, 72, 0.45);
+      border-top: none;
+      border-radius: 2px 2px 5px 5px;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.65), rgba(246, 235, 225, 0.35));
+      overflow: hidden;
+      box-shadow: inset 0 -1px 0 rgba(91, 72, 72, 0.18);
+    }
+    .glass-fill {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 0;
+      background: linear-gradient(180deg, #d89440 0%, #b06a1e 55%, #8a4c14 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 226, 176, 0.7);
+      transition: height 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .glass-shine {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 3px; height: 12px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.55);
+    }
+    .glass-foot {
+      width: 26px;
+      height: 2px;
+      margin-top: 1px;
+      border-radius: 1px;
+      background: rgba(91, 72, 72, 0.3);
+    }
+    .glass.is-full .glass-body { border-color: rgba(169, 53, 56, 0.5); }
+
+    .drink-note {
+      display: none;
+      margin: 0.9rem auto 0;
+      max-width: 34em;
+      text-align: center;
+      font-size: 0.86rem;
+      line-height: 1.9;
+      letter-spacing: 0.04em;
+      color: var(--seal);
+    }
+    .drink-note.is-shown { display: block; }
+    .drink-note span { display: block; }
+    .drink-note span + span { margin-top: 0.2rem; }
+
+    @media (max-width: 560px) {
+      .drink-row { gap: 0.45rem; }
+      .glass-body { width: 18px; height: 22px; }
+      .glass-foot { width: 21px; }
+      .drink-note { font-size: 0.78rem; line-height: 1.75; }
+    }
+  
+    /* ============ 勝利動畫（與話呸同一套） ============
+       收局時替贏的那一家加上 .is-won：
+       金光暈開 → 一道光掃過 → 骰子接力躍起 → 蓋上「勝」印。
+       只認 .is-won，不綁特定面板 class，各遊戲共用。 */
+    .is-won {
+      position: relative;
+      border-color: var(--gold) !important;
+      background: linear-gradient(155deg, rgba(255, 250, 238, 0.9), rgba(247, 235, 214, 0.75)) !important;
+      animation: winGlow 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes winGlow {
+      0%   { box-shadow: 0 0 0 0 rgba(184, 152, 101, 0); }
+      28%  { box-shadow: 0 0 0 5px rgba(184, 152, 101, 0.26),
+                         0 20px 48px rgba(184, 152, 101, 0.42); }
+      100% { box-shadow: 0 0 0 1px rgba(184, 152, 101, 0.32),
+                         0 10px 26px rgba(184, 152, 101, 0.18); }
+    }
+
+    /* 掃光：border-radius: inherit 讓它自然裁在各遊戲的圓角內 */
+    .is-won::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 1;
+      background: linear-gradient(115deg,
+        transparent 34%,
+        rgba(255, 248, 228, 0.9) 50%,
+        transparent 66%);
+      background-size: 260% 100%;
+      animation: winSweep 1.15s ease-out both;
+    }
+    @keyframes winSweep {
+      0%   { background-position: 150% 0; opacity: 0; }
+      18%  { opacity: 1; }
+      100% { background-position: -60% 0; opacity: 0; }
+    }
+
+    /* 骰子接力躍起 */
+    .is-won .die {
+      animation: winHop 0.6s cubic-bezier(0.25, 1.5, 0.45, 1) both;
+    }
+    .is-won .die:nth-child(1) { animation-delay: 0.10s; }
+    .is-won .die:nth-child(2) { animation-delay: 0.19s; }
+    .is-won .die:nth-child(3) { animation-delay: 0.28s; }
+    .is-won .die:nth-child(4) { animation-delay: 0.37s; }
+    .is-won .die:nth-child(5) { animation-delay: 0.46s; }
+    @keyframes winHop {
+      0%   { transform: translateY(0) rotate(0deg); }
+      45%  { transform: translateY(-16px) rotate(-7deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* 蓋印 */
+    .is-won::after {
+      content: "勝";
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 42px; height: 42px;
+      display: grid;
+      place-items: center;
+      z-index: 2;
+      font-family: serif;
+      font-size: 1.2rem;
+      letter-spacing: 0;
+      color: var(--paper);
+      background: var(--seal);
+      border-radius: 3px;
+      box-shadow: 0 6px 18px rgba(140, 42, 45, 0.34),
+                  inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+      animation: winStamp 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) 0.42s both;
+    }
+    @keyframes winStamp {
+      0%   { opacity: 0; transform: scale(2.3) rotate(-16deg); }
+      60%  { opacity: 1; transform: scale(0.9) rotate(-7deg); }
+      100% { opacity: 1; transform: scale(1) rotate(-7deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .is-won, .is-won::before, .is-won::after, .is-won .die {
+        animation-duration: 0.01ms;
+        animation-iteration-count: 1;
+      }
+    }
+    @media (max-width: 560px) {
+      .is-won::after { width: 34px; height: 34px; font-size: 1rem; top: 9px; right: 9px; }
+    }
+  
+    /* ============ 規則說明用的骰子圖示 ============
+       沿用遊戲廳卡片的骰子樣式，縮成可以塞進文字行內。
+       台灣骰：一點、四點為紅。 */
+    .d-ico {
+      display: inline-grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 1.5px;
+      width: 1.25em; height: 1.25em;
+      padding: 0.15em;
+      margin: 0 0.1em;
+      /* 對齊：inline-grid 的「基線」會落在第一列格子上，用 baseline 或負偏移
+         都會讓骰子整排往下掉（實測低約 7–11px）。改用 middle 對齊文字中線，
+         再以 top 微調補掉中日文字框與 x-height 的落差（實測誤差 <0.5px）。 */
+      vertical-align: middle;
+      position: relative;
+      top: -0.14em;
+      line-height: 1;
+      background: var(--paper);
+      border: 1px solid var(--ink-2);
+      border-radius: 0.22em;
+      box-sizing: border-box;
+    }
+    .d-ico > span { display: block; }
+    .d-ico > span.p {
+      width: 0.19em; height: 0.19em;
+      align-self: center; justify-self: center;
+      background: var(--ink);
+      border-radius: 50%;
+    }
+    .d-ico > span.p.red { background: var(--seal); }
+    /* 連著排的骰子之間留點空隙 */
+    .d-ico + .d-ico { margin-left: 0.18em; }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <header class="site-header" aria-label="主導覽">
+      <a class="brand" href="game-lobby.html" aria-label="繁花酒桌">
+        <img class="brand-mark" src="../assets/Stamp_Vert.png" alt="繁花 BLOSSOM AGENT" />
+        <span class="brand-en">酒 桌 骰 子</span>
+      </a>
+      <nav class="site-nav">
+        <a href="game-lobby.html" class="nav-home">← 返 回 遊 戲 廳</a>
+      </nav>
+    </header>
+
+    <div class="game-head">
+      <h1>紅 黑 <em>單 雙</em></h1>
+      <p class="game-head-lede">擲 五 骰 ・ 喊 條 件 ・ 拿 走 符 合 者</p>
+      <button class="rules-btn" id="rules-btn">規 則 說 明</button>
+    </div>
+
+    <div class="table">
+
+      <!-- 對戰面板 -->
+      <div class="versus">
+        <div class="player-panel">
+          <div class="name">妳</div>
+          <div class="remaining"><b id="rem-you">5</b>粒 骰</div>
+        </div>
+        <div class="versus-mark">對</div>
+        <div class="player-panel">
+          <div class="name">繁 花</div>
+          <div class="remaining"><b id="rem-cpu">5</b>粒 骰</div>
+        </div>
+      </div>
+
+      <!-- 雙盤 -->
+      <div class="pans">
+        <div class="pan is-turn" id="pan-you">
+          <div class="pan-label">妳的骰盅</div>
+          <div class="dice-row" id="dice-you"></div>
+        </div>
+        <div class="pan" id="pan-cpu">
+          <div class="pan-label">繁花骰盅</div>
+          <div class="dice-row" id="dice-cpu"></div>
+        </div>
+      </div>
+
+      <!-- 條件按鈕 -->
+      <div class="conditions" id="conditions">
+        <div class="conditions-label">
+          開 盅 後 ， 喊 <em>條 件</em> 拿 掉 雙 方 符 合 的 骰
+        </div>
+        <div class="cond-grid">
+          <button class="cond-btn is-red" data-cond="red" disabled>紅<span class="cond-en">RED</span></button>
+          <button class="cond-btn" data-cond="black" disabled>黑<span class="cond-en">BLACK</span></button>
+          <button class="cond-btn" data-cond="odd" disabled>單<span class="cond-en">ODD</span></button>
+          <button class="cond-btn" data-cond="even" disabled>雙<span class="cond-en">EVEN</span></button>
+          <button class="cond-btn" data-cond="big" disabled>大<span class="cond-en">4–6</span></button>
+          <button class="cond-btn" data-cond="small" disabled>小<span class="cond-en">1–3</span></button>
+        </div>
+      </div>
+
+      <!-- 動作 -->
+      <div class="actions">
+        <button class="btn btn-primary" id="btn-roll">擲 骰</button>
+      </div>
+      <div class="actions" style="margin-top: 0.6rem;">
+        <button class="btn btn-ghost btn-small" id="btn-reset">重 新 開 局</button>
+      </div>
+
+    </div>
+
+    <div class="message-log" id="msg-log">
+      <div class="msg">妳先手，點「<strong>擲骰</strong>」開始這一局。</div>
+    </div>
+
+  </div>
+
+  <!-- 規則抽屜 -->
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="rules-drawer" id="rules-drawer">
+    <button class="close" id="close-rules" aria-label="關閉">✕</button>
+    <h2>紅 黑 單 雙 ・ 規 則</h2>
+
+    <div class="rule-section">
+      <h3>基 本 玩 法</h3>
+      <p>雙方各持五顆骰子，以骰盅蓋著。進攻者先開自己的盅——看得到自己的骰，看不到對方的——依骰況喊出一種條件，<strong style="color:var(--seal)">雙方</strong>符合這個條件的骰子一起被拿掉。</p>
+      <p><strong style="color:var(--seal)">手上還是滿的五顆</strong>時，這一喊必須挑一個<strong style="color:var(--seal)">拿得掉自己骰子</strong>的條件，喊不到的會鎖起來——還沒見血就別想只砍別人。</p>
+      <p><strong style="color:var(--seal)">只要掉過骰子（少於五顆）</strong>，限制就解除：六個條件全部開放，就算一顆都拿不掉自己的也能喊——傷敵不傷己的那一喊，往往就是勝負手。</p>
+      <p>輪到妳時，繁花的盅是<strong style="color:var(--seal)">蓋著</strong>的，喊定條件才掀開；她那邊也一樣看不到妳的骰子。兩邊都沒有符合的骰子時就是<strong style="color:var(--seal)">空喊</strong>，白費一輪——盲喊的代價。</p>
+      <p><strong style="color:var(--seal)">每個回合結束</strong>，兩家都把剩下的骰子蓋起來<strong style="color:var(--seal)">重新搖過</strong>——點數全部重來，上一回合記住的東西一律作廢。骰子只會變少，不會變多。</p>
+      <p>雙方輪流進攻。誰先把骰子全部拿光（=0 顆），誰就<strong style="color:var(--seal)">輸</strong>。若一喊之下雙方同時歸零，判進攻者輸。</p>
+    </div>
+
+    <div class="rule-section">
+      <h3>生 死 關</h3>
+      <p>生死關是<strong style="color:var(--seal)">個人狀態</strong>——只有<strong style="color:var(--seal)">自己剩下最後一顆</strong>的那一方才進入，對家骰子還多的話不受影響。</p>
+      <p>進了生死關的人：那顆<strong style="color:var(--seal)">連自己都看不到</strong>，喊什麼都是盲賭；而且<strong style="color:var(--seal)">輪到自己進攻時改成一家一家開，自己先開</strong>——先見底就直接輸，對家那顆連掀都不用掀。喊之前先想想，這一刀會不會先砍到自己。</p>
+      <p>反過來說，妳骰子還多、對家只剩一顆時，輪到妳喊仍是<strong style="color:var(--seal)">兩家同時開</strong>——妳不必承擔「先開」的風險，可以放手砍。</p>
+      <p>繁花打生死關時不再用估的，她直接算勝率：<br />
+      P(贏) = (1 − 她自爆的機率) × P(對家每顆都符合)，挑數字最高的喊；同分就挑自爆率最低的。喊之前她會把勝算報出來。</p>
+    </div>
+
+    <div class="rule-section">
+      <h3>六 種 條 件</h3>
+      <div class="cond-key">
+        <div><b>紅</b><br/><span class="d-ico" aria-label="1"><span></span><span></span><span></span><span></span><span class="p red"></span><span></span><span></span><span></span><span></span></span><span class="d-ico" aria-label="4"><span class="p red"></span><span></span><span class="p red"></span><span></span><span></span><span></span><span class="p red"></span><span></span><span class="p red"></span></span></div>
+        <div><b>黑</b><br/><span class="d-ico" aria-label="2"><span class="p"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="3"><span class="p"></span><span></span><span></span><span></span><span class="p"></span><span></span><span></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="5"><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="6"><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span></span></div>
+        <div><b>單</b><br/><span class="d-ico" aria-label="1"><span></span><span></span><span></span><span></span><span class="p red"></span><span></span><span></span><span></span><span></span></span><span class="d-ico" aria-label="3"><span class="p"></span><span></span><span></span><span></span><span class="p"></span><span></span><span></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="5"><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span></span></div>
+        <div><b>雙</b><br/><span class="d-ico" aria-label="2"><span class="p"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="4"><span class="p red"></span><span></span><span class="p red"></span><span></span><span></span><span></span><span class="p red"></span><span></span><span class="p red"></span></span><span class="d-ico" aria-label="6"><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span></span></div>
+        <div><b>大</b><br/><span class="d-ico" aria-label="4"><span class="p red"></span><span></span><span class="p red"></span><span></span><span></span><span></span><span class="p red"></span><span></span><span class="p red"></span></span><span class="d-ico" aria-label="5"><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="6"><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span><span class="p"></span><span></span><span class="p"></span></span></div>
+        <div><b>小</b><br/><span class="d-ico" aria-label="1"><span></span><span></span><span></span><span></span><span class="p red"></span><span></span><span></span><span></span><span></span></span><span class="d-ico" aria-label="2"><span class="p"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="p"></span></span><span class="d-ico" aria-label="3"><span class="p"></span><span></span><span></span><span></span><span class="p"></span><span></span><span></span><span></span><span class="p"></span></span></div>
+      </div>
+    </div>
+
+    <div class="rule-section">
+      <h3>策 略</h3>
+      <p>喊條件時要看自己「面前」的骰子——喊得多不一定好，多喊的可能讓自己更快輸。</p>
+      <p>掉過骰子之後可以找<strong style="color:var(--seal)">自己一顆都不掉</strong>的條件——但對方的盅蓋著，削不削得到她全靠賭；賭空了就白白讓她一輪。</p>
+      <p>所以先掉一顆不全是壞事：滿五顆時妳每一喊都得砍自己，掉過之後才有「只砍對方」的權利。</p>
+      <p>因為每回合都重搖，記牌沒有用；能算的只有「還剩幾顆」與各條件的命中率。</p>
+      <p>但盤面上骰子少時，你可能被迫喊符合的條件——命懸一線。</p>
+    </div>
+  </aside>
+
+  <!-- ============================================
+       遊戲邏輯
+       ============================================ -->
+  <script src="dice-core.js"></script>
+  <script src="drink-meter.js"></script>
+  <script>
+  (() => {
+    'use strict';
+
+    const Core = window.DiceCore;
+
+    /* ========== 條件判定（一律取自共用引擎） ========== */
+    // 紅色點數：1 和 4（傳統麻將骰）→ Core.isRed
+    const CONDS = Core.CONDITIONS;                       // red / black / odd / even / big / small
+    const condOf = (key) => CONDS.find((c) => c.key === key);
+
+    const condLabels = {
+      red: '紅', black: '黑', odd: '單', even: '雙', big: '大', small: '小',
+    };
+
+    const countMatch = (dice, cond) => dice.reduce((n, v) => n + (cond.test(v) ? 1 : 0), 0);
+
+    /* ========== 骰面 pip 位置 ========== */
+    const PIP_POSITIONS = {
+      1: [5], 2: [1, 9], 3: [1, 5, 9],
+      4: [1, 3, 7, 9], 5: [1, 3, 5, 7, 9], 6: [1, 3, 4, 6, 7, 9],
+    };
+
+    /* hidden  = 骰盅還蓋著，只見骰身不見點
+       rolling = 這次是真的在搖骰（開局或每回合結束重搖）才播動畫；
+                 開盅、拿骰、單純重繪都只是換畫面，不該再翻一次 */
+    const buildDieEl = (value, hidden, rolling = false) => {
+      const die = document.createElement('div');
+      die.className = 'die' + (rolling ? ' is-rolling' : '');
+      die.dataset.value = hidden ? '' : value;
+
+      const face = document.createElement('div');
+      face.className = 'die-face';
+      const positions = hidden ? [] : (PIP_POSITIONS[value] || []);
+      for (let i = 1; i <= 9; i++) {
+        const cell = document.createElement('span');
+        if (positions.includes(i)) {
+          cell.className = 'pip' + (Core.isRed(value) ? ' red' : '');
+        }
+        face.appendChild(cell);
+      }
+      die.appendChild(face);
+      return die;
+    };
+
+    /* ========== 遊戲狀態 ========== */
+    const state = {
+      diceYou: [],        // 每回合結束都會蓋牌重搖
+      diceCpu: [],
+      turn: 'you',        // 'you' or 'cpu'
+      phase: 'idle',      // idle（未開盅）／ playing ／ ended
+      openYou: true,      // 妳的骰子是否攤開
+      openCpu: false,     // 繁花的骰子是否攤開
+      busy: false,
+    };
+
+    /* 手上還是滿的五顆 → 這一喊必須拿掉自己至少一顆；
+       只要掉過骰子（少於五顆）就沒有這個限制，可以喊完全沒中的條件。 */
+    const mustMatchOwn = (who) => diceOf(who).length === 5;
+
+    /* ---- 兩家共用的存取器，省得到處寫 who === 'you' ? ... : ... ---- */
+    const diceOf = (who) => (who === 'you' ? state.diceYou : state.diceCpu);
+    const setDice = (who, d) => { if (who === 'you') state.diceYou = d; else state.diceCpu = d; };
+    const setOpen = (who, v) => { if (who === 'you') state.openYou = v; else state.openCpu = v; };
+
+    /* 生死關是「個人狀態」：只有剩下一顆的那一方進入，對家骰子還多時不受影響。
+       進了生死關的那一方：
+         1. 自己那顆蓋著，連自己都看不到點數 → 盲選
+         2. 輪到自己進攻時改成循序開盅，而且自己先開；先見底就直接輸 */
+    const inShowdown = (who) => diceOf(who).length === 1;
+    const isBlind = inShowdown;      // 同一件事：剩一顆就看不到自己
+
+    /* 這一喊有沒有可能直接分勝負——只要有人站在最後一顆上就算。
+       用來決定繁花要不要改用純勝率計算（她的最後一攻）。 */
+    const canEndThisCall = () => inShowdown('you') || inShowdown('cpu');
+
+    /* 每回合結束：兩家把剩下的骰子重新搖過。
+       搖完之後：
+         妳自己的骰子照樣看得見——除非只剩一顆，那顆才蓋著盲喊；
+         繁花的一律蓋著，喊定條件才掀。 */
+    const reshuffle = () => {
+      setDice('you', Core.roll(state.diceYou.length));
+      setDice('cpu', Core.roll(state.diceCpu.length));
+      state.openYou = !isBlind('you');
+      state.openCpu = false;
+      renderYou(true);      // 真的在搖 → 播動畫
+      renderCpu(true);
+    };
+
+    /* ========== UI 元素 ========== */
+    const els = {
+      diceYou: document.getElementById('dice-you'),
+      diceCpu: document.getElementById('dice-cpu'),
+      remYou: document.getElementById('rem-you'),
+      remCpu: document.getElementById('rem-cpu'),
+      panYou: document.getElementById('pan-you'),
+      panCpu: document.getElementById('pan-cpu'),
+      btnRoll: document.getElementById('btn-roll'),
+      btnReset: document.getElementById('btn-reset'),
+      msgLog: document.getElementById('msg-log'),
+      conds: document.querySelectorAll('.cond-btn'),
+    };
+
+    const setMsg = (html, isResult = false) => {
+      els.msgLog.innerHTML = `<div class="msg">${html}</div>`;
+      els.msgLog.classList.toggle('is-result', isResult);
+    };
+
+    /* ========== 勝利動畫 ========== */
+    const winPanel = (who) => (who === 'you' ? els.panYou : els.panCpu);
+    const clearWinFx = () => ['you','cpu'].forEach((k) => winPanel(k)?.classList.remove('is-won'));
+    const playWinFx = (winner) => { clearWinFx(); if (winner) winPanel(winner)?.classList.add('is-won'); };
+
+
+    const renderDice = (container, dice, hidden, rolling = false) => {
+      container.innerHTML = '';
+      dice.forEach((v) => container.appendChild(buildDieEl(v, hidden, rolling)));
+      // 補預設空位提示（若無骰）
+      if (dice.length === 0) {
+        container.innerHTML = `<div style="color:var(--muted);font-style:italic;font-family:'Cormorant Garamond',serif;letter-spacing:0.25em;font-size:0.85rem;">— empty —</div>`;
+      }
+    };
+
+    const updateRemaining = () => {
+      els.remYou.textContent = state.diceYou.length;
+      els.remCpu.textContent = state.diceCpu.length;
+    };
+
+    const setTurn = (who) => {
+      state.turn = who;
+      els.panYou.classList.toggle('is-turn', who === 'you');
+      els.panCpu.classList.toggle('is-turn', who === 'cpu');
+    };
+
+    // rolling 只在真的搖骰時給 true（開局、每回合結束重搖）
+    const renderYou = (rolling = false) => renderDice(els.diceYou, state.diceYou, !state.openYou, rolling);
+    const renderCpu = (rolling = false) => renderDice(els.diceCpu, state.diceCpu, !state.openCpu, rolling);
+
+    /* 妳是蓋著繁花的盅在喊的，所以按鈕的開關只能看妳自己的骰子——
+       要是連她的骰子一起算，哪個條件被鎖起來就等於洩漏了她的牌。
+       滿五顆：只開放拿得掉自己一顆的條件。
+       少於五顆：六個全開；萬一兩邊都沒有符合的，就是白喊一輪（空喊）。 */
+    const canCall = (cond) =>
+      !mustMatchOwn('you') || countMatch(state.diceYou, cond) >= 1;
+
+    const enableConds = (enable) => {
+      els.conds.forEach((btn) => {
+        const cond = condOf(btn.dataset.cond);
+        btn.disabled = !enable || !canCall(cond);
+      });
+    };
+
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    /* ========== AI 決策 ========== */
+    /**
+     * 她跟妳一樣看不到對手的骰子——只看得到自己的，外加對方還剩幾顆。
+     * 所以對手那邊一律用機率估，不偷看 state.diceYou。
+     *
+     * restrict（她手上還是滿的五顆）→ 這一喊必須拿掉自己至少一顆。
+     * 手上少於五顆就沒這個限制，可以挑完全沒中自己的條件。
+     * 註：restrict 代表五顆、blindOwn 代表只剩一顆，兩者不可能同時成立。
+     *
+     * 對六個條件各自計算：
+     *   ownCount     = 這一喊她自己會掉幾顆（只剩一顆看不到時改用機率估）
+     *   ownCount === 自己全部骰數 且 對手還多於 1 顆 → 跳過（別把自己一次喊光）
+     *   oppExpected  = 對手剩餘骰數 × 該條件在未知骰上的命中率
+     *   score        = oppExpected - ownCount * 1.25
+     * 不受 restrict 時 ownCount 可以是 0，「傷敵不傷己」自然拿到最高分。
+     */
+    const cpuChooseCondition = (own, opp, restrict = false, blindOwn = false) => {
+      const legal = [];
+      let best = null;
+
+      CONDS.forEach((cond) => {
+        // 只剩一顆時她自己那顆也蓋著 → 連自己都只能用機率估
+        const ownCount = blindOwn
+          ? own.length * Core.conditionOdds(cond)
+          : countMatch(own, cond);
+
+        if (restrict && ownCount < 1) return;      // 滿五顆：一定要拿掉自己一顆
+        legal.push({ cond, ownCount });
+
+        if (!blindOwn && ownCount === own.length && opp.length > 1) return;   // 別自殺
+
+        const oppExpected = opp.length * Core.conditionOdds(cond);
+        const score = oppExpected - ownCount * 1.25;
+        if (!best || score > best.score) best = { cond, ownCount, score };
+      });
+
+      if (best) return best;
+      if (legal.length) return legal[Math.floor(Math.random() * legal.length)];
+      return null;   // 理論上不會發生：任何骰子至少符合三個條件
+    };
+
+    /**
+     * 最後一攻：進了生死關，這一喊就可能直接分勝負，她改用純勝率下判斷。
+     *
+     * 生死關是循序開盅、進攻者先開，所以她這一喊的三種結局是：
+     *   自爆   = 她自己每一顆都符合 → 她先見底，直接輸
+     *   贏     = 她沒自爆，而對家每一顆都符合 → 對家見底
+     *   繼續   = 其餘
+     *
+     *   P(自爆) = 看得到自己 → 全中就是 1、否則 0
+     *             盲著     → 命中率 ^ 自己骰數
+     *   P(對家全中) = 命中率 ^ 對家骰數（對家的骰子她一律看不到）
+     *   P(贏) = (1 - P(自爆)) × P(對家全中)
+     *
+     * 目標：勝率最高；同分再挑自爆率最低的。
+     *
+     * restrict：她自己還是滿的五顆時（對家只剩一顆也可能發生），
+     * 同樣得挑一個拿得掉自己一顆的條件，這條規則在生死關一樣要遵守。
+     */
+    const cpuChooseFinal = (own, opp, blindOwn, restrict = false) => {
+      let best = null;
+      CONDS.forEach((cond) => {
+        const hit = blindOwn ? null : countMatch(own, cond);
+        if (restrict && hit < 1) return;    // 滿五顆：一定要拿掉自己一顆
+
+        const p = Core.conditionOdds(cond);
+        const pSelfBust = blindOwn
+          ? Math.pow(p, own.length)
+          : (hit === own.length ? 1 : 0);
+        const pOppBust = Math.pow(p, opp.length);
+        const win = (1 - pSelfBust) * pOppBust;
+        const score = win - pSelfBust;      // 贏面減掉自爆面
+        if (!best || score > best.score) {
+          best = {
+            cond,
+            ownCount: blindOwn ? own.length * p : hit,
+            win, pSelfBust, score,
+          };
+        }
+      });
+      return best;
+    };
+
+    /* ========== 動作 ========== */
+
+    // 一喊之下雙方同時歸零 → 進攻者輸
+    const checkEnd = (attacker) => {
+      const youOut = state.diceYou.length === 0;
+      const cpuOut = state.diceCpu.length === 0;
+      if (!youOut && !cpuOut) return false;
+
+      let youLose;
+      if (youOut && cpuOut) youLose = attacker === 'you';
+      else youLose = youOut;
+
+      state.phase = 'ended';
+      state.openYou = true;
+      state.openCpu = true;
+      window.DrinkMeter?.loss(youLose ? 'you' : 'cpu');
+      renderCpu();
+
+      const both = youOut && cpuOut ? '雙方同時見底，進攻者認輸——' : '';
+      setMsg(youLose
+        ? `${both}妳的骰子被拿光了——<strong>繁花贏。</strong>`
+        : `${both}繁花的骰子被拿光了——<strong>妳贏了。</strong>`, true);
+
+      playWinFx(youLose ? 'cpu' : 'you');
+      els.btnRoll.disabled = true;
+      els.conds.forEach((btn) => btn.disabled = true);
+      return true;
+    };
+
+    // 動畫：指定的幾家一起高亮 → 一起飛走 → 一起更新
+    const animateTake = async (keys, cond) => {
+      const plans = keys.map((k) => {
+        const container = k === 'you' ? els.diceYou : els.diceCpu;
+        const dice = diceOf(k);
+        const matchedIdx = [];
+        dice.forEach((v, i) => { if (cond.test(v)) matchedIdx.push(i); });
+        return { k, dice, matchedIdx, nodes: container.querySelectorAll('.die') };
+      });
+
+      // 高亮
+      plans.forEach((p) => p.matchedIdx.forEach((i) => p.nodes[i]?.classList.add('is-matched')));
+      await sleep(700);
+
+      // 播放拿走動畫
+      plans.forEach((p) => p.matchedIdx.forEach((i) => {
+        p.nodes[i]?.classList.remove('is-matched');
+        p.nodes[i]?.classList.add('is-taken');
+      }));
+      await sleep(600);
+
+      // 實際從 state 移除
+      const taken = { you: 0, cpu: 0 };
+      plans.forEach((p) => {
+        setDice(p.k, p.dice.filter((_, i) => !p.matchedIdx.includes(i)));
+        taken[p.k] = p.matchedIdx.length;
+      });
+
+      renderYou();
+      renderCpu();
+      updateRemaining();
+      return taken;
+    };
+
+    // 平時：兩家同時開，同時拿
+    const takeDice = (cond) => animateTake(['you', 'cpu'], cond);
+
+    /* 生死關（任一方只剩一顆）：改成一家一家開。
+       進攻者先開自己的——沒過關就直接輸，對方那顆連掀都不用掀。 */
+    const showdown = async (cond, attacker) => {
+      const order = attacker === 'you' ? ['you', 'cpu'] : ['cpu', 'you'];
+      const taken = { you: 0, cpu: 0 };
+
+      for (const k of order) {
+        const who = k === 'you' ? '妳' : '繁花';
+        const role = k === attacker ? '進攻者' : '對家';
+        setOpen(k, true);                      // 掀這一家的盅
+        (k === 'you' ? renderYou : renderCpu)();
+        setMsg(`${role}<strong>${who}</strong>開盅——<em>${diceOf(k).join(' · ')}</em>。`);
+        await sleep(1000);
+
+        const t = await animateTake([k], cond);
+        taken[k] = t[k];
+
+        if (diceOf(k).length === 0) {
+          // 這一家見底了，後面那家不必再開
+          setMsg(`<strong>${who}</strong>的骰子被拿光了。`);
+          await sleep(600);
+          break;
+        }
+        setMsg(t[k] > 0
+          ? `<strong>${who}</strong>去 <em>${t[k]}</em> 顆，還撐著——`
+          : `<strong>${who}</strong>沒有符合的骰子，過關——`);
+        await sleep(700);
+      }
+      return taken;
+    };
+
+    // 開局：雙方各擲五顆，之後不再重擲
+    const openGame = () => {
+      clearWinFx();
+      if (state.phase !== 'idle' || state.busy) return;
+
+      state.diceYou = Core.roll(5);
+      state.diceCpu = Core.roll(5);
+      state.openYou = true;
+      state.openCpu = false;
+      state.phase = 'playing';
+
+      renderYou(true);      // 開局擲骰 → 播動畫
+      renderCpu(true);
+      updateRemaining();
+
+      setMsg(`妳開盅，見 <strong>${state.diceYou.join(' · ')}</strong>——繁花的盅還蓋著。<br />` +
+             `手上還是滿五顆，這一喊得挑一個<strong>拿得掉自己骰子</strong>的條件，其餘的先鎖著。`);
+      els.btnRoll.disabled = true;
+      enableConds(true);
+    };
+
+    // 玩家喊條件
+    const playerChooseCondition = async (key) => {
+      if (state.phase !== 'playing' || state.turn !== 'you' || state.busy) return;
+      const cond = condOf(key);
+      if (!cond || !canCall(cond)) return;
+
+      state.busy = true;
+      els.conds.forEach((btn) => btn.disabled = true);
+
+      let taken;
+      if (inShowdown('you')) {
+        // 妳自己站在最後一顆上 → 生死關，循序開盅，而且妳先開
+        setMsg(`妳喊「<strong>${condLabels[key]}</strong>」——妳只剩一顆，生死關：<strong>妳先開</strong>。`);
+        await sleep(800);
+        taken = await showdown(cond, 'you');
+      } else {
+        // 喊定之後才掀她的盅——這一刻才看得到自己賭中了沒有
+        setOpen('cpu', true);
+        renderCpu();
+        setMsg(`妳喊「<strong>${condLabels[key]}</strong>」——繁花的盅掀開了，見 <em>${state.diceCpu.join(' · ')}</em>。`);
+        await sleep(900);
+
+        setMsg(`妳喊「<strong>${condLabels[key]}</strong>」——雙方符合的一起拿掉。`);
+        taken = await takeDice(cond);
+      }
+
+      setMsg(taken.you + taken.cpu === 0
+        ? `妳喊「<strong>${condLabels[key]}</strong>」——兩邊都沒有符合的骰子，<em>這一喊空了</em>。`
+        : `妳喊「<strong>${condLabels[key]}</strong>」——妳去 <em>${taken.you}</em> 顆，繁花去 <em>${taken.cpu}</em> 顆。`);
+
+      if (checkEnd('you')) { state.busy = false; return; }
+
+      // 回合結束 → 兩家蓋牌重搖
+      await sleep(700);
+      await endOfTurn();
+
+      setTurn('cpu');
+      await cpuTurn();
+      state.busy = false;
+    };
+
+    /* 回合結束：蓋牌、重搖，並播報一下誰站在最後一顆上 */
+    const endOfTurn = async () => {
+      reshuffle();
+      const inner = [];
+      if (inShowdown('you')) inner.push('妳');
+      if (inShowdown('cpu')) inner.push('繁花');
+      setMsg(inner.length
+        ? `這一回合結束——兩家重新搖過。<strong>${inner.join('、')}</strong>只剩一顆，` +
+          `進了生死關：那顆蓋著看不到，輪到自己進攻時得先開自己的盅。`
+        : '這一回合結束——兩家重新搖過，點數全部重來。繁花的盅蓋著。');
+      await sleep(1100);
+    };
+
+    // 繁花回合
+    const cpuTurn = async () => {
+      if (state.phase === 'ended') return;
+
+      /* cpuBlind    = 她只剩一顆 → 連自己都看不到，而且輪到她進攻要循序開盅
+         finalStrike = 場上有人站在最後一顆 → 這一喊可能直接分勝負，改用純勝率算 */
+      const cpuBlind = inShowdown('cpu');
+      const finalStrike = canEndThisCall();
+
+      setMsg(cpuBlind
+        ? '繁花的最後一顆也蓋著，她只能憑感覺——'
+        : '繁花端詳自己的骰子片刻——');
+      await sleep(900);
+
+      // 她手上還是滿的五顆 → 這一喊必須拿掉自己至少一顆
+      const restrict = mustMatchOwn('cpu');
+      const choice = finalStrike
+        ? cpuChooseFinal(state.diceCpu, state.diceYou, cpuBlind, restrict)      // 最後一攻：挑勝率最高的
+        : cpuChooseCondition(state.diceCpu, state.diceYou, restrict, cpuBlind);
+      if (!choice) return;
+
+      const label = condLabels[choice.cond.key];
+      if (finalStrike) {
+        setMsg(`繁花：「<strong>喊${label}</strong>。」` +
+               `——她算過了，這一喊勝算 <em>${Math.round(choice.win * 100)}%</em>、` +
+               `自爆 <em>${Math.round(choice.pSelfBust * 100)}%</em>。`);
+      } else {
+        setMsg(!cpuBlind && choice.ownCount === 0
+          ? `繁花：「<strong>喊${label}</strong>。」——這一喊她自己一顆都不掉。`
+          : `繁花：「<strong>喊${label}</strong>。」`);
+      }
+      await sleep(900);
+
+      let taken;
+      if (cpuBlind) {
+        // 她自己站在最後一顆上 → 生死關，循序開盅，而且她先開
+        setMsg(`繁花喊「<strong>${label}</strong>」——她只剩一顆，生死關：<strong>她先開</strong>。`);
+        await sleep(800);
+        taken = await showdown(choice.cond, 'cpu');
+      } else {
+        // 她喊定 → 兩家一起掀，妳才看得到自己被拿掉哪幾顆
+        setOpen('you', true);
+        setOpen('cpu', true);
+        renderYou();
+        renderCpu();
+        setMsg(`繁花喊「<strong>${label}</strong>」——兩家開盅：` +
+               `妳 <strong>${state.diceYou.join(' · ')}</strong>，繁花 <em>${state.diceCpu.join(' · ')}</em>。`);
+        await sleep(900);
+        taken = await takeDice(choice.cond);
+      }
+
+      setMsg(taken.you + taken.cpu === 0
+        ? `繁花喊「<strong>${label}</strong>」——兩邊都沒有符合的骰子，<em>這一喊空了</em>。`
+        : `繁花喊「<strong>${label}</strong>」——繁花去 <em>${taken.cpu}</em> 顆，妳去 <em>${taken.you}</em> 顆。`);
+
+      if (checkEnd('cpu')) return;
+
+      // 回合結束 → 兩家蓋牌重搖
+      await sleep(700);
+      await endOfTurn();
+
+      setTurn('you');
+      setMsg(state.openYou
+        ? `輪到妳——重搖後妳手上是 <strong>${state.diceYou.join(' · ')}</strong>，繁花的盅蓋著。喊定才掀。`
+        : `輪到妳——<strong>雙方的盅都蓋著</strong>，連妳自己那顆都不知道點數。喊定才開，進攻者先開。`);
+      enableConds(true);
+    };
+
+    /* ========== 事件 ========== */
+
+    els.btnRoll.addEventListener('click', () => { els.btnRoll.blur(); openGame(); });
+    els.conds.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        btn.blur();          // 放掉焦點，按過的鍵不會留著填色的殘影
+        playerChooseCondition(btn.dataset.cond);
+      });
+    });
+
+    const resetGame = () => {
+      clearWinFx();
+      state.diceYou = [];
+      state.diceCpu = [];
+      state.turn = 'you';
+      state.phase = 'idle';
+      state.openYou = true;
+      state.openCpu = false;
+      state.busy = false;
+
+      // 未開局：兩邊各擺五個蓋著的骰盅
+      renderDice(els.diceYou, [0, 0, 0, 0, 0], true);
+      renderDice(els.diceCpu, [0, 0, 0, 0, 0], true);
+      els.remYou.textContent = 5;
+      els.remCpu.textContent = 5;
+      setTurn('you');
+
+      els.btnRoll.disabled = false;
+      els.conds.forEach((btn) => btn.disabled = true);
+      els.msgLog.classList.remove('is-result');
+      setMsg('妳先手，點「<strong>擲骰</strong>」開局——雙方各五顆，之後不再重擲。');
+    };
+
+    els.btnReset.addEventListener('click', resetGame);
+
+    /* ========== 初始化 ========== */
+    resetGame();
+
+    /* 測試用掛勾（不影響畫面） */
+    window.RedBlack = {
+      state, CONDS, condOf, countMatch, cpuChooseCondition,
+      openGame, playerChooseCondition, resetGame,
+      isCondEnabled: (key) => {
+        const btn = [...els.conds].find((b) => b.dataset.cond === key);
+        return btn ? !btn.disabled : false;
+      },
+      remainingText: () => [els.remYou.textContent, els.remCpu.textContent],
+      renderedCount: () => [
+        els.diceYou.querySelectorAll('.die:not(.is-taken)').length,
+        els.diceCpu.querySelectorAll('.die:not(.is-taken)').length,
+      ],
+    };
+
+    /* ========== 規則抽屜 ========== */
+    const drawer = document.getElementById('rules-drawer');
+    const backdrop = document.getElementById('backdrop');
+    document.getElementById('rules-btn').addEventListener('click', () => {
+      drawer.classList.add('is-open');
+      backdrop.classList.add('is-open');
+    });
+    const closeDrawer = () => {
+      drawer.classList.remove('is-open');
+      backdrop.classList.remove('is-open');
+    };
+    document.getElementById('close-rules').addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+  })();
+  </script>
+
+
+  <footer class="site-footer">
+    <div class="footer-seal" aria-hidden="true">
+      <img class="footer-icon" src="../assets/Footer_ICON.png" alt="繁花 BLOSSOM AGENT" />
+    </div>
+    <p class="footer-tagline">讓每一朵花，盛開成自己。</p>
+    <p class="footer-copy">© <span id="year"></span> 繁花 BLOSSOM AGENT. All rights reserved.</p>
+  </footer>
+
+  <script>
+    /* 頁首捲動陰影（與 journey.html 的 is-scrolled 行為一致） */
+    (() => {
+      const h = document.querySelector('.site-header');
+      if (!h) return;
+      const year = document.getElementById('year');
+      if (year) year.textContent = new Date().getFullYear();
+      const onScroll = () => h.classList.toggle('is-scrolled', window.scrollY > 10);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
+</body>
+</html>
