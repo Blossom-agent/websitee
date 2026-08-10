@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>妳是哪一種花｜繁花 BLOSSOM AGENT 12 花格氣質測驗</title>
+    <meta
+      name="description"
+      content="繁花 BLOSSOM AGENT 花格人格測驗——回答 12 道情境題，找出妳最接近的 12 種花格。MBTI 僅作為趣味氣質參考。"
+    />
+    <style>
+      :root {
+        --ink: #3f3435;
+        --ink-2: #5b4848;
+        --muted: #7f6e6c;
+        --paper: #fbf5ef;
+        --cream: #f6ebe1;
+        --blush: #ecccc6;
+        --rose: #c47a7a;
+        --rose-d: #9a4a4f;
+        --sage: #9fb39a;
+        --moss: #5e7659;
+        --plum: #7d4f64;
+        --seal: #a93538;
+        --gold: #b89865;
+        --line: rgba(86, 62, 62, 0.14);
+        --shadow: 0 24px 70px rgba(81, 54, 50, 0.14);
+        --shadow-soft: 0 10px 30px rgba(81, 54, 50, 0.08);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        font-family: "Garamond Premier", "一點明體", serif;
+        font-weight: 300;
+        line-height: 1.85;
+        letter-spacing: 0.02em;
+        -webkit-font-smoothing: antialiased;
+        background:
+          radial-gradient(ellipse at 75% 12%, rgba(236, 204, 198, 0.5) 0%, transparent 52%),
+          radial-gradient(ellipse at 15% 88%, rgba(196, 184, 144, 0.22) 0%, transparent 55%),
+          linear-gradient(165deg, #fbf5ef 0%, #f6ebe1 58%, #f3e3d3 100%);
+        overflow-x: hidden;
+      }
+
+      h1, h2, h3 {
+        margin: 0;
+        font-weight: 600;
+        line-height: 1.25;
+        letter-spacing: 0.06em;
+        color: var(--ink);
+      }
+
+      /* ===== falling petals ===== */
+      .petals { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+      .petals span {
+        position: absolute;
+        top: -8%;
+        width: 13px;
+        height: 13px;
+        background: radial-gradient(circle at 30% 30%, #fff0ed 0%, #f0c1bd 60%, #d99592 100%);
+        border-radius: 70% 0 70% 0;
+        opacity: 0;
+        animation: petalFall linear infinite;
+      }
+      .petals span:nth-child(1) { left: 9%;  animation-duration: 15s; animation-delay: 0s;   }
+      .petals span:nth-child(2) { left: 22%; animation-duration: 18s; animation-delay: 3s;   }
+      .petals span:nth-child(3) { left: 38%; animation-duration: 20s; animation-delay: 6s;   }
+      .petals span:nth-child(4) { left: 54%; animation-duration: 16s; animation-delay: 1.5s; }
+      .petals span:nth-child(5) { left: 68%; animation-duration: 22s; animation-delay: 4.5s; }
+      .petals span:nth-child(6) { left: 84%; animation-duration: 17s; animation-delay: 7s;   }
+      @keyframes petalFall {
+        0%   { transform: translateY(0) translateX(0) rotate(0); opacity: 0; }
+        8%   { opacity: 0.65; }
+        100% { transform: translateY(112vh) translateX(70px) rotate(540deg); opacity: 0; }
+      }
+
+      /* ===== layout ===== */
+      .wrap {
+        position: relative;
+        z-index: 1;
+        width: min(720px, 100%);
+        margin: 0 auto;
+        padding: calc(76px + clamp(38px, 7vw, 80px)) clamp(20px, 5vw, 40px) 80px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .kicker {
+        color: var(--seal);
+        font-size: 0.82rem;
+        font-weight: 500;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        margin: 0 0 16px;
+      }
+
+      /* ===== intro ===== */
+      .intro { text-align: center; }
+      .intro h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); letter-spacing: 0.1em; }
+      .intro .lead {
+        margin: 22px auto 8px;
+        max-width: 520px;
+        color: var(--ink-2);
+        font-size: clamp(1.02rem, 1.6vw, 1.15rem);
+        line-height: 1.95;
+      }
+      .intro-art { width: clamp(132px, 34vw, 168px); margin: 0 auto 18px; }
+      .note {
+        display: block;
+        width: fit-content;
+        max-width: 100%;
+        margin: 18px auto 0;
+        padding: 13px clamp(26px, 8vw, 60px);
+        border-radius: 2px;
+        background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.6) 24%,
+          rgba(255, 255, 255, 0.6) 76%,
+          transparent 100%);
+        color: var(--rose-d);
+        font-size: 0.9rem;
+        line-height: 1.95;
+        text-align: center;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 13px 36px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--seal);
+        color: #fff7ee;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 0.16em;
+        cursor: pointer;
+        transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+        box-shadow: 0 12px 26px rgba(169, 53, 56, 0.26);
+      }
+      .btn:hover { transform: translateY(-3px); box-shadow: 0 18px 34px rgba(169, 53, 56, 0.32); }
+      .btn.ghost {
+        background: transparent;
+        color: var(--seal);
+        border: 1.5px solid rgba(169, 53, 56, 0.4);
+        box-shadow: none;
+      }
+      .btn.ghost:hover { background: rgba(169, 53, 56, 0.06); transform: translateY(-2px); }
+      .intro .btn { margin-top: 30px; }
+
+      /* ===== progress ===== */
+      .progress-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+        color: var(--muted);
+        font-size: 0.84rem;
+        letter-spacing: 0.12em;
+      }
+      .progress-track {
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(169, 53, 56, 0.14);
+        overflow: hidden;
+        margin-bottom: clamp(28px, 5vw, 46px);
+      }
+      .progress-fill {
+        height: 100%;
+        width: 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--rose), var(--seal));
+        transition: width 350ms cubic-bezier(.4, 0, .2, 1);
+      }
+
+      .question {
+        font-size: clamp(1.34rem, 3.2vw, 1.9rem);
+        font-weight: 600;
+        line-height: 1.5;
+        letter-spacing: 0.04em;
+        margin-bottom: clamp(22px, 5vw, 36px);
+      }
+      .question-hint {
+        display: block;
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 0.95rem;
+        font-weight: 300;
+        letter-spacing: 0.04em;
+      }
+
+      .options { display: grid; gap: 12px; }
+      .option {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        text-align: left;
+        padding: 15px 20px 15px 22px;
+        border: 1px solid rgba(176, 144, 74, 0.2);
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(251, 245, 239, 0.66));
+        color: var(--ink);
+        font-family: inherit;
+        font-size: clamp(0.96rem, 1.45vw, 1.06rem);
+        line-height: 1.55;
+        cursor: pointer;
+        overflow: hidden;
+        box-shadow:
+          inset 0 0 0 4px rgba(255, 255, 255, 0.5),
+          inset 0 0 0 5px rgba(184, 152, 101, 0.16);
+        transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+      }
+      /* 左側 朱印→金 強調條，hover 時滑入（呼應繁花分隔線） */
+      .option::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, var(--seal), var(--gold));
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 300ms ease;
+      }
+      .option:hover {
+        transform: translateY(-2px);
+        border-color: rgba(176, 144, 74, 0.46);
+        background: linear-gradient(180deg, #ffffff, rgba(251, 245, 239, 0.9));
+        box-shadow:
+          var(--shadow-soft),
+          inset 0 0 0 4px rgba(255, 255, 255, 0.6),
+          inset 0 0 0 5px rgba(184, 152, 101, 0.34);
+      }
+      .option:hover::before { transform: scaleY(1); }
+      .option:active { transform: translateY(0); }
+      .option:focus-visible { outline: 2px solid var(--seal); outline-offset: 3px; }
+      .option .dot {
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgba(169, 53, 56, 0.08);
+        border: 1px solid rgba(169, 53, 56, 0.22);
+        color: var(--seal);
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: background 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease;
+      }
+      .option:hover .dot {
+        background: var(--seal);
+        border-color: var(--seal);
+        color: #fff7ee;
+        transform: scale(1.06);
+      }
+
+      .quiz-foot {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      .quiz-foot .btn { min-height: 44px; padding: 8px 20px; font-size: 0.86rem; }
+
+      /* ===== result ===== */
+      .result { text-align: center; }
+      .result-art { width: clamp(168px, 44vw, 220px); margin: 0 auto 6px; }
+      .result-art img { width: 100%; height: auto; display: block; }
+      .result .kicker { margin-bottom: 6px; }
+      .result h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        letter-spacing: 0.12em;
+      }
+      .result .flower-en {
+        margin: 6px 0 0;
+        color: var(--gold);
+        font-size: 0.9rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+      }
+      .result .tagline {
+        margin: 18px auto 0;
+        max-width: 500px;
+        color: var(--seal);
+        font-size: clamp(1.1rem, 2vw, 1.3rem);
+        font-weight: 500;
+        font-style: italic;
+      }
+      .result .desc {
+        margin: 20px auto 0;
+        max-width: 530px;
+        color: var(--ink-2);
+        font-size: 1.04rem;
+        line-height: 1.95;
+      }
+      .flower-language, .mbti-ref, .sub-result {
+        display: block;
+        width: fit-content;
+        max-width: min(560px, 100%);
+        margin: 18px auto 0;
+        padding: 13px clamp(26px, 7vw, 56px);
+        border-radius: 2px;
+        border: none;
+        background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.6) 24%,
+          rgba(255, 255, 255, 0.6) 76%,
+          transparent 100%);
+        color: var(--ink-2);
+        line-height: 1.9;
+        text-align: center;
+      }
+      .flower-language strong, .mbti-ref strong, .sub-result strong { color: var(--seal); }
+      .traits {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 24px 0 4px;
+      }
+      .trait {
+        padding: 7px 16px;
+        border-radius: 999px;
+        background: rgba(169, 53, 56, 0.08);
+        border: 1px solid rgba(169, 53, 56, 0.16);
+        color: var(--rose-d);
+        font-size: 0.86rem;
+        letter-spacing: 0.08em;
+      }
+      .score-list {
+        margin: 24px auto 0;
+        max-width: 560px;
+        display: grid;
+        gap: 9px;
+      }
+      .score-row {
+        display: grid;
+        grid-template-columns: 88px 1fr 36px;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+      .bar {
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(169, 53, 56, 0.12);
+        overflow: hidden;
+      }
+      .bar span {
+        display: block;
+        height: 100%;
+        width: 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(196,122,122,0.75), var(--seal));
+      }
+      .result-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        justify-content: center;
+        margin-top: 34px;
+      }
+
+      .is-hidden { display: none !important; }
+
+      .fade-in { animation: fadeIn 480ms ease both; }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .petals span { animation: none; display: none; }
+        .fade-in { animation: none; }
+      }
+
+      /* ===== 行動裝置字級調校 — 依常見手機螢幕寬度縮放 ===== */
+      @media (max-width: 600px) { html { font-size: 93.75%; } }   /* 15px */
+      @media (max-width: 430px) { html { font-size: 90.5%; } }    /* ~14.5px，iPhone Pro Max */
+      @media (max-width: 393px) { html { font-size: 87.5%; } }    /* 14px，iPhone 12–16 / Pixel */
+      @media (max-width: 360px) { html { font-size: 84.4%; } }    /* ~13.5px，常見 Android */
+      @media (max-width: 320px) { html { font-size: 81.25%; } }   /* 13px，迷你螢幕 */
+
+      /* 標題在小螢幕另外收斂 */
+      @media (max-width: 480px) {
+        .intro h1 { font-size: clamp(1.9rem, 8.5vw, 2.5rem); }
+        .question { font-size: clamp(1.25rem, 5vw, 1.55rem); }
+        .result h2 { font-size: clamp(1.7rem, 7.5vw, 2.35rem); }
+        .result .tagline { font-size: clamp(1rem, 4.2vw, 1.2rem); }
+        .score-row { grid-template-columns: 76px 1fr 30px; }
+      }
+
+      /* ===== 網頁尾部（與首頁 index 相同） ===== */
+      .site-footer {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 14px;
+        padding: 60px clamp(20px, 5vw, 76px) 40px;
+        background: #2b1f1f;
+        color: #d8c5c1;
+        text-align: center;
+      }
+      .site-footer .footer-seal { display: grid; place-items: center; }
+      .site-footer .footer-icon { width: clamp(84px, 12vw, 112px); height: auto; display: block; }
+      .site-footer .footer-tagline {
+        margin: 0;
+        font-family: "Garamond Premier", "一點明體", serif;
+        font-size: 1.15rem;
+        letter-spacing: 0.16em;
+        color: #ecd9d5;
+      }
+      .site-footer .footer-copy {
+        margin: 0;
+        color: #8a7572;
+        font-size: 0.84rem;
+        letter-spacing: 0.1em;
+      }
+
+      /* ===== 頁首橫幅（與 index 一致） ===== */
+      .site-header {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 76px;
+        padding: 14px clamp(18px, 4vw, 54px);
+        background: rgba(251, 245, 239, 0.86);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        transition: background 240ms ease, box-shadow 240ms ease;
+      }
+      .site-header.is-scrolled {
+        background: rgba(251, 245, 239, 0.96);
+        box-shadow: 0 1px 20px rgba(81, 54, 50, 0.06);
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        font-family: "Garamond Premier", "一點明體", serif;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      .brand-mark {
+        width: 46px;
+        height: 46px;
+        object-fit: contain;
+      }
+      .brand-en {
+        color: var(--ink-2);
+        font-family: "Garamond Premier", "一點明體", serif;
+        font-size: 0.86rem;
+        letter-spacing: 0.18em;
+      }
+      .site-nav {
+        display: flex;
+        align-items: center;
+      }
+      .nav-home {
+        padding: 9px 18px;
+        color: #fff;
+        background: var(--seal);
+        border-radius: 2px;
+        font-size: 0.94rem;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        transition: background 200ms ease;
+      }
+      .nav-home:hover { background: var(--rose-d); color: #fff; }
+
+      @media (max-width: 620px) {
+        .site-header { min-height: 64px; padding: 10px clamp(14px, 4vw, 24px); }
+        .brand { gap: 10px; }
+        .brand-mark { width: 40px; height: 40px; font-size: 0.96rem; }
+        .brand-en { font-size: 0.74rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="petals" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <header class="site-header" aria-label="主導覽">
+      <a class="brand" href="main_cultivate.html" aria-label="繁花首頁">
+        <img class="brand-mark" src="assets/Stamp_Vert.png" alt="繁花 BLOSSOM AGENT" />
+        <span class="brand-en">酒店經紀公司</span>
+      </a>
+      <nav class="site-nav">
+        <a href="main_cultivate.html" class="nav-home">← 繁花首頁</a>
+      </nav>
+    </header>
+
+
+    <div class="wrap">
+      <main class="card">
+        <!-- ===== Intro ===== -->
+        <section id="intro" class="intro fade-in">
+          <div class="intro-art" aria-hidden="true">
+            <!-- 牡丹 peony -->
+            <svg viewBox="0 0 120 120">
+          <g fill="#f0bcc8">
+            <ellipse cx="60" cy="24" rx="15" ry="21"/>
+            <ellipse cx="60" cy="24" rx="15" ry="21" transform="rotate(45 60 60)"/>
+            <ellipse cx="60" cy="24" rx="15" ry="21" transform="rotate(90 60 60)"/>
+            <ellipse cx="60" cy="24" rx="15" ry="21" transform="rotate(135 60 60)"/>
+            <ellipse cx="60" cy="24" rx="15" ry="21" transform="rotate(180 60 60)"/>
+            <ellipse cx="60" cy="24" rx="15" ry="21" transform="rotate(225 60 60)"/>
+            <ellipse cx="60" cy="24" rx="15" ry="21" transform="rotate(270 60 60)"/>
+            <ellipse cx="60" cy="24" rx="15" ry="21" transform="rotate(315 60 60)"/>
+          </g>
+          <g fill="#e6a3b6">
+            <ellipse cx="60" cy="34" rx="12" ry="16" transform="rotate(22.5 60 60)"/>
+            <ellipse cx="60" cy="34" rx="12" ry="16" transform="rotate(67.5 60 60)"/>
+            <ellipse cx="60" cy="34" rx="12" ry="16" transform="rotate(112.5 60 60)"/>
+            <ellipse cx="60" cy="34" rx="12" ry="16" transform="rotate(157.5 60 60)"/>
+            <ellipse cx="60" cy="34" rx="12" ry="16" transform="rotate(202.5 60 60)"/>
+            <ellipse cx="60" cy="34" rx="12" ry="16" transform="rotate(247.5 60 60)"/>
+            <ellipse cx="60" cy="34" rx="12" ry="16" transform="rotate(292.5 60 60)"/>
+            <ellipse cx="60" cy="34" rx="12" ry="16" transform="rotate(337.5 60 60)"/>
+          </g>
+          <g fill="#d07d92">
+            <ellipse cx="60" cy="46" rx="9" ry="12"/>
+            <ellipse cx="60" cy="46" rx="9" ry="12" transform="rotate(60 60 60)"/>
+            <ellipse cx="60" cy="46" rx="9" ry="12" transform="rotate(120 60 60)"/>
+            <ellipse cx="60" cy="46" rx="9" ry="12" transform="rotate(180 60 60)"/>
+            <ellipse cx="60" cy="46" rx="9" ry="12" transform="rotate(240 60 60)"/>
+            <ellipse cx="60" cy="46" rx="9" ry="12" transform="rotate(300 60 60)"/>
+          </g>
+          <circle cx="60" cy="60" r="12" fill="#c4607a"/>
+          <g fill="#ecc65a">
+            <circle cx="60" cy="53" r="1.7"/>
+            <circle cx="60" cy="53" r="1.7" transform="rotate(45 60 60)"/>
+            <circle cx="60" cy="53" r="1.7" transform="rotate(90 60 60)"/>
+            <circle cx="60" cy="53" r="1.7" transform="rotate(135 60 60)"/>
+            <circle cx="60" cy="53" r="1.7" transform="rotate(180 60 60)"/>
+            <circle cx="60" cy="53" r="1.7" transform="rotate(225 60 60)"/>
+            <circle cx="60" cy="53" r="1.7" transform="rotate(270 60 60)"/>
+            <circle cx="60" cy="53" r="1.7" transform="rotate(315 60 60)"/>
+          </g>
+          <circle cx="60" cy="60" r="4.5" fill="#a84a64"/>
+        </svg>
+          </div>
+          <p class="kicker">FLOWER PERSONALITY</p>
+          <h1>妳是哪一種花</h1>
+          <p class="lead">
+            12 種花，12 種綻放方式。<br />
+            回答 12 道情境題，看看妳在關係、魅力、行動與內在世界中，<br />
+            最接近哪一種花格。
+          </p>
+          <p class="note">MBTI 僅作為趣味性的氣質參考，並非正式心理測驗。<br />此測驗無法準確適配妳的 MBTI<br />若想了解可至 MBTI 測驗網測試。</p>
+          <button class="btn" type="button" id="start-btn">開始測驗</button>
+        </section>
+
+        <!-- ===== Quiz ===== -->
+        <section id="quiz" class="is-hidden">
+          <div class="progress-head">
+            <span id="q-counter">第 1 題 / 共 12 題</span>
+            <span id="q-percent">0%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
+          <h2 class="question" id="question-text"></h2>
+          <div class="options" id="options"></div>
+
+          <div class="quiz-foot">
+            <button class="btn ghost" type="button" id="back-btn">← 上一題</button>
+            <button class="btn ghost" type="button" id="restart-btn">重新開始</button>
+          </div>
+        </section>
+
+        <!-- ===== Result ===== -->
+        <section id="result" class="result is-hidden">
+          <p class="kicker">妳的花格是</p>
+          <div class="result-art" id="result-art"></div>
+          <p class="tagline" id="result-tagline"></p>
+          <p class="desc" id="result-desc"></p>
+          <div class="traits" id="result-traits"></div>
+          <div class="flower-language" id="result-language"></div>
+          <div class="mbti-ref" id="result-mbti"></div>
+          <div class="sub-result" id="result-sub"></div>
+          <div class="score-list" id="score-list"></div>
+          <div class="result-actions">
+            <a class="btn" id="result-cta" href="main_cultivate.html#contact">與繁花聊聊</a>
+            <a class="btn ghost" href="types.html">查看類型介紹</a>
+            <button class="btn ghost" type="button" id="retry-btn">再測一次</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-seal" aria-hidden="true">
+        <img class="footer-icon" src="assets/Footer_ICON.png" alt="繁花 BLOSSOM AGENT" />
+      </div>
+      <p class="footer-tagline">讓每一朵花，盛開成自己。</p>
+      <p class="footer-copy">© <span id="year"></span> 繁花 BLOSSOM AGENT. All rights reserved.</p>
+    </footer>
+
+    <script>
+      // ===== 頁首橫幅：捲動陰影 + 頁尾年份 =====
+      (function () {
+        const header = document.querySelector(".site-header");
+        const onScroll = () =>
+          header?.classList.toggle("is-scrolled", window.scrollY > 24);
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+
+        const year = document.getElementById("year");
+        if (year) year.textContent = new Date().getFullYear();
+      })();
+
+      // ===== 12 種花格 SVG 圖案（viewBox 0 0 120 120） =====
+
+      // ===== 12 種花格資料 =====
+      const FLOWERS = {
+        rose: {
+          name: "紅玫瑰", en: "Red Rose", mbti: "ENFJ / ESTP",
+          tagline: "妳不是等待被看見的人，妳本身就是焦點。",
+          language: "熱烈的愛、自信魅力、主動追求。",
+          desc: "紅玫瑰型的人熱情、直接，擅長把情緒與吸引力大方展現出來。妳有很強的存在感，也不害怕主動靠近自己想要的人事物。妳的魅力不是安靜等待，而是用眼神、語氣與行動讓人記住妳。",
+          traits: ["熱情", "魅力", "主動", "存在感"],
+        },
+        peony: {
+          name: "牡丹", en: "Peony", mbti: "ENTJ / ESTJ",
+          tagline: "真正的氣場，不需要用力證明。",
+          language: "富貴、大器、成熟氣場、領袖感。",
+          desc: "牡丹型的人有成熟而穩定的氣勢，做事有標準，也很清楚自己要什麼。妳不急著討好別人，而是用成果、格局與判斷力建立位置。妳的魅力來自一種穩穩坐在主位上的從容。",
+          traits: ["大器", "成熟", "掌控", "領袖感"],
+        },
+        bellflower: {
+          name: "桔梗", en: "Balloon Flower", mbti: "INFP",
+          tagline: "妳的溫柔裡，有一種不會退讓的信念。",
+          language: "真誠的愛、永恆承諾、理想與等待。",
+          desc: "桔梗型的人重視真心與承諾，不喜歡浮誇的關係，也不願意違背自己的內在信念。妳看起來柔和，實際上很有原則；一旦認定某件事，就會安靜而堅定地守著。",
+          traits: ["真誠", "理想", "承諾", "內在信念"],
+        },
+        violet: {
+          name: "紫羅蘭", en: "Violet", mbti: "INFJ",
+          tagline: "妳不需要被所有人理解，只需要被真正讀懂。",
+          language: "神秘、忠誠、深情、精神性的愛。",
+          desc: "紫羅蘭型的人敏銳、內斂，常常能看見別人沒說出口的情緒。妳不輕易展開自己，但內在世界極深。妳的魅力像夜色裡的花，不張揚，卻讓真正靠近的人很難忘。",
+          traits: ["神秘", "深度", "洞察", "內斂"],
+        },
+        sunflower: {
+          name: "向日葵", en: "Sunflower", mbti: "ENFP / ESFP",
+          tagline: "妳把光帶到哪裡，哪裡就開始變得熱鬧。",
+          language: "陽光、自由、樂觀、追逐熱愛。",
+          desc: "向日葵型的人明亮、開放，擅長把希望與活力感染給周圍的人。妳不喜歡被困住，喜歡自由選擇，也喜歡讓生活保持新鮮感。妳的魅力是自然散發的熱度。",
+          traits: ["明亮", "自由", "樂觀", "感染力"],
+        },
+        orchid: {
+          name: "蘭花", en: "Orchid", mbti: "INTJ / ENTP",
+          tagline: "妳的高級感，來自不輕易迎合。",
+          language: "高雅、獨特、智慧、難以取代。",
+          desc: "蘭花型的人有獨特品味與清楚標準，不喜歡和別人一樣。妳可能帶有一點距離感，但那不是冷漠，而是妳對品質、界線與自我風格的堅持。越了解妳，越會發現妳的層次。",
+          traits: ["獨特", "聰明", "高標準", "疏離美"],
+        },
+        lily: {
+          name: "百合", en: "Lily", mbti: "ISTJ",
+          tagline: "乾淨、端正、可靠，是妳最安靜的力量。",
+          language: "純粹、高雅、端莊、責任。",
+          desc: "百合型的人重視秩序、界線與責任感。妳做事穩，做人端正，不喜歡太混亂或太浮誇的環境。妳的美不是強烈衝擊，而是越相處越讓人信任的清澈感。",
+          traits: ["純粹", "高雅", "端莊", "穩定"],
+        },
+        jasmine: {
+          name: "茉莉", en: "Jasmine", mbti: "ISFP",
+          tagline: "妳不張揚，卻有一種讓人想靠近的香氣。",
+          language: "溫柔、親切、感性、自然魅力。",
+          desc: "茉莉型的人細膩、感性，擅長用生活美感與柔和氣質打動人。妳不一定喜歡成為全場焦點，但妳的自然、真實與舒適感，常常讓人越靠近越喜歡。",
+          traits: ["細膩", "感性", "自然", "柔和魅力"],
+        },
+        lavender: {
+          name: "薰衣草", en: "Lavender", mbti: "INTP",
+          tagline: "妳的安靜不是空白，而是一整座正在運轉的宇宙。",
+          language: "安定、療癒、等待、思考與沉澱。",
+          desc: "薰衣草型的人冷靜、理性，喜歡保留自己的空間，也習慣先想清楚再行動。妳的節奏不急不躁，給人一種安定感。妳的魅力常常不是第一眼，而是長時間相處後的清醒與深度。",
+          traits: ["冷靜", "療癒", "思考", "安定"],
+        },
+        chamomile: {
+          name: "洋甘菊", en: "Chamomile", mbti: "ISFJ",
+          tagline: "妳像一杯溫熱的茶，讓疲憊的人慢慢放鬆。",
+          language: "逆境中的力量、安撫、陪伴、修復。",
+          desc: "洋甘菊型的人溫和、可靠，擅長照顧細節與穩定關係。妳不一定會大聲宣告自己的付出，但總會在重要時刻出現。妳的力量是讓人安心，也讓混亂慢慢恢復秩序。",
+          traits: ["照顧", "溫和", "陪伴", "安心感"],
+        },
+        plum: {
+          name: "梅花", en: "Plum Blossom", mbti: "ISTP",
+          tagline: "越冷的時候，越看得出妳的韌性。",
+          language: "堅忍、不屈、獨立、逆境中的盛開。",
+          desc: "梅花型的人冷靜、耐壓，不喜歡多說，但真正遇到困難時很能扛。妳有自己的判斷，不容易被情緒牽著走，也擅長在混亂中快速找到方法。妳的美帶著一點冷感，卻非常有力量。",
+          traits: ["堅韌", "獨立", "控場", "沉著"],
+        },
+        sakura: {
+          name: "櫻花", en: "Sakura", mbti: "ESFJ",
+          tagline: "妳讓相遇變得溫柔，也讓離別被人記住。",
+          language: "親和、溫柔、短暫之美、珍惜當下。",
+          desc: "櫻花型的人親切、重視關係，擅長讓人感受到被歡迎與被記得。妳的魅力不是壓迫式的存在感，而是一種溫柔的氛圍；妳讓人想靠近，也讓人離開後仍然想念。",
+          traits: ["親和", "溫柔", "關係感", "短暫卻難忘"],
+        },
+      };
+
+      const FLOWER_ORDER = [
+        "rose", "peony", "bellflower", "violet", "sunflower", "orchid",
+        "lily", "jasmine", "lavender", "chamomile", "plum", "sakura"
+      ];
+
+      // ===== 12 道情境題（每個選項對應花格加權分數） =====
+      const QUESTIONS = [
+        {
+          q: "妳走進一個新場合，最自然的狀態是？",
+          hint: "這題主要區分外放魅力、觀察型、照顧型與主導型。",
+          options: [
+            { t: "主動開話題，把氣氛點亮，讓大家自然注意到我。", score: { rose: 3, sunflower: 2 } },
+            { t: "先觀察大家的情緒，再用舒服的方式融入。", score: { sakura: 3, chamomile: 2 } },
+            { t: "保持優雅距離，不急著靠近，但也不會失禮。", score: { orchid: 3, lily: 2 } },
+            { t: "快速判斷誰主導、誰可靠，找到最有效的位置。", score: { peony: 3, plum: 2 } },
+            { t: "找一個安靜角落，等真正有共鳴的人出現。", score: { violet: 3, lavender: 2 } },
+            { t: "用自然的笑容和小互動，讓別人慢慢放鬆。", score: { jasmine: 3, bellflower: 2 } }
+          ]
+        },
+        {
+          q: "面對喜歡的人，妳最像哪一種？",
+          hint: "這題用愛情中的表達方式拉開差異。",
+          options: [
+            { t: "喜歡就會釋放訊號，讓對方清楚感受到我的吸引力。", score: { rose: 3, sunflower: 1 } },
+            { t: "我會維持分寸與姿態，讓對方主動靠近我。", score: { peony: 3, orchid: 2 } },
+            { t: "我不隨便開始，但一旦認定，就會很真誠地守著。", score: { bellflower: 3, violet: 2 } },
+            { t: "我會用陪伴、關心與細節，讓感情慢慢升溫。", score: { chamomile: 3, sakura: 2 } },
+            { t: "我需要自然舒服的感覺，不喜歡太制式或太壓迫。", score: { jasmine: 3, lavender: 2 } },
+            { t: "我會先看對方是否值得信任，確定後才行動。", score: { lily: 3, plum: 2 } }
+          ]
+        },
+        {
+          q: "當事情失控時，妳通常會怎麼處理？",
+          hint: "這題區分控場、耐壓、安撫與逃離混亂的模式。",
+          options: [
+            { t: "直接站出來整理局面，該決定就決定。", score: { peony: 3, plum: 2 } },
+            { t: "先穩住人的情緒，讓大家不要繼續慌。", score: { chamomile: 3, sakura: 2 } },
+            { t: "迅速找出最實際的解法，不想浪費時間抱怨。", score: { plum: 3, lily: 2 } },
+            { t: "我會先退一步想清楚，避免被情緒帶著走。", score: { lavender: 3, violet: 2 } },
+            { t: "我會用樂觀和行動感把大家拉回正軌。", score: { sunflower: 3, rose: 2 } },
+            { t: "我會重新檢查標準與細節，找出哪裡出了問題。", score: { lily: 3, orchid: 2 } }
+          ]
+        },
+        {
+          q: "別人最容易被妳哪一點吸引？",
+          hint: "這題直接區分魅力來源。",
+          options: [
+            { t: "我的眼神、語氣和存在感，會讓人不自覺被吸過來。", score: { rose: 3, peony: 1 } },
+            { t: "我的明亮和好相處，會讓人覺得跟我在一起很開心。", score: { sunflower: 3, sakura: 2 } },
+            { t: "我的高級感和距離感，讓人覺得我很特別。", score: { orchid: 3, lily: 2 } },
+            { t: "我的細膩和自然感，讓人越相處越舒服。", score: { jasmine: 3, chamomile: 2 } },
+            { t: "我的神秘和深度，讓人想知道我真正的想法。", score: { violet: 3, lavender: 2 } },
+            { t: "我的穩定和可靠，會讓人覺得可以相信我。", score: { lily: 3, bellflower: 2 } }
+          ]
+        },
+        {
+          q: "妳最無法忍受哪一種關係？",
+          hint: "這題用排斥點提高辨別度。",
+          options: [
+            { t: "冷淡、沒火花、什麼都不說清楚的關係。", score: { rose: 3, sunflower: 1 } },
+            { t: "沒有承諾、隨便說說、讓人懷疑真心的關係。", score: { bellflower: 3, lily: 2 } },
+            { t: "太黏、太干涉、讓我失去個人空間的關係。", score: { orchid: 3, lavender: 2 } },
+            { t: "混亂、沒責任感、讓我一直收拾殘局的關係。", score: { peony: 3, lily: 2 } },
+            { t: "情緒勒索、過度依賴、消耗我能量的關係。", score: { plum: 3, violet: 2 } },
+            { t: "太疏離、沒有互相照顧、感受不到溫度的關係。", score: { sakura: 3, chamomile: 2 } }
+          ]
+        },
+        {
+          q: "如果要形容妳的穿搭或外在風格，哪個最接近？",
+          hint: "這題區分花的視覺意象。",
+          options: [
+            { t: "亮眼、性感、有記憶點，最好一出場就被看見。", score: { rose: 3, sunflower: 2 } },
+            { t: "質感、剪裁、氣勢，不一定高調但一定有份量。", score: { peony: 3, orchid: 2 } },
+            { t: "乾淨、端正、經典，不喜歡太凌亂或太浮誇。", score: { lily: 3, chamomile: 1 } },
+            { t: "柔和、自然、有香氣感，像沒用力卻剛剛好。", score: { jasmine: 3, sakura: 2 } },
+            { t: "特殊、冷感、有個人標誌，不想被歸類。", score: { orchid: 3, violet: 2 } },
+            { t: "簡單、機能、耐看，行動方便比華麗重要。", score: { plum: 3, lavender: 2 } }
+          ]
+        },
+        {
+          q: "朋友遇到困難時，妳通常扮演什麼角色？",
+          hint: "這題區分關係中的功能位置。",
+          options: [
+            { t: "我會鼓勵她、拉她出門，讓她重新感覺自己還活著。", score: { sunflower: 3, rose: 2 } },
+            { t: "我會陪她慢慢講，不急著給答案，先讓她安心。", score: { chamomile: 3, sakura: 2 } },
+            { t: "我會幫她分析問題核心，告訴她下一步怎麼做。", score: { peony: 3, orchid: 2 } },
+            { t: "我會安靜陪著，但必要時會很實際地幫她處理。", score: { plum: 3, lily: 2 } },
+            { t: "我會理解她沒說出口的感受，也會替她保守秘密。", score: { violet: 3, bellflower: 2 } },
+            { t: "我會用小細節照顧她，例如吃飯、訊息、生活安排。", score: { jasmine: 3, chamomile: 2 } }
+          ]
+        },
+        {
+          q: "妳做選擇時，最重視的是什麼？",
+          hint: "這題區分價值判準。",
+          options: [
+            { t: "它有沒有讓我心動、有沒有火花。", score: { rose: 3, sunflower: 2 } },
+            { t: "它是否符合我的長期目標與整體格局。", score: { peony: 3, orchid: 2 } },
+            { t: "它是否真誠，是否對得起我的內心。", score: { bellflower: 3, violet: 2 } },
+            { t: "它是否穩定、可靠、符合規範。", score: { lily: 3, chamomile: 2 } },
+            { t: "它是否讓我保持自由與自己的節奏。", score: { lavender: 3, jasmine: 2 } },
+            { t: "它是否實際有效，能不能真的解決問題。", score: { plum: 3, lily: 2 } }
+          ]
+        },
+        {
+          q: "在團隊或工作場合，妳最常被看見的能力是？",
+          hint: "這題用職場表現補足 MBTI 氣質。",
+          options: [
+            { t: "帶氣氛、拉人心，讓大家願意一起動起來。", score: { rose: 2, sunflower: 3 } },
+            { t: "建立方向、分配任務、讓局面有效率。", score: { peony: 3, lily: 2 } },
+            { t: "提出獨特觀點，挑戰大家習慣的想法。", score: { orchid: 3, lavender: 2 } },
+            { t: "默默補位，把別人忽略的小事顧好。", score: { chamomile: 3, sakura: 2 } },
+            { t: "在壓力下穩定執行，危急時不慌。", score: { plum: 3, lily: 2 } },
+            { t: "用審美、感受和細節，讓成果變得更有溫度。", score: { jasmine: 3, bellflower: 2 } }
+          ]
+        },
+        {
+          q: "妳最理想的生活節奏是？",
+          hint: "這題區分外向奔放、內在沉澱與穩定秩序。",
+          options: [
+            { t: "充滿邀約、熱度、新鮮感，每天都有值得期待的事。", score: { sunflower: 3, rose: 2 } },
+            { t: "有品質、有目標、有清楚安排，生活要越來越升級。", score: { peony: 3, orchid: 2 } },
+            { t: "穩定、乾淨、有規律，讓我能把事情做好。", score: { lily: 3, chamomile: 2 } },
+            { t: "安靜、有自己的時間，可以慢慢閱讀、思考或放空。", score: { lavender: 3, violet: 2 } },
+            { t: "自然、舒服、有美感，不需要太滿但要真實。", score: { jasmine: 3, bellflower: 2 } },
+            { t: "保有彈性與行動自由，想走就走、想停就停。", score: { plum: 3, sunflower: 1 } }
+          ]
+        },
+        {
+          q: "如果妳要留給別人一個印象，妳最希望是？",
+          hint: "這題強迫選擇自我形象。",
+          options: [
+            { t: "她很迷人，很有生命力，讓人很難忽略。", score: { rose: 3, sunflower: 2 } },
+            { t: "她很有氣場，很值得尊重，也很有能力。", score: { peony: 3, plum: 1 } },
+            { t: "她很特別，很聰明，好像有自己的世界。", score: { orchid: 3, violet: 2 } },
+            { t: "她很溫柔，很好相處，跟她在一起很放鬆。", score: { sakura: 3, jasmine: 2 } },
+            { t: "她很可靠，很穩定，是可以長久相信的人。", score: { lily: 3, chamomile: 2 } },
+            { t: "她很真誠，不浮誇，但內心很有力量。", score: { bellflower: 3, lavender: 2 } }
+          ]
+        },
+        {
+          q: "哪一句話最像妳內心真正的渴望？",
+          hint: "最後一題用核心需求作為結果加權。",
+          options: [
+            { t: "我想要被熱烈地選擇，也想大方地活成自己。", score: { rose: 4, sunflower: 1 } },
+            { t: "我想要站穩自己的位置，讓人生照我的標準前進。", score: { peony: 4, lily: 1 } },
+            { t: "我想要一份不被辜負的真心，也想守住自己的理想。", score: { bellflower: 4, violet: 1 } },
+            { t: "我想要被真正理解，而不是只被表面喜歡。", score: { violet: 4, lavender: 1 } },
+            { t: "我想要自由、快樂，永遠不要失去對世界的好奇。", score: { sunflower: 4, jasmine: 1 } },
+            { t: "我想要安穩地照顧重要的人，也被溫柔珍惜。", score: { chamomile: 3, sakura: 3 } }
+          ]
+        }
+      ];
+
+      // ===== State =====
+      const total = QUESTIONS.length;
+      let current = 0;
+      const answers = new Array(total).fill(null);
+
+      const $ = (id) => document.getElementById(id);
+      const introEl = $("intro");
+      const quizEl = $("quiz");
+      const resultEl = $("result");
+
+      function show(el) {
+        [introEl, quizEl, resultEl].forEach((s) => s.classList.add("is-hidden"));
+        el.classList.remove("is-hidden");
+        el.classList.remove("fade-in");
+        void el.offsetWidth; // restart animation
+        el.classList.add("fade-in");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function renderQuestion() {
+        const item = QUESTIONS[current];
+        $("q-counter").textContent = `第 ${current + 1} 題 / 共 ${total} 題`;
+        const pct = Math.round((current / total) * 100);
+        $("q-percent").textContent = pct + "%";
+        $("progress-fill").style.width = pct + "%";
+        $("question-text").innerHTML = `${item.q}<span class="question-hint">${item.hint}</span>`;
+
+        const box = $("options");
+        box.innerHTML = "";
+        const letters = ["A", "B", "C", "D", "E", "F"];
+        item.options.forEach((opt, i) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "option";
+          btn.innerHTML = `<span class="dot">${letters[i]}</span><span>${opt.t}</span>`;
+          btn.addEventListener("click", () => choose(opt));
+          box.appendChild(btn);
+        });
+
+        $("back-btn").style.visibility = current === 0 ? "hidden" : "visible";
+      }
+
+      function choose(option) {
+        answers[current] = option.score;
+        if (current < total - 1) {
+          current++;
+          renderQuestion();
+        } else {
+          showResult();
+        }
+      }
+
+      function buildScores() {
+        const scores = {};
+        FLOWER_ORDER.forEach((k) => (scores[k] = 0));
+        answers.forEach((scoreMap) => {
+          if (!scoreMap) return;
+          Object.entries(scoreMap).forEach(([key, value]) => {
+            scores[key] = (scores[key] || 0) + value;
+          });
+        });
+        return scores;
+      }
+
+      function sortedFlowers(scores) {
+        return FLOWER_ORDER
+          .map((key, index) => ({ key, index, score: scores[key] || 0 }))
+          .sort((a, b) => b.score - a.score || a.index - b.index);
+      }
+
+      function showResult() {
+        const scores = buildScores();
+        const sorted = sortedFlowers(scores);
+        const best = sorted[0];
+        const second = sorted[1];
+        const f = FLOWERS[best.key];
+        const secondFlower = FLOWERS[second.key];
+        const maxScore = Math.max(best.score, 1);
+
+        $("result-art").innerHTML = `<img src="assets/flowers/flower-${best.key}.png" alt="${f.name}" />`;
+        $("result-tagline").textContent = f.tagline;
+        $("result-desc").textContent = f.desc;
+        $("result-language").innerHTML = `<strong>花語：</strong>${f.language}`;
+        $("result-mbti").innerHTML = `<strong>MBTI 氣質參考：</strong>${f.mbti}`;
+        $("result-sub").innerHTML = `<strong>妳的隱性花影：</strong>${secondFlower.name}。這代表妳除了主要花格之外，也帶有「${secondFlower.traits.join("、")}」的一面。`;
+
+        const tEl = $("result-traits");
+        tEl.innerHTML = "";
+        f.traits.forEach((t) => {
+          const span = document.createElement("span");
+          span.className = "trait";
+          span.textContent = t;
+          tEl.appendChild(span);
+        });
+
+        const scoreList = $("score-list");
+        scoreList.innerHTML = "";
+        sorted.slice(0, 5).forEach((row) => {
+          const flower = FLOWERS[row.key];
+          const el = document.createElement("div");
+          el.className = "score-row";
+          const width = Math.round((row.score / maxScore) * 100);
+          el.innerHTML = `
+            <span>${flower.name}</span>
+            <div class="bar"><span style="width:${width}%"></span></div>
+            <span>${row.score}</span>
+          `;
+          scoreList.appendChild(el);
+        });
+
+        $("progress-fill").style.width = "100%";
+        $("q-percent").textContent = "100%";
+        show(resultEl);
+      }
+
+      function start() {
+        current = 0;
+        answers.fill(null);
+        renderQuestion();
+        show(quizEl);
+      }
+
+      $("start-btn").addEventListener("click", start);
+      $("restart-btn").addEventListener("click", start);
+      $("retry-btn").addEventListener("click", () => show(introEl));
+      $("back-btn").addEventListener("click", () => {
+        if (current > 0) { current--; renderQuestion(); }
+      });
+    </script>
+  </body>
+</html>
