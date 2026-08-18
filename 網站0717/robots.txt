@@ -1,0 +1,28 @@
+# robots.txt — 繁花 BLOSSOM AGENT
+# 放置位置：https://blossom-agent.com/robots.txt（必須在網站根目錄）
+
+User-agent: *
+Allow: /
+
+# 內部工具／範本頁：不需要出現在搜尋結果
+# （這些頁面同時掛了 <meta name="robots" content="noindex">，
+#   此處只列 Allow 以便 Google 能讀到該標籤並確實移除索引。
+#   請勿改成 Disallow，否則爬蟲讀不到 noindex，反而可能留下網址型索引。）
+Allow: /blossom-namecard.html
+Allow: /_m.html
+
+# 明確允許圖片與樣式，Google 需要完整渲染頁面
+Allow: /assets/
+Allow: /styles.css
+Allow: /script.js
+
+# AI 爬蟲：目前開放（有助於被 AI 搜尋工具引用）
+# 若日後不想被抓，取消下列註解即可
+# User-agent: GPTBot
+# Disallow: /
+# User-agent: CCBot
+# Disallow: /
+# User-agent: ClaudeBot
+# Disallow: /
+
+Sitemap: https://blossom-agent.com/sitemap.xml

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>OG 封面圖原稿（1200×630）</title>
+<!-- 產圖用原稿，非網站頁面 -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:    #3f3435;
+  --ink-2:  #5b4848;
+  --muted:  #7f6e6c;
+  --paper:  #fbf5ef;
+  --cream:  #f6ebe1;
+  --rose:   #c47a7a;
+  --rose-d: #9a4a4f;
+  --sage:   #9fb39a;
+  --moss:   #5e7659;
+  --plum:   #7d4f64;
+  --seal:   #a93538;
+  --gold:   #b89865;
+  --line:   rgba(86, 62, 62, 0.14);
+  --f-display: "Noto Serif TC", serif;
+  --f-latin:   "Cormorant Garamond", serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1200px;height:630px;overflow:hidden}
+body{
+  background:linear-gradient(200deg,var(--paper) 0%,#fdfaf6 40%,var(--cream) 100%);
+  color:var(--ink);
+  font-family:var(--f-display);
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+}
+.canvas{
+  position:relative;
+  width:1200px;height:630px;
+  display:flex;flex-direction:column;
+  padding:74px 104px 66px;
+}
+.watermark{
+  position:absolute;right:-64px;bottom:-96px;
+  width:400px;opacity:.05;z-index:1;
+}
+
+/* ── 頂列：方印 + 品牌 ── */
+.top{display:flex;justify-content:space-between;align-items:flex-start;z-index:3}
+.mark{width:132px;height:132px;object-fit:contain;box-shadow:0 4px 12px rgba(81,54,50,.14)}
+.brand{text-align:right;padding-top:8px}
+.brand-en{
+  font-family:var(--f-latin);
+  font-size:38px;font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--seal);line-height:1.2;
+}
+.brand-zh{
+  font-size:36px;font-weight:500;letter-spacing:.2em;
+  color:var(--ink);margin-top:16px;line-height:1.3;
+}
+
+/* ── 標語 ── */
+.word{
+  margin-top:auto;
+  font-size:66px;font-weight:500;letter-spacing:.12em;line-height:1.5;
+  color:#3a2a2c;z-index:3;
+}
+
+/* ── 七花 ── */
+.garden{display:flex;align-items:center;gap:32px;margin-top:34px;z-index:3}
+.garden i{font-style:normal;line-height:1;font-size:38px}
+
+/* ── 頁腳 ── */
+.foot{
+  margin-top:32px;padding-top:24px;
+  border-top:1px solid var(--line);
+  z-index:3;
+}
+.foot-web{font-size:32px;font-weight:300;letter-spacing:.1em;color:var(--ink-2);line-height:1.3}
+.foot-latin{
+  font-family:var(--f-latin);
+  font-size:24px;font-weight:600;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--muted);margin-top:10px;
+}
+</style>
+</head>
+<body>
+<div class="canvas">
+  <img class="watermark" src="Blossom_logo_transparent.png" alt="" aria-hidden="true">
+
+  <div class="top">
+    <img class="mark" src="Footer_ICON.png" alt="繁花 BLOSSOM AGENT">
+    <div class="brand">
+      <div class="brand-en">Blossom Agent</div>
+      <div class="brand-zh">繁花酒店經紀公司</div>
+    </div>
+  </div>
+
+  <p class="word">讓每一朵花，盛開成自己。</p>
+
+  <div class="garden" aria-hidden="true">
+    <i style="color:var(--seal)">✿</i>
+    <i style="color:var(--rose-d)">✿</i>
+    <i style="color:var(--rose)">✿</i>
+    <i style="color:var(--plum)">✿</i>
+    <i style="color:var(--gold)">✿</i>
+    <i style="color:var(--moss)">✿</i>
+    <i style="color:var(--sage)">✿</i>
+  </div>
+
+  <div class="foot">
+    <div class="foot-web">blossom-agent.com</div>
+    <div class="foot-latin">Taipei · Taiwan</div>
+  </div>
+</div>
+</body>
+</html>
