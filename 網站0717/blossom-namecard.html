@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>繁花 BLOSSOM AGENT · 名片範本</title>
+<!-- 內部範本頁，不進入搜尋結果 -->
+<meta name="robots" content="noindex, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== 與網站共用的色票（來自 styles.css） ===== */
+:root{
+  --ink:    #3f3435;
+  --ink-2:  #5b4848;
+  --muted:  #7f6e6c;
+  --paper:  #fbf5ef;
+  --cream:  #f6ebe1;
+  --blush:  #ecccc6;
+  --rose:   #c47a7a;
+  --rose-d: #9a4a4f;
+  --sage:   #9fb39a;
+  --moss:   #5e7659;
+  --plum:   #7d4f64;
+  --seal:   #a93538;
+  --gold:   #b89865;
+  --line:   rgba(86, 62, 62, 0.14);
+
+  /* 字體：與網站相同的堆疊，未安裝時退回 Google Fonts */
+  --f-display: "Garamond Premier", "一點明體", "Noto Serif TC", serif;
+  --f-text:    "Noto Serif TC", "一點明體", serif;
+  --f-latin:   "Cormorant Garamond", "Garamond Premier", serif;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; padding:48px 20px 90px;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #fdf9f4 0%, var(--cream) 55%, #efe2d6 100%);
+  color:var(--ink);
+  font-family:var(--f-text);
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+img{display:block;max-width:100%}
+
+/* ---------- 控制列（列印時隱藏） ---------- */
+.panel{
+  position:relative;
+  max-width:760px; margin:0 auto 46px;
+  background:var(--paper); border:1px solid var(--line);
+  border-radius:3px;
+  padding:30px 30px 24px;
+  box-shadow:0 24px 70px rgba(81,54,50,.14);
+}
+.panel::before{                     /* 頂部朱→玫瑰漸層條，同網站 */
+  content:""; position:absolute; inset:0 0 auto; height:3px;
+  background:linear-gradient(90deg,var(--seal) 0%,var(--rose) 100%);
+  border-radius:3px 3px 0 0;
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;}
+label{
+  display:block;font-family:var(--f-latin);font-size:.68rem;font-weight:600;
+  letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;
+}
+input{
+  width:100%; padding:10px 12px; font-size:.94rem;
+  font-family:var(--f-text); font-weight:300; color:var(--ink);
+  background:#fff; border:1px solid var(--line); border-radius:2px;
+  transition:border-color 200ms ease, box-shadow 200ms ease;
+}
+input:focus{outline:none;border-color:var(--rose);box-shadow:0 0 0 3px rgba(196,122,122,.16);}
+.switches{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;}
+.switch{
+  display:inline-flex;align-items:center;gap:8px;margin:0;cursor:pointer;
+  font-family:var(--f-text);font-size:.86rem;font-weight:300;
+  letter-spacing:.04em;text-transform:none;color:var(--ink-2);
+}
+.switch input{width:15px;height:15px;padding:0;accent-color:var(--seal);cursor:pointer;}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:1px solid var(--line);}
+button{
+  font-family:var(--f-display); font-size:.92rem; letter-spacing:.16em;
+  padding:11px 26px; cursor:pointer; border-radius:2px;
+  border:1px solid var(--seal); background:var(--seal); color:#fff;
+  box-shadow:0 8px 22px rgba(169,53,56,.22);
+  transition:transform 200ms ease, background 200ms ease, box-shadow 200ms ease;
+}
+button:hover{transform:translateY(-2px);background:var(--rose-d);border-color:var(--rose-d);box-shadow:0 12px 30px rgba(169,53,56,.32);}
+button.ghost{background:transparent;color:var(--ink-2);border-color:var(--line);box-shadow:none;}
+button.ghost:hover{background:transparent;color:var(--seal);border-color:var(--seal);}
+
+/* ---------- 名片本體 ---------- */
+.sheet{max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;gap:38px;justify-content:center;}
+.card-wrap{text-align:center;}
+.card-tag{
+  font-family:var(--f-latin);font-size:.68rem;font-weight:600;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 12px;
+}
+
+.card{
+  position:relative;
+  width:96mm; height:60mm;          /* 90×54mm 成品 + 四邊 3mm 出血 */
+  overflow:hidden;
+  font-family:var(--f-display);
+  box-shadow:0 24px 70px rgba(81,54,50,.14);
+}
+.card__inner{position:absolute;inset:3mm;text-align:left;}   /* 3mm 出血內＝成品範圍 */
+
+/* 裁切線（螢幕預覽用，列印自動隱藏） */
+.card::after{
+  content:""; position:absolute; inset:3mm;
+  border:.3mm dashed rgba(86,62,62,.26); pointer-events:none; z-index:5;
+}
+body.clean .card::after{display:none;}
+
+/* ===== 正面 ===== */
+.front{
+  background:linear-gradient(150deg,#fdfaf6 0%,var(--paper) 46%,var(--cream) 100%);
+}
+.front::before{                      /* 紙紋：極淡的橫向織理 */
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:2;
+  background:repeating-linear-gradient(180deg,rgba(63,52,53,.02) 0 1px,transparent 1px 3px);
+}
+.front .card__inner{
+  display:flex; align-items:stretch;
+  padding:6mm 6mm 5.5mm; z-index:3;
+}
+.front-watermark{                    /* 右上角巨型 ✿ 淡印 */
+  position:absolute; right:-4mm; top:-14mm;
+  font-family:var(--f-text); font-size:48mm; line-height:1;
+  color:var(--rose); opacity:.06; pointer-events:none; z-index:1;
+}
+
+.f-left{display:flex;flex-direction:column;justify-content:space-between;min-width:0;}
+.f-eyebrow{
+  font-family:var(--f-latin);
+  font-size:7.2pt; font-weight:600; letter-spacing:.34em;
+  color:var(--seal); text-transform:uppercase; margin:0;
+}
+.f-name{
+  font-size:20pt;letter-spacing:.12em;font-weight:600;line-height:1.1;
+  margin:1.8mm 0 0;color:#3a2a2c;
+}
+.f-role{
+  font-family:var(--f-text);
+  font-size:7.6pt; letter-spacing:.26em; color:var(--muted);
+  margin:2.4mm 0 0; font-weight:300;
+}
+.f-rule{                              /* 金線 → 淡出 */
+  width:13mm;height:.3mm;margin:3mm 0 0;
+  background:linear-gradient(90deg,var(--gold) 0%,rgba(184,152,101,0) 100%);
+}
+.f-contact{                          /* 左：Line／右：社群，兩欄並排 */
+  display:flex; gap:5mm;
+  font-family:var(--f-text);font-size:7.2pt;font-weight:300;
+  line-height:2.05;color:var(--ink-2);
+}
+.f-c-col{display:flex;flex-direction:column;}
+.f-c-row{display:flex;align-items:baseline;}
+.f-c-label{
+  font-family:var(--f-text);font-weight:500;
+  color:var(--seal);letter-spacing:.08em;font-size:6.6pt;
+  width:14mm;flex:none;
+}
+
+
+/* ===== 背面：紙色 · 十二花型 ===== */
+.back{background:linear-gradient(200deg,var(--paper) 0%,#fdfaf6 40%,var(--cream) 100%);}
+.back-watermark{                     /* 尺寸與正面浮水印一致 */
+  position:absolute; right:-12mm; bottom:-14mm;
+  width:38mm; opacity:.045; pointer-events:none; z-index:1;
+}
+.back .card__inner{
+  display:flex; flex-direction:column;
+  padding:5.5mm 5.5mm 5mm; z-index:3;
+}
+.b-top{display:flex;justify-content:space-between;align-items:flex-start;gap:4mm;}
+.b-mark{                              /* 網站 footer 方形識別 */
+  width:10.5mm;height:10.5mm;flex:none;object-fit:contain;
+  box-shadow:0 .4mm 1mm rgba(81,54,50,.14);
+}
+.b-eyebrow{
+  font-family:var(--f-latin);
+  font-size:6.8pt;font-weight:600;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--seal);text-align:right;margin:0;line-height:1.6;
+}
+.b-eyebrow em{
+  display:block;font-style:normal;font-family:var(--f-display);
+  font-size:7.4pt;font-weight:500;letter-spacing:.24em;text-transform:none;
+  color:var(--ink);margin-top:.8mm;
+}
+
+.b-word{
+  font-size:12pt;letter-spacing:.16em;line-height:1.7;font-weight:500;
+  color:#3a2a2c;margin:auto 0 0;
+}
+
+/* 七花條：官網色票的七朵 ✿ */
+.b-garden{
+  display:flex;align-items:center;gap:2.8mm;margin:3mm 0 0;
+}
+.b-garden i{
+  font-style:normal;line-height:1;font-size:10pt;
+}
+
+.b-bottom{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:4mm;
+  margin-top:2.4mm;padding-top:2.2mm;
+  border-top:.25mm solid var(--line);
+  font-family:var(--f-text);font-size:6.6pt;font-weight:300;letter-spacing:.12em;
+  color:var(--ink-2);
+}
+.b-bottom .b-latin{
+  font-family:var(--f-latin);font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--muted);margin-top:.7mm;font-size:5.6pt;
+}
+/* ---------- 列印 ---------- */
+@page{size:A4;margin:12mm;}
+@media print{
+  body{background:#fff;padding:0;}
+  .panel{display:none;}
+  .card-tag{display:none;}
+  .card::after{display:none;}
+  .card{box-shadow:none;break-inside:avoid;}
+  .sheet{gap:8mm;}
+}
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="grid">
+    <div><label>姓名</label><input id="i-name" value="繁花" placeholder="王小花"></div>
+    <div><label>職稱</label><input id="i-role" value="經 紀 人" placeholder="經紀人"></div>
+    <div><label>個人 LINE ID</label><input id="i-line" value="@yourid" placeholder="@yourid"></div>
+    <div><label>Instagram</label><input id="i-ig" value="@blossom.agent"></div>
+    <div><label>Threads</label><input id="i-th" value="@blossom.agent"></div>
+    <div><label>網址</label><input id="i-web" value="blossom-agent.com"></div>
+    <div><label>背面標語</label><input id="i-word" value="讓每一朵花，盛開成自己。"></div>
+  </div>
+
+  <div class="switches">
+    <label class="switch"><input type="checkbox" id="t-ig" checked> 名片顯示 Instagram</label>
+    <label class="switch"><input type="checkbox" id="t-th" checked> 名片顯示 Threads</label>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="window.print()">列 印 · 輸 出 PDF</button>
+    <button class="ghost" id="btn-clean">隱 藏 裁 切 線</button>
+  </div>
+</div>
+
+<div class="sheet">
+  <div class="card-wrap">
+    <p class="card-tag">Front · 正面</p>
+    <div class="card front">
+      <span class="front-watermark" aria-hidden="true">✿</span>
+      <div class="card__inner">
+        <div class="f-left">
+          <div>
+            <p class="f-eyebrow">Blossom Agent</p>
+            <p class="f-name" id="o-name">繁花</p>
+            <p class="f-role" id="o-role">經 紀 人</p>
+            <div class="f-rule"></div>
+          </div>
+          <div class="f-contact">
+            <div class="f-c-col">
+              <div class="f-c-row"><span class="f-c-label">官方 Line</span><em style="font-style:normal">@262fpzyu</em></div>
+              <div class="f-c-row"><span class="f-c-label">個人 Line</span><em id="o-line" style="font-style:normal">@yourid</em></div>
+            </div>
+            <div class="f-c-col">
+              <div class="f-c-row" id="row-ig"><span class="f-c-label">IG</span><em id="o-ig" style="font-style:normal">@blossom.agent</em></div>
+              <div class="f-c-row" id="row-th"><span class="f-c-label">Threads</span><em id="o-th" style="font-style:normal">@blossom.agent</em></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-wrap">
+    <p class="card-tag">Back · 背面</p>
+    <div class="card back">
+      <img class="back-watermark" src="assets/Blossom_logo_transparent.png" alt="" aria-hidden="true">
+      <div class="card__inner">
+        <div class="b-top">
+          <img class="b-mark" src="assets/Footer_ICON.png" alt="繁花 BLOSSOM AGENT">
+          <p class="b-eyebrow">Blossom Agent<em>繁花酒店經紀公司</em></p>
+        </div>
+
+        <p class="b-word" id="o-word">讓每一朵花，盛開成自己。</p>
+
+        <div class="b-garden" aria-hidden="true">
+          <i style="color:var(--seal)">✿</i>
+          <i style="color:var(--rose-d)">✿</i>
+          <i style="color:var(--rose)">✿</i>
+          <i style="color:var(--plum)">✿</i>
+          <i style="color:var(--gold)">✿</i>
+          <i style="color:var(--moss)">✿</i>
+          <i style="color:var(--sage)">✿</i>
+        </div>
+
+        <div class="b-bottom">
+          <div>
+            <div id="o-web">blossom-agent.com</div>
+            <div class="b-latin">Taipei · Taiwan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function bind(inputId, outId){
+  var i = document.getElementById(inputId), o = document.getElementById(outId);
+  i.addEventListener('input', function(){ o.textContent = i.value; });
+}
+['name','role','line','ig','th','web','word'].forEach(function(k){ bind('i-'+k, 'o-'+k); });
+
+/* IG / Threads 可選擇是否印在名片上 */
+function optional(cbId, rowId){
+  var cb = document.getElementById(cbId), row = document.getElementById(rowId);
+  function apply(){ row.style.display = cb.checked ? '' : 'none'; }
+  cb.addEventListener('change', apply);
+  apply();
+}
+optional('t-ig', 'row-ig');
+optional('t-th', 'row-th');
+
+document.getElementById('btn-clean').addEventListener('click', function(){
+  document.body.classList.toggle('clean');
+  this.textContent = document.body.classList.contains('clean') ? '顯 示 裁 切 線' : '隱 藏 裁 切 線';
+});
+</script>
+</body>
+</html>
