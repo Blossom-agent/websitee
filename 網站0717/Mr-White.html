@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>懷特 WHITE · 商務娛樂顧問</title>
+<meta name="description" content="台北商務招待安排。進場前價格算清楚，離場前帳單逐項核對。Taipei business hospitality arrangements.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   懷特 WHITE — 打字機 / 複寫紙
+   牛皮紙 #E9E2D2 ・ 色帶黑 #2B2823 ・ 色帶紅 #B23A2E
+   拉丁字用 Courier Prime，中文自動落到 Noto Sans TC
+   （中文本身即等寬全形，兩者並置剛好對齊）
+   ═══════════════════════════════════════════════════ */
+:root{
+  --paper:#E9E2D2;
+  --form:#F6F1E4;
+  --ink:#2B2823;
+  --ink2:#6D6759;
+  --rule:#C6BDA8;
+  --red:#B23A2E;
+  --carbon:#232019;
+  --lit:#F1E6D1;                        /* 暗場中的暖奶油高光 */
+  --gold-lit:#D9A05B;                   /* 暗場中的威士忌琥珀 */
+  --mono:"Courier Prime","Noto Sans TC",ui-monospace,monospace;
+  --slab:"Special Elite","Noto Sans TC",serif;
+  --pad:clamp(20px,5vw,60px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  font-family:var(--mono);font-size:15px;line-height:1.85;
+  color:var(--ink);background:var(--paper);
+  background-image:
+    repeating-linear-gradient(0deg,rgba(0,0,0,.014) 0 1px,transparent 1px 3px),
+    radial-gradient(circle at 20% 10%,rgba(255,255,255,.5),transparent 55%);
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.band{padding-top:clamp(50px,8vw,92px);padding-bottom:clamp(50px,8vw,92px);border-top:1px solid var(--rule)}
+
+.eyebrow{
+  font-family:var(--slab);font-size:11px;letter-spacing:.34em;
+  text-transform:uppercase;color:var(--red);margin-bottom:16px;
+  text-align:center;text-indent:.34em;   /* 補償字距造成的視覺偏左 */
+}
+.sec-title{
+  font-family:var(--slab);font-size:clamp(25px,4.4vw,40px);
+  line-height:1.32;letter-spacing:.05em;
+  text-align:center;text-indent:.05em;
+}
+.sec-title::after{
+  content:"";display:block;width:70px;height:0;
+  border-top:3px double var(--ink);margin:14px auto 0;
+}
+.sec-note{color:var(--ink2);font-size:14px;margin-top:16px;max-width:44em}
+
+/* ── 信頭（固定於頁面上方） ── */
+.mast{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding-top:20px;
+  background:var(--paper);
+  /* 沿用 body 的複寫紙橫紋，固定後底下的紙感不會斷開 */
+  background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.014) 0 1px,transparent 1px 3px);
+  transition:background-color .45s ease, box-shadow .22s ease;
+}
+.mast.is-stuck{box-shadow:0 2px 14px rgba(43,40,35,.14)}
+
+/* 還壓在首屏暗場上時，信頭跟著轉暗；捲過首屏才換回紙白 */
+.mast-name,.mast-name small,.lang button,.docmeta{transition:color .45s ease}
+.mast-in,.docmeta{transition:border-color .45s ease}
+/* 壓在暗場上時信頭透明，直接透出首屏自己的漸層，
+   否則純色信頭與底下的光暈之間會出現一道色階 */
+html.at-hero .mast{
+  background-color:rgba(14,11,8,0);background-image:none;box-shadow:none;
+}
+html.at-hero .mast-in{border-bottom-color:rgba(217,160,91,.55)}
+html.at-hero .mast-name{color:var(--lit)}
+html.at-hero .mast-name small{color:rgba(237,226,205,.52)}
+html.at-hero .lang button{color:rgba(237,226,205,.52)}
+html.at-hero .lang button[aria-pressed="true"]{color:var(--gold-lit)}
+html.at-hero .docmeta{
+  color:rgba(237,226,205,.48);
+  border-bottom-color:rgba(237,226,205,.16);
+}
+/* 錨點捲動時避開固定信頭 */
+[id]{scroll-margin-top:calc(var(--mast-h,96px) + 14px)}
+.mast-in{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+  flex-wrap:wrap;padding-bottom:12px;border-bottom:3px double var(--ink);
+}
+.mast-name{font-family:var(--slab);font-size:17px;letter-spacing:.3em}
+.mast-name small{font-size:11px;letter-spacing:.24em;color:var(--ink2);margin-left:10px}
+.lang{display:flex;gap:14px;font-size:12.5px;letter-spacing:.1em}
+.lang button{color:var(--ink2);transition:color .2s}
+.lang button::before{content:"[ ] ";font-family:var(--mono)}
+.lang button[aria-pressed="true"]{color:var(--red);font-weight:700}
+.lang button[aria-pressed="true"]::before{content:"[×] "}
+.docmeta{
+  display:flex;gap:22px;flex-wrap:wrap;padding:9px 0;
+  font-size:10.5px;letter-spacing:.16em;color:var(--ink2);text-transform:uppercase;
+  border-bottom:1px solid var(--rule);
+}
+.blink{color:var(--red);animation:bk 1.15s steps(1) infinite}
+@keyframes bk{50%{opacity:0}}
+
+/* ── 首屏：讓 hero 下方那條分隔線貼齊畫面底部 ──
+   信頭改為 fixed 後脫離文件流，用 --mast-h 補回它佔的高度（由 JS 實測） */
+.screen{
+  --hero-fade:clamp(180px,30vh,380px);  /* 底部溶入紙面的漸層帶高度 */
+  --fade-top:calc(100% - var(--hero-fade));
+  position:relative;
+  min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
+  padding-top:var(--mast-h,96px);
+  color:var(--lit);
+}
+/* 暗場整層做在 ::before，而不是 .screen 自己的背景。
+   這樣可以用遮罩讓「整層」在底部淡出到全透明，露出頁面原本的紙面
+   （含紙紋與左上的白色光暈）。先前是疊一層不透明紙色去蓋，
+   終點寫死 --paper，與 body 實際算出來的顏色只要有一點差，
+   交界就會出現一道階梯——改成淡出到透明後，這種落差結構上不可能發生。
+   遮罩只作用在這層裝飾，內容在 .hero（z-index:1）不受影響。 */
+.screen::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    /* 失焦的暖色高光，模擬吧檯上的散景 */
+    radial-gradient(circle 92px at 11% 73%, rgba(217,160,91,.16), transparent 70%),
+    radial-gradient(circle 62px at 89% 61%, rgba(217,160,91,.13), transparent 70%),
+    radial-gradient(circle 42px at 73% 88%, rgba(232,184,113,.10), transparent 70%),
+    /* 威士忌琥珀與一抹朱紅的大面積光暈 */
+    radial-gradient(120% 74% at 50% 82%, rgba(201,138,60,.30) 0%, rgba(201,138,60,0) 62%),
+    radial-gradient(72% 48% at 84% 20%, rgba(178,58,46,.15) 0%, rgba(178,58,46,0) 66%),
+    /* 底層近黑 */
+    linear-gradient(180deg, #0E0B08 0%, #16110C 56%, #1E170F 100%);
+  /* 透明度走 S 形曲線（smoothstep），兩端的變化率都趨近 0，
+     看不出漸層從哪裡開始、又在哪裡結束 */
+  -webkit-mask-image:linear-gradient(180deg,
+    #000                var(--fade-top),
+    rgba(0,0,0,.97) calc(var(--fade-top) + var(--hero-fade) * .10),
+    rgba(0,0,0,.90) calc(var(--fade-top) + var(--hero-fade) * .20),
+    rgba(0,0,0,.78) calc(var(--fade-top) + var(--hero-fade) * .30),
+    rgba(0,0,0,.65) calc(var(--fade-top) + var(--hero-fade) * .40),
+    rgba(0,0,0,.50) calc(var(--fade-top) + var(--hero-fade) * .50),
+    rgba(0,0,0,.35) calc(var(--fade-top) + var(--hero-fade) * .60),
+    rgba(0,0,0,.22) calc(var(--fade-top) + var(--hero-fade) * .70),
+    rgba(0,0,0,.10) calc(var(--fade-top) + var(--hero-fade) * .80),
+    rgba(0,0,0,.03) calc(var(--fade-top) + var(--hero-fade) * .90),
+    rgba(0,0,0,0)       100%);
+  mask-image:linear-gradient(180deg,
+    #000                var(--fade-top),
+    rgba(0,0,0,.97) calc(var(--fade-top) + var(--hero-fade) * .10),
+    rgba(0,0,0,.90) calc(var(--fade-top) + var(--hero-fade) * .20),
+    rgba(0,0,0,.78) calc(var(--fade-top) + var(--hero-fade) * .30),
+    rgba(0,0,0,.65) calc(var(--fade-top) + var(--hero-fade) * .40),
+    rgba(0,0,0,.50) calc(var(--fade-top) + var(--hero-fade) * .50),
+    rgba(0,0,0,.35) calc(var(--fade-top) + var(--hero-fade) * .60),
+    rgba(0,0,0,.22) calc(var(--fade-top) + var(--hero-fade) * .70),
+    rgba(0,0,0,.10) calc(var(--fade-top) + var(--hero-fade) * .80),
+    rgba(0,0,0,.03) calc(var(--fade-top) + var(--hero-fade) * .90),
+    rgba(0,0,0,0)       100%);
+}
+/* 內容讓開漸層帶的後 2/3。前段透明度還不到三成，淺色字在那裡仍然清楚，
+   全部讓開反而會把版面擠得太上面 */
+.screen .hero{padding-bottom:calc(clamp(40px,6vw,72px) + var(--hero-fade) * .66)}
+/* 交界要柔和，就不能再有那條硬線 */
+.screen + .band{border-top:none}
+
+/* 首屏內的字色全面翻轉為暖色 */
+.screen .hero{position:relative;z-index:1}
+.screen .eyebrow{color:var(--gold-lit)}
+.screen .hero-mark{color:var(--lit)}
+.screen .hero-mark span{color:#C9573F}
+.screen .hero-role{color:rgba(237,226,205,.60)}
+.screen .typed{color:var(--lit)}
+.screen .cur{color:var(--gold-lit)}
+.screen .hero-sub{color:rgba(237,226,205,.66)}
+/* 需壓過後面 .hero .cta .btn 的同權重規則，故多帶一層 .hero */
+.screen .hero .cta .btn{color:rgba(237,226,205,.72)}
+.screen .hero .cta .btn-k{color:var(--gold-lit)}
+.screen .hero .cta .btn:hover{color:var(--lit)}
+.screen .hero .cta .btn-k:hover{color:#EFC98B}
+
+/* ── HERO ── */
+.hero{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding-top:clamp(11px,2vw,22px);padding-bottom:clamp(40px,6vw,72px);
+}
+.hero-mark{
+  font-family:var(--slab);font-size:clamp(46px,12.5vw,116px);
+  line-height:1;letter-spacing:.06em;
+  text-align:center;text-indent:.06em;
+}
+.hero-mark span{color:var(--red)}
+.hero-role{
+  font-size:clamp(12px,2.4vw,15px);letter-spacing:.44em;
+  color:var(--ink2);margin-top:18px;text-transform:uppercase;
+  text-align:center;text-indent:.44em;   /* 補償字距造成的視覺偏左 */
+}
+.typed{
+  font-family:var(--slab);font-size:clamp(20px,4vw,32px);
+  line-height:1.62;margin-top:34px;min-height:3.4em;letter-spacing:.02em;
+  text-align:center;text-indent:.02em;   /* 補償字距造成的視覺偏左 */
+}
+.cur{color:var(--red);animation:bk 1.05s steps(1) infinite}
+.hero-sub{margin-top:clamp(63px,11vw,112px);color:var(--ink2);font-size:14px;max-width:34em}
+.cta{display:flex;flex-wrap:wrap;gap:11px;margin-top:34px}
+.btn{
+  display:inline-block;padding:12px 18px;font-size:13.5px;letter-spacing:.14em;
+  border:1px solid var(--ink);text-decoration:none;transition:.2s;
+}
+.btn-k{background:var(--ink);color:var(--form)}
+.btn-k:hover{background:var(--red);border-color:var(--red)}
+.btn-o:hover{background:var(--ink);color:var(--form)}
+
+/* Hero 行動呼籲：置中直排、去外框，以文字為主 */
+.hero .cta{
+  flex-direction:column;align-items:center;
+  gap:0;margin-top:clamp(30px,5vw,44px);
+}
+.hero .cta .btn{
+  position:relative;padding:12px 6px;
+  border:none;background:none;
+  font-size:14.5px;letter-spacing:.22em;
+  text-indent:.22em;                 /* 補償字距造成的視覺偏左 */
+  color:var(--ink2);transition:color .2s;
+}
+.hero .cta .btn-k{color:var(--red);font-weight:700}   /* 主要動作用色帶紅帶頭 */
+.hero .cta .btn:hover{background:none;border-color:transparent;color:var(--ink)}
+.hero .cta .btn-k:hover{color:var(--red)}
+/* 滑過時由中間往外展開的虛線，沿用估價單的引導線語彙 */
+.hero .cta .btn::after{
+  content:"";position:absolute;left:50%;right:50%;bottom:5px;
+  border-bottom:1px dotted currentColor;opacity:.5;
+  transition:left .26s ease,right .26s ease;
+}
+.hero .cta .btn:hover::after{left:12%;right:12%}
+
+/* ── 服務 ── */
+/* 無邊框：拿掉格線與底色，改用編號與留白分欄 */
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));
+  gap:clamp(30px,4.6vw,46px) clamp(26px,4vw,54px);
+  margin-top:clamp(34px,5vw,50px);
+}
+.grid > div{padding-top:2px}
+.grid i{
+  display:block;font-style:normal;font-family:var(--slab);
+  font-size:11.5px;letter-spacing:.22em;color:var(--red);
+}
+/* 方括號沿用頁面既有的語彙（語言鍵、折疊鍵），比外框更輕 */
+.grid i::before{content:"[";color:var(--rule)}
+.grid i::after{content:"]";color:var(--rule);margin-left:-.22em}
+.grid b{display:block;font-family:var(--slab);font-size:16.5px;letter-spacing:.09em;line-height:1.35;margin-top:12px}
+.grid span{display:block;font-size:12.8px;color:var(--ink2);margin-top:9px;line-height:1.9;max-width:24em}
+
+/* ── 場合對照 ── */
+.occ{width:100%;border-collapse:collapse;margin-top:34px;font-size:14px}
+.occ th{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink2);
+  text-align:left;font-weight:400;padding:0 12px 10px 0;border-bottom:2px solid var(--ink);
+}
+.occ td{padding:17px 12px 17px 0;border-bottom:1px dotted var(--rule);vertical-align:top}
+.occ tr:hover td{background:rgba(178,58,46,.045)}
+.occ .c1{font-family:var(--slab);font-size:15.5px;letter-spacing:.05em;width:28%}
+.occ .c2{color:var(--red);white-space:nowrap}
+.occ .c3{white-space:nowrap;font-size:13px}
+.occ .c4{color:var(--ink2);font-size:12.8px;line-height:1.75}
+
+/* ── 估價單（招牌） ── */
+.desk{background:var(--carbon);border-top:none}
+.desk .eyebrow{color:#D9705F}
+.desk .sec-title{color:var(--form)}
+.desk .sec-title::after{border-color:rgba(246,241,228,.5)}
+.desk .sec-note{color:rgba(246,241,228,.55)}
+.slip{
+  position:relative;margin-top:38px;background:var(--form);
+  padding:clamp(22px,4vw,40px) clamp(30px,5vw,58px);
+  box-shadow:0 24px 54px rgba(0,0,0,.45);
+}
+/* 連續報表紙送紙孔 */
+.slip::before,.slip::after{
+  content:"";position:absolute;top:0;bottom:0;width:20px;
+  background-image:radial-gradient(circle,var(--carbon) 3.2px,transparent 3.4px);
+  background-size:20px 26px;background-position:center 13px;
+  border-right:1px dashed var(--rule);
+}
+.slip::before{left:0}
+.slip::after{right:0;border-right:none;border-left:1px dashed var(--rule)}
+
+.slip-hd{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
+  flex-wrap:wrap;padding-bottom:13px;border-bottom:3px double var(--ink);
+}
+.slip-hd b{font-family:var(--slab);font-size:18px;letter-spacing:.16em}
+.slip-hd em{font-style:normal;font-size:10.5px;letter-spacing:.16em;color:var(--ink2)}
+
+.tabs{display:flex;flex-wrap:wrap;border:1px solid var(--rule);margin:22px 0 0}
+.tabs button{
+  flex:1 1 auto;padding:11px 14px;font-size:13px;letter-spacing:.08em;
+  color:var(--ink2);border-right:1px solid var(--rule);white-space:nowrap;transition:.18s;
+}
+.tabs button:last-child{border-right:none}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--form)}
+
+/* 試算機店家選擇：固定同一列三等分（#vTabs 仍用彈性排列） */
+#tabs{display:grid;grid-template-columns:repeat(3,1fr)}
+#tabs button{white-space:normal;text-align:center}
+
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px 26px;margin-top:26px}
+/* 標籤與加減鍵並排 */
+.fld{display:flex;align-items:center;gap:14px}
+.fld label{
+  flex:1 1 0;min-width:0;font-size:10px;letter-spacing:.2em;
+  color:var(--ink2);text-transform:uppercase;
+}
+.fld .step,.fld .pay{flex:2 1 0;min-width:0}   /* 佔一列的 2/3 */
+.step,.pay{display:flex;border:1px solid var(--rule);background:#fff}
+.step button{width:42px;height:44px;color:var(--ink2);font-size:17px;transition:.15s}
+.step button:hover{background:var(--ink);color:var(--form)}
+.step output{flex:1;text-align:center;line-height:44px;font-size:16px;font-weight:700}
+.pay button{flex:1;height:44px;font-size:13px;color:var(--ink2);transition:.18s}
+.pay button[aria-pressed="true"]{background:var(--red);color:#fff}
+
+/* 總計移到細項上方，細項預設收合 */
+.lines-toggle{
+  display:inline-flex;align-items:center;gap:9px;
+  margin-top:18px;padding:0;
+  font-size:12.5px;letter-spacing:.16em;color:var(--ink2);
+  transition:color .2s;
+}
+/* 沿用折疊區塊的 [+] / [−] 語彙 */
+.lines-toggle::before{content:"[+]";font-family:var(--mono);color:var(--red)}
+.lines-toggle[aria-expanded="true"]::before{content:"[−]"}
+.lines-toggle:hover{color:var(--ink)}
+/* 不加展開動畫：與頁面既有的 <details> 折疊一致，
+   也避免 fill-mode 讓內容在動畫沒跑起來時卡在透明狀態 */
+.lines[hidden]{display:none}
+.lines{margin-top:14px;border-top:1px dashed var(--rule);padding-top:6px}
+.ln{display:flex;align-items:baseline;gap:7px;padding:8px 0;font-size:13.5px}
+.ln .n{white-space:nowrap}
+.ln .n em{font-style:normal;font-size:11.5px;color:var(--ink2);margin-left:7px}
+.ln .d{flex:1;border-bottom:1px dotted #B6AC94;transform:translateY(-4px)}
+.ln .v{white-space:nowrap}
+.tot{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  flex-wrap:wrap;margin-top:26px;padding:17px 20px;
+  border:3px double var(--red);color:var(--red);
+}
+.tot span{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase}
+.tot strong{font-family:var(--slab);font-size:clamp(27px,6.4vw,42px);letter-spacing:.02em}
+.slip-ft{margin-top:16px;font-size:12px;color:var(--ink2);line-height:1.85}
+.stamp{
+  position:absolute;right:clamp(24px,6vw,66px);bottom:clamp(18px,4vw,34px);
+  transform:rotate(-9deg);border:2px solid var(--red);
+  padding:7px 13px;color:var(--red);opacity:.62;
+  font-family:var(--slab);font-size:11px;letter-spacing:.2em;text-align:center;
+  box-shadow:inset 0 0 0 1px var(--red);pointer-events:none;line-height:1.4;
+}
+.desk-note{margin-top:32px;font-size:12.5px;color:rgba(246,241,228,.52);line-height:1.9}
+
+/* ── 流程 ── */
+.flow{margin-top:38px;border-top:2px solid var(--ink)}
+.flow > div{display:grid;grid-template-columns:60px 1fr;gap:18px;padding:22px 0;border-bottom:1px dotted var(--rule)}
+.flow i{font-style:normal;font-family:var(--slab);font-size:13px;color:var(--red);padding-top:4px}
+.flow b{display:block;font-family:var(--slab);font-size:17px;letter-spacing:.09em}
+.flow p{color:var(--ink2);font-size:13.5px;margin-top:6px;max-width:42em}
+
+/* ── 店家 ── */
+.ven{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;list-style:none}
+.ven li{font-size:14px;letter-spacing:.07em;padding:8px 16px;border:1px solid var(--rule);background:var(--form)}
+.ven li:hover{border-color:var(--red);color:var(--red)}
+/* 白底方框，左右兩側漸層淡出融入紙面。
+   漸層一律用「同色 0 透明度」而非 transparent 關鍵字，
+   否則部分瀏覽器會經過透明黑內插，邊緣泛灰。 */
+.warn{
+  --fade:clamp(18px,6vw,76px);
+  margin-top:30px;
+  padding:22px calc(var(--fade) + 14px);
+  font-size:13px;line-height:1.9;
+  background:linear-gradient(90deg,
+    rgba(246,241,228,0) 0,
+    var(--form) var(--fade),
+    var(--form) calc(100% - var(--fade)),
+    rgba(246,241,228,0) 100%);
+  border:1px solid transparent;
+  border-image:linear-gradient(90deg,
+    rgba(178,58,46,0) 0,
+    rgba(178,58,46,.32) var(--fade),
+    rgba(178,58,46,.32) calc(100% - var(--fade)),
+    rgba(178,58,46,0) 100%) 1;
+}
+
+/* ── 折疊 ── */
+.acc{border-top:2px solid var(--ink);margin-top:34px}
+.acc details{border-bottom:1px dotted var(--rule)}
+.acc summary{
+  list-style:none;cursor:pointer;position:relative;padding:18px 38px 18px 0;
+  font-family:var(--slab);font-size:15.5px;letter-spacing:.05em;
+}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"[+]";position:absolute;right:0;top:18px;font-family:var(--mono);font-size:13px;color:var(--red)}
+.acc details[open] summary::after{content:"[−]"}
+.acc .bd{padding:0 0 22px;font-size:13.5px;color:#443F36;line-height:1.95;max-width:50em}
+.acc .bd b{color:var(--red);font-weight:700}
+.acc .bd ul{margin:9px 0 0 17px;color:var(--ink2);font-size:12.5px}
+
+/* ── 郵件預約單 ── */
+.book-form{
+  margin-top:36px;background:var(--form);border:1px solid var(--rule);
+  padding:clamp(24px,4vw,42px) clamp(22px,4.5vw,50px);
+  box-shadow:0 18px 42px rgba(43,40,35,.10);
+}
+.bk-hd{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
+  flex-wrap:wrap;padding-bottom:13px;border-bottom:3px double var(--ink);
+}
+.bk-hd b{font-family:var(--slab);font-size:18px;letter-spacing:.16em}
+.bk-hd em{font-style:normal;font-size:10.5px;letter-spacing:.16em;color:var(--ink2)}
+
+.bk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:18px 26px;margin-top:26px}
+.bk-f{display:flex;flex-direction:column;gap:7px;min-width:0}
+.bk-f.wide{grid-column:1 / -1}
+.bk-f label{font-size:10px;letter-spacing:.2em;color:var(--ink2);text-transform:uppercase}
+.bk-f label i{font-style:normal;color:var(--red);margin-left:5px}
+.bk-f input,.bk-f select,.bk-f textarea{
+  width:100%;font:inherit;font-size:14.5px;color:var(--ink);
+  background:#fff;border:1px solid var(--rule);border-radius:0;
+  padding:11px 13px;transition:border-color .18s;
+}
+.bk-f textarea{min-height:96px;resize:vertical;line-height:1.75}
+.bk-f input:focus,.bk-f select:focus,.bk-f textarea:focus{outline:none;border-color:var(--red)}
+.bk-f input::placeholder,.bk-f textarea::placeholder{color:#A79E8A}
+
+.bk-chk{
+  display:flex;align-items:flex-start;gap:11px;cursor:pointer;
+  margin-top:24px;padding:14px 16px;border:1px dashed var(--rule);
+  font-size:13px;color:var(--ink2);line-height:1.7;
+}
+.bk-chk input{width:16px;height:16px;margin-top:3px;flex:none;accent-color:var(--red);cursor:pointer}
+.bk-est{display:block;margin-top:5px;font-size:12px;color:var(--red);letter-spacing:.02em}
+
+.bk-act{
+  display:flex;flex-wrap:wrap;gap:11px;align-items:center;
+  margin-top:26px;padding-top:22px;border-top:1px dashed var(--rule);
+}
+.bk-act .btn{cursor:pointer}
+.bk-msg{margin-top:14px;font-size:12.5px;line-height:1.85;color:var(--ink2);min-height:1.85em}
+.bk-msg.is-ok{color:var(--red)}
+.bk-mail{margin-top:8px;font-size:12.5px;color:var(--ink2)}
+.bk-mail b{color:var(--ink);font-weight:400;border-bottom:1px dotted #B6AC94}
+
+/* ── 頁尾 ── */
+.foot{background:var(--carbon);color:#CBC4B2;padding:clamp(46px,7vw,84px) 0 30px;border:none}
+.foot .cta{margin-top:28px}
+.foot .cta .btn{margin-top:0}
+.foot h2{font-family:var(--slab);font-size:clamp(22px,4.2vw,34px);color:var(--form);line-height:1.5;letter-spacing:.05em}
+.foot p{margin-top:15px;font-size:13.5px;color:rgba(203,196,178,.7);max-width:34em}
+.foot .btn{border-color:var(--form);color:var(--form);margin-top:28px}
+.foot .btn:hover{background:var(--red);border-color:var(--red)}
+.foot-meta{
+  margin-top:40px;padding-top:20px;border-top:1px dashed rgba(255,255,255,.2);
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  font-size:10.5px;letter-spacing:.14em;color:rgba(203,196,178,.42);text-transform:uppercase;
+}
+.dis{margin-top:12px;font-size:11px;color:rgba(203,196,178,.36);line-height:1.9;max-width:46em}
+
+/* ═══════════════════════════════════════════════════
+   響應式 — 斷點一律由大到小覆寫
+   ≤900px  平板／手機：表格改卡片式
+   ≤560px  手機直式：估價單改雙欄堆疊、按鈕滿版
+   ≤380px  小尺寸手機：再收一次字級與內距
+   ═══════════════════════════════════════════════════ */
+
+/* ── ≤900px：表格改卡片式 ── */
+@media(max-width:900px){
+  /* 場合對照：表格轉為卡片，避免四欄擠壓 */
+  .occ,.occ tbody,.occ tr,.occ td{display:block;width:100%}
+  .occ thead{display:none}
+  .occ tr{padding:18px 0;border-bottom:1px dotted var(--rule)}
+  .occ tr:hover td{background:none}
+  .occ td{border:none;padding:0}
+  .occ .c1{width:auto;font-size:17px;margin-bottom:6px}
+  .occ .c2,.occ .c3{display:inline;white-space:normal}
+  .occ .c3::before{content:" · ";color:var(--rule)}
+  .occ .c4{margin-top:8px}
+
+  /* 估價單：關掉報表紙送紙孔與絕對定位印章 */
+  .slip::before,.slip::after{display:none}
+  .slip{padding:clamp(24px,4vw,40px) clamp(22px,4vw,40px)}
+  .stamp{position:static;display:inline-block;margin-top:22px;transform:rotate(-3deg)}
+}
+
+/* ── ≤560px：手機直式 ── */
+@media(max-width:560px){
+  .mast{padding-top:16px}
+  .docmeta{gap:6px 16px;font-size:10px}
+
+  .hero{padding-top:10px;padding-bottom:34px}
+  .hero-role{letter-spacing:.26em;text-indent:.26em}
+  .typed{margin-top:26px;min-height:3.6em}
+  /* 按鈕不再滿版，依文字寬度並排，放不下才換行 */
+  .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+  .btn{text-align:center;padding:13px 16px}
+
+  /* 服務卡固定單欄，避免 minmax 撐出容器 */
+  /* 服務範圍：手機維持兩欄，六項排成 2×3 */
+  .grid{grid-template-columns:1fr 1fr;gap:26px 18px}
+  .grid b{font-size:15.5px;margin-top:10px}
+  .grid span{font-size:12px;line-height:1.85;margin-top:7px}
+  /* 中文標題一律四字剛好一行，英文長短不一；只在英文版鎖成兩行高，
+     同一列的說明文字才會從相同位置開始 */
+  html[lang="en"] .grid b{min-height:2.7em}
+
+  /* 分頁：改二欄格線，取代會斷邊框的 flex 換行 */
+  .tabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--rule)}
+  .tabs button{
+    border:none;border-top:1px solid var(--rule);border-right:1px solid var(--rule);
+    padding:13px 8px;font-size:12.5px;white-space:normal;
+  }
+  .tabs button:nth-child(-n+2){border-top:none}
+  .tabs button:nth-child(2n){border-right:none}
+  .tabs button:nth-child(3):last-child{grid-column:1 / -1;border-right:none}
+
+  /* 店家選擇：手機也維持同列三等分 */
+  #tabs{grid-template-columns:repeat(3,1fr)}
+  #tabs button{border-top:none;border-right:1px solid var(--rule)}
+  #tabs button:last-child{grid-column:auto;border-right:none}
+
+  .slip{padding:22px 18px}
+  .slip-hd b{font-size:16px}
+  .fields{gap:14px;margin-top:22px}
+  .fld{gap:10px}
+
+  /* 預約單：預設單欄，日期／時間、賓客／小姐兩兩並排 */
+  .book-form{padding:22px 18px}
+  .bk-hd b{font-size:16px}
+  .bk-grid{grid-template-columns:1fr 1fr;gap:15px 10px;margin-top:22px}
+  .bk-f{grid-column:1 / -1}
+  .bk-f.half{grid-column:span 1}
+  /* 並排欄位較窄，收一點內距與字級，避免日期／時間的原生圖示被擠掉 */
+  .bk-f.half label{letter-spacing:.14em}
+  .bk-f.half input,.bk-f.half select{padding:10px 9px;font-size:13.5px}
+  /* 標籤長短不一時（英文版尤其明顯）把輸入框推到底部對齊，同列不會參差 */
+  .bk-f.half input,.bk-f.half select{margin-top:auto}
+  .bk-act{gap:9px}
+
+  /* 明細行：標題與說明堆疊、金額靠右，取消點線引導 */
+  .lines{margin-top:12px}
+  .ln{flex-wrap:wrap;align-items:flex-start;gap:0 10px;padding:10px 0}
+  .ln .n{flex:1 1 0;min-width:0;white-space:normal}
+  .ln .n em{display:block;margin-left:0;margin-top:3px}
+  .ln .d{display:none}
+  .ln .v{flex:0 0 auto;margin-left:auto;font-weight:700}
+
+  .tot{padding:15px 16px;gap:4px 12px}
+
+  .flow > div{grid-template-columns:34px 1fr;gap:12px;padding:20px 0}
+  .flow b{font-size:16px}
+
+  .ven li{font-size:13.5px;padding:7px 13px}
+  .warn{--fade:14px;padding:18px 24px;margin-top:24px}
+
+  .acc summary{padding:16px 34px 16px 0;font-size:15px}
+  .acc summary::after{top:16px}
+
+  .foot-meta{gap:8px}
+}
+
+/* ── ≤380px：小尺寸手機 ── */
+@media(max-width:380px){
+  :root{--pad:18px}
+  .mast-name{font-size:15px;letter-spacing:.22em}
+  .lang{gap:10px;font-size:11.5px}
+  .slip{padding:20px 15px}
+  .step button{width:38px}
+  .ln{font-size:13px}
+  .tabs button{font-size:11.5px;letter-spacing:.04em;padding:12px 6px}
+
+  /* 服務範圍：小尺寸手機兩欄更窄，再收一次字級與欄距 */
+  .grid{gap:22px 12px}
+  .grid i{font-size:10.5px;letter-spacing:.18em}
+  .grid b{font-size:14.5px;letter-spacing:.05em}
+  .grid span{font-size:11.5px}
+
+  /* 預約單：並排欄位在小尺寸手機再收一次，並讓出原生日曆／時鐘圖示的位置，
+     否則「下午 08:00」會被圖示壓掉尾巴（欄寬只剩約 97px） */
+  .book-form{padding:20px 15px}
+  .bk-grid{gap:14px 8px}
+  .bk-f.half input,.bk-f.half select{padding:9px 7px;font-size:12.5px}
+  .bk-f.half input[type="date"]::-webkit-calendar-picker-indicator,
+  .bk-f.half input[type="time"]::-webkit-calendar-picker-indicator{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="mast" id="mast">
+  <div class="wrap">
+    <div class="mast-in">
+      <div class="mast-name">WHITE<small>懷特</small></div>
+      <div class="lang">
+        <button data-l="zh" aria-pressed="true">中文</button>
+        <button data-l="en" aria-pressed="false">ENGLISH</button>
+      </div>
+    </div>
+    <div class="docmeta">
+      <div data-t="m1"></div>
+      <div data-t="m2"></div>
+    </div>
+  </div>
+</header>
+
+<div class="screen">
+<section class="wrap hero">
+  <div class="eyebrow" data-t="heroEyebrow"></div>
+  <div class="hero-mark">WHITE<span>.</span></div>
+  <div class="hero-role" data-t="heroRole"></div>
+  <div class="typed" id="typed"></div>
+  <p class="hero-sub" data-t="heroSub"></p>
+  <div class="cta">
+    <a class="btn btn-k" data-t="ctaLine" id="ctaLine" href="#" target="_blank" rel="noopener"></a>
+    <a class="btn btn-o" data-t="ctaBook" href="#booking"></a>
+    <a class="btn btn-o" data-t="ctaQuote" href="#quote"></a>
+  </div>
+</section>
+</div>
+
+<section class="wrap band">
+  <div class="eyebrow" data-t="svcEyebrow"></div>
+  <h2 class="sec-title" data-t="svcTitle"></h2>
+  <p class="sec-note" data-t="svcNote"></p>
+  <div class="grid" id="svcGrid"></div>
+</section>
+
+<section class="wrap band">
+  <div class="eyebrow" data-t="occEyebrow"></div>
+  <h2 class="sec-title" data-t="occTitle"></h2>
+  <p class="sec-note" data-t="occNote"></p>
+  <table class="occ">
+    <thead><tr>
+      <th data-t="occH1"></th><th data-t="occH2"></th><th data-t="occH3"></th><th data-t="occH4"></th>
+    </tr></thead>
+    <tbody id="occBody"></tbody>
+  </table>
+</section>
+
+<section class="band desk" id="quote">
+  <div class="wrap">
+    <div class="eyebrow" data-t="estEyebrow"></div>
+    <h2 class="sec-title" data-t="estTitle"></h2>
+    <p class="sec-note" data-t="estNote"></p>
+
+    <div class="slip">
+      <div class="slip-hd">
+        <b data-t="slipTitle"></b>
+        <em id="slipNo"></em>
+      </div>
+
+      <div class="tabs" role="tablist" id="tabs">
+        <button role="tab" aria-selected="true" data-k="dress"></button>
+        <button role="tab" aria-selected="false" data-k="uniform"></button>
+        <button role="tab" aria-selected="false" data-k="house"></button>
+      </div>
+
+      <div class="fields">
+        <div class="fld"><label data-t="fHours"></label>
+          <div class="step"><button data-f="hours" data-d="-1">−</button><output id="oHours"></output><button data-f="hours" data-d="1">＋</button></div></div>
+        <div class="fld"><label data-t="fGuests"></label>
+          <div class="step"><button data-f="guests" data-d="-1">−</button><output id="oGuests"></output><button data-f="guests" data-d="1">＋</button></div></div>
+        <div class="fld"><label data-t="fGirls"></label>
+          <div class="step"><button data-f="girls" data-d="-1">−</button><output id="oGirls"></output><button data-f="girls" data-d="1">＋</button></div></div>
+        <div class="fld"><label data-t="fPay"></label>
+          <div class="pay" id="pay">
+            <button aria-pressed="true" data-p="cash" data-t="payCash"></button>
+            <button aria-pressed="false" data-p="card" data-t="payCard"></button>
+          </div></div>
+      </div>
+
+      <div class="tot"><span data-t="totLabel"></span><strong id="total"></strong></div>
+
+      <button type="button" class="lines-toggle" id="linesToggle"
+              aria-expanded="false" aria-controls="lines"></button>
+      <div class="lines" id="lines" hidden></div>
+
+      <p class="slip-ft" data-t="slipFoot"></p>
+      <div class="stamp" data-t="stamp"></div>
+    </div>
+
+    <p class="desk-note" data-t="deskNote"></p>
+  </div>
+</section>
+
+<section class="wrap band">
+  <div class="eyebrow" data-t="flowEyebrow"></div>
+  <h2 class="sec-title" data-t="flowTitle"></h2>
+  <p class="sec-note" data-t="flowNote"></p>
+  <div class="flow" id="flowList"></div>
+</section>
+
+<section class="wrap band">
+  <div class="eyebrow" data-t="venEyebrow"></div>
+  <h2 class="sec-title" data-t="venTitle"></h2>
+  <p class="sec-note" data-t="venNote"></p>
+  <div class="tabs" role="tablist" id="vTabs" style="margin-top:26px">
+    <button role="tab" aria-selected="true" data-v="0"></button>
+    <button role="tab" aria-selected="false" data-v="1"></button>
+    <button role="tab" aria-selected="false" data-v="2"></button>
+    <button role="tab" aria-selected="false" data-v="3"></button>
+  </div>
+  <ul class="ven" id="venList"></ul>
+  <div class="warn" data-t="venWarn"></div>
+</section>
+
+<section class="wrap band">
+  <div class="eyebrow" data-t="gloEyebrow"></div>
+  <h2 class="sec-title" data-t="gloTitle"></h2>
+  <p class="sec-note" data-t="gloNote"></p>
+  <div class="acc" id="gloList"></div>
+</section>
+
+<section class="wrap band">
+  <div class="eyebrow" data-t="faqEyebrow"></div>
+  <h2 class="sec-title" data-t="faqTitle"></h2>
+  <div class="acc" id="faqList"></div>
+</section>
+
+<section class="wrap band" id="booking">
+  <div class="eyebrow" data-t="bkEyebrow"></div>
+  <h2 class="sec-title" data-t="bkTitle"></h2>
+  <p class="sec-note" data-t="bkNote"></p>
+
+  <form class="book-form" id="bookForm">
+    <div class="bk-hd">
+      <b data-t="bkFormTitle"></b>
+      <em id="bkNo"></em>
+    </div>
+
+    <div class="bk-grid">
+      <div class="bk-f">
+        <label for="bkName"><span data-t="bkName"></span><i>*</i></label>
+        <input id="bkName" type="text" required maxlength="40" autocomplete="name" data-ph="bkNamePh">
+      </div>
+      <div class="bk-f">
+        <label for="bkEmail"><span data-t="bkEmail"></span><i>*</i></label>
+        <input id="bkEmail" type="email" required maxlength="80" autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="bk-f">
+        <label for="bkContact" data-t="bkContact"></label>
+        <input id="bkContact" type="text" maxlength="60" data-ph="bkContactPh">
+      </div>
+      <div class="bk-f half">
+        <label for="bkDate"><span data-t="bkDate"></span><i>*</i></label>
+        <input id="bkDate" type="date" required>
+      </div>
+      <div class="bk-f half">
+        <label for="bkTime"><span data-t="bkTime"></span><i>*</i></label>
+        <input id="bkTime" type="time" required value="20:00">
+      </div>
+      <div class="bk-f half">
+        <label for="bkGuests"><span data-t="bkGuests"></span><i>*</i></label>
+        <input id="bkGuests" type="number" required min="1" max="20" step="1" value="2" inputmode="numeric">
+      </div>
+      <div class="bk-f half">
+        <label for="bkGirls" data-t="bkGirls"></label>
+        <input id="bkGirls" type="number" min="1" max="20" step="1" value="2" inputmode="numeric">
+      </div>
+      <div class="bk-f half">
+        <label for="bkType" data-t="bkType"></label>
+        <select id="bkType">
+          <option value="ask" data-t="bkTypeAsk"></option>
+          <option value="dress"   data-k="dress"></option>
+          <option value="uniform" data-k="uniform"></option>
+          <option value="house"   data-k="house"></option>
+        </select>
+      </div>
+      <div class="bk-f half">
+        <label for="bkBudget" data-t="bkBudget"></label>
+        <input id="bkBudget" type="text" maxlength="40" data-ph="bkBudgetPh">
+      </div>
+      <div class="bk-f wide">
+        <label for="bkRemark" data-t="bkRemark"></label>
+        <textarea id="bkRemark" maxlength="300" data-ph="bkRemarkPh"></textarea>
+      </div>
+    </div>
+
+    <label class="bk-chk">
+      <input type="checkbox" id="bkAttach" checked>
+      <span>
+        <span data-t="bkAttach"></span>
+        <span class="bk-est" id="bkEstNote"></span>
+      </span>
+    </label>
+
+    <div class="bk-act">
+      <button type="submit" class="btn btn-k" data-t="bkSend"></button>
+      <button type="button" class="btn btn-o" id="bkCopy" data-t="bkCopy"></button>
+    </div>
+
+    <p class="bk-msg" id="bkMsg" role="status" aria-live="polite"></p>
+    <p class="bk-mail"><span data-t="bkMailTo"></span>　<b id="bkAddr"></b></p>
+  </form>
+</section>
+
+<footer class="foot" id="contact">
+  <div class="wrap">
+    <h2 data-t="footH"></h2>
+    <p data-t="footP"></p>
+    <div class="cta">
+      <a class="btn btn-o" id="ctaLine2" href="#" target="_blank" rel="noopener" data-t="footBtn"></a>
+      <a class="btn btn-o" href="#booking" data-t="footBtn2"></a>
+    </div>
+    <div class="foot-meta">
+      <div data-t="footMeta1"></div>
+      <div id="footLine"></div>
+    </div>
+    <p class="dis" data-t="disclaim"></p>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   設定區 — 上線前只要改這一塊
+   ══════════════════════════════════════════════════════════ */
+const LINE_ID = "_sleepy_white_";        // ← 換成你的 LINE ID
+
+/* 預約單收件信箱。拆成兩段組合，降低被爬蟲掃走變垃圾信的機率 */
+const MAIL_USER = "nightconsultant.white";
+const MAIL_HOST = "gmail.com";
+const MAIL_TO   = MAIL_USER + "@" + MAIL_HOST;
+
+const RATE = {                          // ← 費率，請依實際行情校正
+  dress  :{ zh:"禮服店", en:"Gown Club",     hour:2000, head:300, tip:1000, table:500 },
+  uniform:{ zh:"制服店", en:"Uniform Club",  hour:1800, head:200, tip:1000, table:500 },
+  house  :{ zh:"店家店", en:"Advanced Club", hour:2700, head:600, tip:1000, table:500 }
+};
+
+/* 包廂費：依男性賓客人數分級。
+   人數級距三種店型共用，金額各店型可分開設定；
+   ROOM_FEES 沒列到的店型走 default。
+   超過最後一級（10 位）一律沿用最後一級的金額，實際以現場確認為準。 */
+const ROOM_BRACKETS = [2, 5, 8, 10];              // 各級距的人數上限
+const ROOM_FEES = {
+  default: [2500, 3000, 3500,  4000],             // 禮服店、制服店
+  house  : [3000, 5000, 8000, 10000]              // 店家店
+};
+const CARD_FEE = 0.10;
+
+const VENUES = [                        // ← 換成你實際帶得進去的店
+  ["新濠","龍昇","皇家","首席","百達","特蘭斯","威士汀","紫藤","金荷"],
+  ["金聰","皇冠","豪昇","大老闆"],
+  ["威晶","威世登","香水","金拿督","金典","龍亨","王牌","世盟","名享","豪威"],
+  ["潘朵拉","沁香閣","大都會","芯苑","愛寶","雙城","頂妝"]
+];
+
+/* ══ 中英文案 ══ */
+const T = {
+zh:{
+  m1:"文件 · 台北 TAIPEI", m2:"商務招待安排",
+  heroEyebrow:"Business Hospitality · Taipei",
+  heroRole:"懷特 · 商務娛樂顧問",
+  types:[
+    "場子交給我，\n你專心把事情談完。",
+    "讓橡木桶與水晶鞋\n共伴你的尊爵",
+    "專業經營商務人士"
+  ],
+  heroSub:"進場前價格算清楚，離場前帳單逐項核對。從包廂、人數到預算上限，一則訊息安排完成。",
+  ctaLine:"LINE 諮詢", ctaBook:"郵件預約", ctaQuote:"先算費用",
+
+  svcEyebrow:"Services", svcTitle:"服務範圍",
+  svcNote:"以商務招待為主。訂位、報價、現場陪同、結帳核對，全程由我與專業團隊負責到底。",
+
+  occEyebrow:"Which Venue", occTitle:"場合對照",
+  occNote:"商務局最常出錯的不是花多少，是帶錯地方。以下是我實際帶客人的判斷方式。",
+  occH1:"場合", occH2:"建議店型", occH3:"每人抓", occH4:"原因",
+
+  estEyebrow:"Estimate", estTitle:"費用試算",
+  estNote:"先把數字看清楚再決定。以下每一項都會出現在你的帳單上，沒有另外的名目。",
+  slipTitle:"預估估價單",
+  fHours:"入場時數", fGuests:"男性賓客", fGirls:"小姐人數", fPay:"付款方式",
+  payCash:"現金", payCard:"刷卡 +10%",
+  liHour:"時費", liHead:"人頭費", liRoom:"包廂費", liTip:"少爺小費", liTable:"桌面・水費", liFee:"刷卡手續費",
+  roomOver:"以上", exTip:"固定", exTable:"酒水另計", exFee:"10%",
+  unitH:" H", unitP:" 位",
+  totLabel:"預估總計 · TWD", stamp:"預估<br>ESTIMATE",
+  linesShow:"查看細項", linesHide:"收起細項",
+  slipFoot:"酒水另計，喝多少算多少，不喝不用付。<br>實際金額以現場為準，通常落差在一成以內。包廂費依店型與男性賓客人數分級，特殊包廂另計。",
+  deskNote:"按摩舒壓另有安排，依店家與內容約 $2,800–4,000，需要報價直接私訊。<br>預算有上限的話進場前先告訴我，我會在接近時提醒你，不會等到結帳才發現。",
+
+  flowEyebrow:"How it works", flowTitle:"安排流程",
+  flowNote:"從第一則訊息到結帳離場，你要做的只有兩件事：說時間，然後出現。",
+
+  venEyebrow:"Venues", venTitle:"合作店家",
+  venNote:"依你的場合與預算推薦，不會硬推特定一家。",
+  venTabs:["禮服店","制服店","店家店","按摩舒壓"],
+  venWarn:"各店消費有落差，進場前我會再講一次當店規則，確定你完全清楚才開始。<br>店家店不是每位幹部都帶得進去，需要一定的人脈與信任基礎——能帶你進去，本身就是一種保障。",
+
+  gloEyebrow:"Glossary", gloTitle:"名詞解釋",
+  gloNote:"帳單上會看到的字，先在這裡看懂，現場就不會被牽著走。",
+  faqEyebrow:"FAQ", faqTitle:"你會想問的",
+
+  bkEyebrow:"Reservation", bkTitle:"郵件預約",
+  bkNote:"不方便用 LINE 的話，填這張單就好。按下寄出會開啟你的郵件軟體，內容已經幫你打好，確認後按寄出即可。收到後我會儘快回覆確認。",
+  bkFormTitle:"預約單",
+  bkName:"稱謂", bkNamePh:"怎麼稱呼你，例：王先生",
+  bkEmail:"電子郵件",
+  bkContact:"電話或 LINE ID（選填）", bkContactPh:"方便的話留一個，回覆比較快",
+  bkDate:"到訪日期",
+  bkTime:"到訪時間",
+  bkGuests:"男性賓客人數",
+  bkGirls:"小姐人數",
+  bkType:"店型偏好",
+  bkTypeAsk:"請你建議",
+  bkBudget:"預算上限（選填）", bkBudgetPh:"例：30,000",
+  bkRemark:"備註（選填）", bkRemarkPh:"場合、慶祝生日、指定包廂、忌口、其他需求⋯⋯",
+  bkAttach:"一併附上上方的費用試算",
+  bkSend:"開啟郵件寄出", bkCopy:"複製內容",
+  bkMailTo:"收件信箱",
+  bkSubject:"預約詢問",
+  bkGreet:"懷特你好，我想預約：",
+  bkEstHead:"費用試算",
+  bkSign:"（本信由懷特 WHITE 網站預約單自動產生）",
+  sep:"：",
+  bkSent:"已開啟你的郵件軟體，請確認內容後按寄出。若畫面沒有反應，請改按「複製內容」，自行寄到下方信箱。",
+  bkCopied:"已複製。貼進郵件內文，寄到下方信箱即可。",
+  bkCopyFail:"瀏覽器擋下了複製功能，請手動選取欄位內容。",
+  bkTooLong:"內容較長，部分郵件軟體可能會截斷。建議改按「複製內容」再貼上。",
+
+  footH:"把時間留給談事情，<br>剩下的交給懷特。",
+  footP:"先私訊告訴我日期、人數與預算，我把費用算清楚給你看，你確認之後再決定要不要出門。",
+  footBtn:"LINE 私訊懷特", footBtn2:"郵件預約",
+  footMeta1:"懷特 WHITE · 商務娛樂顧問 · 台北在地",
+  disclaim:"本站所有安排均為合法立案之娛樂場所。費用僅供參考，實際以現場確認為準。未滿十八歲不得進入。"
+},
+en:{
+  m1:"DOCUMENT · TAIPEI", m2:"BUSINESS HOSPITALITY",
+  heroEyebrow:"Business Hospitality · Taipei",
+  heroRole:"Business Hospitality Consultant",
+  types:[
+    "Let me handle the room.\nYou handle the deal.",
+    "Oak cask and glass slipper,\nattending your evening.",
+    "Professionally run,\nfor business professionals."
+  ],
+  heroSub:"Every cost is agreed before you walk in and checked line by line before you leave. Room, headcount, spending cap — arranged in one message.",
+  ctaLine:"MESSAGE ON LINE", ctaBook:"BOOK BY EMAIL", ctaQuote:"ESTIMATE COST",
+
+  svcEyebrow:"Services", svcTitle:"What we handle",
+  svcNote:"Built for client entertaining. Booking, quoting, on-site host, bill check — handled by me and my team from start to finish.",
+
+  occEyebrow:"Which Venue", occTitle:"Choosing the room",
+  occNote:"The usual mistake in corporate entertaining isn't overspending — it's the wrong venue for the guest. This is how I decide.",
+  occH1:"Occasion", occH2:"Recommended", occH3:"Per person", occH4:"Why",
+
+  estEyebrow:"Estimate", estTitle:"Cost estimate",
+  estNote:"See the numbers before you commit. Every line below appears on your bill. Nothing else does.",
+  slipTitle:"COST ESTIMATE",
+  fHours:"Hours", fGuests:"Guests (male)", fGirls:"Hostesses", fPay:"Payment",
+  payCash:"Cash", payCard:"Card +10%",
+  liHour:"Hostess time", liHead:"Cover charge", liRoom:"Room charge", liTip:"Staff gratuity", liTable:"Table & water", liFee:"Card surcharge",
+  roomOver:" and up", exTip:"fixed", exTable:"drinks separate", exFee:"10%",
+  unitH:" hr", unitP:" pax",
+  totLabel:"Estimated total · TWD", stamp:"ESTIMATE<br>ONLY",
+  linesShow:"VIEW BREAKDOWN", linesHide:"HIDE BREAKDOWN",
+  slipFoot:"Drinks are billed separately — you pay for what you order, nothing if you don't drink.<br>Final amount is confirmed on site and usually lands within 10% of this figure.",
+  deskNote:"Massage and relaxation venues are arranged separately, roughly $2,800–4,000 depending on the venue. Message me for a quote.<br>If you have a hard ceiling, tell me before we go in. I'll flag it as we approach — you won't find out at the till.",
+
+  flowEyebrow:"How it works", flowTitle:"The process",
+  flowNote:"From first message to final bill, you do two things: name a time, and show up.",
+
+  venEyebrow:"Venues", venTitle:"Partner venues",
+  venNote:"Matched to your occasion and budget. I don't push one house over another.",
+  venTabs:["Gown clubs","Uniform clubs","Advanced clubs","Massage"],
+  venWarn:"Pricing varies by venue. I go through the house rules with you again at the door, so nothing starts until you're clear.<br>Not every agent can get you into an advanced club — it takes standing and trust. Getting you through the door is itself a form of protection.",
+
+  gloEyebrow:"Glossary", gloTitle:"Terms on your bill",
+  gloNote:"Learn the words here and nobody can steer you with them later.",
+  faqEyebrow:"FAQ", faqTitle:"Common questions",
+
+  bkEyebrow:"Reservation", bkTitle:"Book by email",
+  bkNote:"If LINE isn't convenient, this form does the same job. Sending opens your mail app with the message already written — check it and hit send. I'll confirm as soon as it reaches me.",
+  bkFormTitle:"RESERVATION SLIP",
+  bkName:"Name", bkNamePh:"How should I address you",
+  bkEmail:"Email",
+  bkContact:"Phone or LINE ID (optional)", bkContactPh:"Leave one and I can reply faster",
+  bkDate:"Date of visit",
+  bkTime:"Time of visit",
+  bkGuests:"Guests (male)",
+  bkGirls:"Hostesses",
+  bkType:"Venue preference",
+  bkTypeAsk:"Recommend one for me",
+  bkBudget:"Budget ceiling (optional)", bkBudgetPh:"e.g. 30,000",
+  bkRemark:"Notes (optional)", bkRemarkPh:"Occasion, birthday celebration, room request, dietary notes…",
+  bkAttach:"Include the cost estimate above",
+  bkSend:"OPEN MAIL & SEND", bkCopy:"COPY DETAILS",
+  bkMailTo:"Sends to",
+  bkSubject:"Reservation enquiry",
+  bkGreet:"Hello White, I'd like to make a reservation:",
+  bkEstHead:"Cost estimate",
+  bkSign:"(Generated by the WHITE reservation form.)",
+  sep:": ",
+  bkSent:"Your mail app should now be open with the message ready — check it and hit send. If nothing happened, use COPY DETAILS and send it to the address below.",
+  bkCopied:"Copied. Paste it into an email to the address below.",
+  bkCopyFail:"Your browser blocked the clipboard — please select the field contents manually.",
+  bkTooLong:"That's a long message; some mail apps may truncate it. Consider using COPY DETAILS instead.",
+
+  footH:"Spend the evening on the deal.<br>Leave the rest to White.",
+  footP:"Send me the date, headcount and budget. I'll price it out in full and you decide from there.",
+  footBtn:"MESSAGE WHITE ON LINE", footBtn2:"BOOK BY EMAIL",
+  footMeta1:"WHITE · Business Hospitality Consultant · Taipei",
+  disclaim:"All arrangements are made at licensed venues. Prices are indicative; final amounts are confirmed on site. Guests must be 18 or older."
+}};
+
+const SVC = [
+ {zh:["客戶接待","依對象與場合挑店型，避免踩到對方的地雷"], en:["Client entertaining","Venue matched to the guest, so nothing lands wrong"]},
+ {zh:["包廂預約","依人數安排包廂大小與位置，提前三小時較穩"], en:["Room booking","Sized and placed for your party. Three hours' notice is safest"]},
+ {zh:["預算控管","先設上限，接近時我會先跟你說一聲"], en:["Spending cap","Set a ceiling and I'll flag it before you reach it"]},
+ {zh:["現場陪同","全程待命，換人、加時、結帳都由我與團隊處理"], en:["On-site host","My team and I stay through the night and handle every request"]},
+ {zh:["續攤銜接","餐敘結束直接接手，不用在路邊喬地方"], en:["After dinner","I take over when dinner ends. No deciding on the pavement"]},
+ {zh:["保密處理","名單、行程、消費紀錄不外流、不聊給第三人"], en:["Discretion","Names, schedules and bills stay with me. Nobody else hears them"]}
+];
+
+const OCC = [
+ {zh:["重要客戶初次招待","禮服店","$6,000–8,000","場面體面但不過度，對方不會有壓力，也不會覺得你隨便。"],
+  en:["First time with a key client","Gown club","$6,000–8,000","Polished without overreaching. No pressure on the guest, no sense you cut corners."]},
+ {zh:["簽約後慶功","店家店","$9,000–12,000","氣氛與服務都拉到最高，讓對方感受到你把這筆案子當回事。"],
+  en:["Closing celebration","Advanced club","$9,000–12,000","The best rooms and service in the city. It reads as: this deal mattered to us."]},
+ {zh:["國外客戶來訪","店家店 · 禮服店","$8,000–12,000","環境與應對品質穩定，需要語言配合可事先講。"],
+  en:["Visiting overseas client","Advanced / Gown club","$8,000–12,000","Consistent standard of room and service. Tell me in advance if you need language support."]},
+ {zh:["部門聚餐續攤","制服店","$4,000–5,500","氣氛輕鬆、費用好抓，人多也不會失控。"],
+  en:["Team night out","Uniform club","$4,000–5,500","Relaxed, easy to budget, and it holds up with a big group."]},
+ {zh:["老闆帶隊","禮服店","$6,000–9,000","最不容易出錯的選項，服務與素質都在水準之上。"],
+  en:["When the boss is hosting","Gown club","$6,000–9,000","The safest choice on the list. Service and standard are reliably above the line."]},
+ {zh:["自己放鬆 · 小酌","制服店","$4,000–6,000","一兩個人也可以，不用湊人數，時間短一點就好。"],
+  en:["A quiet drink alone","Uniform club","$4,000–6,000","One or two people is fine. No minimum party, and a short session works."]}
+];
+
+const FLOW = [
+ {zh:["私訊告知","日期、人數、預算、場合性質。四個資訊就夠我開始安排。"],
+  en:["Message me","Date, headcount, budget, and the nature of the occasion. Four things and I can start."]},
+ {zh:["確認費用","我把明細列給你看，每一項多少錢寫清楚，你確認後才往下走。"],
+  en:["Agree the cost","I send a full breakdown. Nothing moves until you've confirmed the figure."]},
+ {zh:["代為訂位","建議提前三小時以上。臨時也可以，只是包廂選擇會少一點。"],
+  en:["I book the room","Three hours' notice is ideal. Last minute works too, with fewer rooms to choose from."]},
+ {zh:["現場接應","我在門口等你，直接帶進包廂，不用開口跟任何人交涉。"],
+  en:["Met at the door","I'm waiting outside and take you straight in. You negotiate with nobody."]},
+ {zh:["全程處理","加時、換人、送客、叫車，過程中有任何狀況找我就好。"],
+  en:["Through the night","Extending, swapping, seeing guests off, calling cars — bring it to me."]},
+ {zh:["核對結帳","帳單逐項對過再結。有出入我當場處理，不會讓你回去才發現。"],
+  en:["Bill checked, then paid","I go through it line by line. Anything off gets settled there, not discovered later."]}
+];
+
+const GLO = [
+ {zh:["時費","小姐陪你的費用，以小時計算。<b>禮服店 $2,000/H、制服店 $1,800/H、店家店 $2,700/H</b>。時費乘上小姐人數就是基本時費，入場後開始跑。"],
+  en:["Hostess time","Charged per hostess per hour. <b>Gown $2,000／Uniform $1,800／Advanced $2,700</b>. Multiply by the number of hostesses; the clock starts when you sit down."]},
+ {zh:["優質公關","店內資歷與評價較好的小姐，應對、酒量與氣氛掌控都更穩，適合重要客戶或需要撐場面的局。選擇優質公關時，<b>每位加收 $1,000</b>，一次性計算，不隨時數累加。<ul><li>與點台費是兩回事：點台指定的是「某一位」，優質公關指定的是「等級」</li><li>上方的費用試算尚未含這一項，需要的話我另外報給你</li><li>想安排的話進場前先跟我說，我會請店家先留人</li></ul>"],
+  en:["Premium hostess","A hostess with stronger standing and experience — steadier conversation, better with drink, reliable at holding the mood. Worth it for important clients. Choosing one adds <b>$1,000 per hostess</b>, charged once, not per hour.<ul><li>Different from requesting by name: that names a person, this names a tier</li><li>The estimator above doesn't cover it — ask and I'll quote it separately</li><li>Tell me before we go in and I'll have the house hold someone</li></ul>"]},
+ {zh:["點台","指定某位特定小姐，或她正在別的包廂服務，需要 <b>$1,000</b> 把她請過來。只要有框（小框或框到底），就會產生點台費。<ul><li>不指定、由現場推薦的話，不需要點台費</li></ul>"],
+  en:["Requesting by name","Asking for a specific hostess, or pulling her from another room, costs <b>$1,000</b>. Any booking-out arrangement triggers this fee.<ul><li>No fee if you let the house recommend</li></ul>"]},
+ {zh:["訪台","小姐目前在別桌上台，過來你這桌坐約五分鐘後要回去。想留下至少需要小框。訪台的通常素質較高，本身已是點台或小框狀態。<br>費用：禮服店・制服店 <b>$1,000</b>／店家店 <b>$1,000–1,350</b>"],
+  en:["Short visit","A hostess working another room comes by for about five minutes, then returns. To keep her you need to book her out. Visitors are usually in high demand already.<br>Cost: Gown & Uniform <b>$1,000</b>／Advanced <b>$1,000–1,350</b>"]},
+ {zh:["小框","買四個小時，但小姐只陪三個小時。想點正在別桌服務的小姐時可以用小框把人請過來，但前一桌同樣有優先小框的權利。<ul><li>各店制度不同，以當店規定為準</li></ul>"],
+  en:["Short book-out","You pay for four hours; she sits with you for three. This is how you pull a hostess from another room — but that room holds the first right to keep her.<ul><li>Rules differ by venue</li></ul>"]},
+ {zh:["框到底","比小框更大的框法，從入場直接框到打烊。買的時數同樣多於陪的時數，但因為時間長，找到指定那位的機率高很多。<ul><li>12 點前入場：買到 7 點、陪到 6 點</li><li>12 點後入場：買到 8 點、陪到 7 點</li></ul>"],
+  en:["Full book-out","She's yours from arrival until closing. Same principle as a short book-out over a longer window, which makes securing a specific hostess far more likely.<ul><li>In before midnight: paid to 7am, seated to 6am</li><li>In after midnight: paid to 8am, seated to 7am</li></ul>"]},
+ {zh:["包廂費","使用包廂的費用，依店型與男性賓客人數分級。<br><b>禮服店・制服店</b>　1–2 位 $2,500、3–5 位 $3,000、6–8 位 $3,500、9–10 位 $4,000<br><b>店家店</b>　1–2 位 $3,000、3–5 位 $5,000、6–8 位 $8,000、9–10 位 $10,000<br>超過 10 位或特殊包廂，進場前由現場確認。"],
+  en:["Room charge","For the private room itself, tiered by venue type and the number of male guests.<br><b>Gown &amp; uniform clubs</b>　1–2 pax $2,500 · 3–5 $3,000 · 6–8 $3,500 · 9–10 $4,000<br><b>Advanced clubs</b>　1–2 pax $3,000 · 3–5 $5,000 · 6–8 $8,000 · 9–10 $10,000<br>Larger parties and special rooms are confirmed at the door."]},
+ {zh:["人頭費","每位入場男性賓客都要收。<b>禮服店 $300/人、制服店 $200/人、店家店 $300–1,200/人</b>。小姐不算人頭費，只算時費。"],
+  en:["Cover charge","Per male guest entering. <b>Gown $300／Uniform $200／Advanced $300–1,200</b>. Hostesses aren't counted here — only their hourly rate applies."]},
+ {zh:["少爺小費","給服務少爺的小費，固定 <b>$1,000</b>，屬於一定要給的費用，請先準備好。"],
+  en:["Staff gratuity","A fixed <b>$1,000</b> for the floor staff. Not optional — budget for it."]},
+ {zh:["桌面・水費","桌上擺設與飲用水，約 <b>$500</b>。酒費另計，喝多少算多少，不喝就不用付。"],
+  en:["Table & water","Table setting and drinking water, about <b>$500</b>. Alcohol is separate — pay only for what you order."]}
+];
+
+const FAQ = [
+ {zh:["帶客戶去，會不會讓對方覺得尷尬？","場合挑對就不會。我會先問你對方是什麼身分、你們熟到哪個程度，再決定店型跟包廂。全程有我與團隊在現場，不需要你開口處理任何細節。"],
+  en:["Will this make my client uncomfortable?","Not if the venue fits. I'll ask who they are and how well you know them before choosing the club and the room. My team and I are on site the whole time, so you never have to handle a detail out loud."]},
+ {zh:["台北的酒店可以自己走進去嗎？","不行，需要幹部帶才進得去。找我的差別在於費用進場前講清楚、店家我熟，同樣的錢會換到比較好的體驗。"],
+  en:["Can I just walk into a Taipei club?","No. These venues require an agent to bring you in. What I add is a price agreed before the door and relationships inside — the same money buys a better night."]},
+ {zh:["禮服店、制服店、店家店差在哪？","<b>店家店</b>　台北最頂端的消費類型，小姐素質最高、服務最細，客群以高端商務為主，體驗接近私人會所。<br><br><b>禮服店</b>　小姐著禮服，素質中上、氣氛優雅，適合商務接待或好友聚會，是最多人選的類型。<br><br><b>制服店</b>　氣氛活潑、費用最親民，適合輕鬆的朋友局或部門續攤。"],
+  en:["What's the difference between the three types?","<b>Advanced club (店家店)</b>　The top tier in Taipei. Highest standard of hostess and service, largely senior business clientele. Closest thing to a private members' club.<br><br><b>Gown club (禮服店)</b>　Hostesses in evening dress, elegant rooms, strong standard throughout. The default choice for client entertaining.<br><br><b>Uniform club (制服店)</b>　Livelier and the most affordable. Best for a relaxed night with colleagues or friends."]},
+ {zh:["可以不喝酒嗎？","可以。不喝就不用付酒費，點水或飲料都沒問題，沒有任何強制消費。要不要喝、喝多少你自己決定。"],
+  en:["Can I not drink?","Yes. No alcohol, no alcohol charge. Water or soft drinks are fine and nothing is compulsory. What and how much you drink is entirely yours to decide."]},
+ {zh:["預算怎麼控？會不會超出很多？","進場前告訴我上限，我會照那個數字安排時數與人數，接近時先提醒你，要不要加你自己決定。上面的試算器可以先抓個大概。"],
+  en:["How do I keep it from running over?","Give me a ceiling before we go in and I'll size the hours and party to it, then warn you as we approach. Whether to go further is your call. The estimator above gets you close."]},
+ {zh:["可以刷卡嗎？","部分店家可以，需另加 <b>10%</b> 手續費。建議帶現金比較划算。試算器可切換刷卡模式，先把數字估好再出門。"],
+  en:["Do they take cards?","Some venues do, with a <b>10%</b> surcharge. Cash is cheaper. Switch the estimator to card mode to see the difference before you leave."]},
+ {zh:["資料會外流嗎？","不會。你的名字、公司、行程、消費紀錄只留在我與團隊手上，對外不會轉述給任何人，包括店家以外的第三方。這是這份工作的底線。"],
+  en:["Is any of this shared?","No. Your name, company, schedule and spending stay with me and my team and go no further — including any third party outside the venue. That's the floor of this job, not a feature of it."]},
+ {zh:["當天臨時說來得及嗎？","來得及。提前幾個小時讓我確認包廂就好。餐敘結束才決定續攤也可以，直接私訊我。"],
+  en:["Can I arrange it same day?","Yes. A few hours is enough for me to secure a room. Deciding after dinner works too — just message me."]},
+ {zh:["第一次去完全不懂流程怎麼辦？","告訴我幾個人、大概預算、什麼場合，剩下交給我與團隊。你只需要準時出現，其餘的我會在現場帶著你走。"],
+  en:["It's my first time and I don't know the etiquette.","Tell me the headcount, rough budget and occasion. My team and I take the rest. Show up on time and I'll walk you through it on the night."]}
+];
+/* ══════════════════════════════════════════════════════════ */
+
+let lang = new URLSearchParams(location.search).get("lang") === "en" ? "en" : "zh";
+const st = { type:"dress", hours:2, guests:2, girls:2, pay:"cash" };
+const LIM = { hours:[1,10], guests:[1,20], girls:[1,20] };
+const nt = n => "$" + n.toLocaleString("en-US");
+const L = () => T[lang];
+
+/* ── 估價單 ── */
+let lastEst = null;                      /* 最近一次試算結果，供預約單附帶 */
+
+/* 依店型與男性賓客人數取包廂費級距；超過最後一級就沿用最後一級 */
+function roomTier(n, type){
+  const fees = ROOM_FEES[type] || ROOM_FEES.default;
+  for(let i = 0; i < ROOM_BRACKETS.length; i++){
+    if(n <= ROOM_BRACKETS[i]){
+      return {
+        fee: fees[i],
+        lo : i === 0 ? 1 : ROOM_BRACKETS[i-1] + 1,
+        hi : ROOM_BRACKETS[i],
+        over: false
+      };
+    }
+  }
+  const last = ROOM_BRACKETS.length - 1;
+  return { fee:fees[last], lo:ROOM_BRACKETS[last], hi:null, over:true };
+}
+
+function calc(){
+  const r = RATE[st.type], t = L();
+  const rt = roomTier(st.guests, st.type);
+  const roomNote = rt.over
+    ? `${rt.lo}${t.unitP}${t.roomOver}`
+    : `${rt.lo}–${rt.hi}${t.unitP}`;
+  const items = [
+    [t.liHour, `${nt(r.hour)} × ${st.girls} × ${st.hours}${t.unitH}`, r.hour*st.girls*st.hours],
+    [t.liHead, `${nt(r.head)} × ${st.guests}`, r.head*st.guests],
+    [t.liRoom, roomNote,  rt.fee],
+    [t.liTip,  t.exTip,   r.tip],
+    [t.liTable,t.exTable, r.table]
+  ];
+  let sum = items.reduce((a,b)=>a+b[2],0);
+  let html = items.map(i=>`<div class="ln"><span class="n">${i[0]}<em>${i[1]}</em></span><span class="d"></span><span class="v">${nt(i[2])}</span></div>`).join("");
+  if(st.pay==="card"){
+    const fee = Math.round(sum*CARD_FEE);
+    html += `<div class="ln"><span class="n">${t.liFee}<em>${t.exFee}</em></span><span class="d"></span><span class="v">${nt(fee)}</span></div>`;
+    items.push([t.liFee, t.exFee, fee]);
+    sum += fee;
+  }
+  document.getElementById("lines").innerHTML = html;
+  document.getElementById("total").textContent = nt(sum);
+  document.getElementById("oHours").textContent  = st.hours  + t.unitH;
+  document.getElementById("oGuests").textContent = st.guests + t.unitP;
+  document.getElementById("oGirls").textContent  = st.girls  + t.unitP;
+
+  lastEst = { venue:r[lang], items, sum };
+  syncBooking();
+}
+
+/* ── 細項收合：預設只露出總計，按「查看細項」才展開 ── */
+let linesOpen = false;
+const linesEl  = document.getElementById("lines");
+const linesBtn = document.getElementById("linesToggle");
+function renderLinesToggle(){
+  if(!linesBtn) return;
+  linesBtn.textContent = linesOpen ? L().linesHide : L().linesShow;
+  linesBtn.setAttribute("aria-expanded", String(linesOpen));
+  linesEl.hidden = !linesOpen;
+}
+if(linesBtn) linesBtn.addEventListener("click",()=>{
+  linesOpen = !linesOpen;
+  renderLinesToggle();
+});
+
+/* ── 打字動畫（三句輪播：打字 → 停頓 → 逐字刪除 → 下一句） ── */
+const TYPE_IN = 62, TYPE_DEL = 26, TYPE_HOLD = 2400, TYPE_GAP = 420;
+let typeTimer, typeIdx = 0;
+
+/* 量出三句中最高的一句，把 .typed 高度鎖住，換句時不會推擠下方按鈕 */
+function lockTypedHeight(){
+  const el = document.getElementById("typed"), keep = el.innerHTML;
+  el.style.minHeight = "0px";
+  let max = 0;
+  L().types.forEach(str=>{
+    el.innerHTML = str.replace(/\n/g,"<br>") + '<span class="cur">▌</span>';
+    max = Math.max(max, el.offsetHeight);
+  });
+  el.innerHTML = keep;
+  el.style.minHeight = max + "px";
+}
+function typeHero(){
+  const el = document.getElementById("typed"), lines = L().types;
+  const draw = str => { el.innerHTML = str.replace(/\n/g,"<br>") + '<span class="cur">▌</span>'; };
+  clearTimeout(typeTimer);
+  typeIdx = 0;
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){ draw(lines[0]); return; }
+
+  (function cycle(){
+    const full = lines[typeIdx];
+    let i = 0;
+    (function typeIn(){
+      draw(full.slice(0, i));
+      if(i++ < full.length)     typeTimer = setTimeout(typeIn, TYPE_IN);
+      else if(lines.length > 1) typeTimer = setTimeout(erase, TYPE_HOLD);
+    })();
+    function erase(){
+      let j = full.length;
+      (function step(){
+        draw(full.slice(0, j));
+        if(j-- > 0) typeTimer = setTimeout(step, TYPE_DEL);
+        else { typeIdx = (typeIdx + 1) % lines.length; typeTimer = setTimeout(cycle, TYPE_GAP); }
+      })();
+    }
+  })();
+}
+
+/* ── 固定信頭：實測高度寫回 --mast-h，供 .screen 與錨點預留空間 ── */
+const mastEl = document.getElementById("mast");
+function lockMastHeight(){
+  if(mastEl) document.documentElement.style.setProperty("--mast-h", mastEl.offsetHeight + "px");
+  syncHeroTheme();
+}
+/* 首屏是暗場，信頭壓在上面時要跟著轉暗；
+   等首屏整個捲過信頭下緣，才切回紙白 */
+const screenEl = document.querySelector(".screen");
+function syncHeroTheme(){
+  if(!screenEl) return;
+  const edge = mastEl ? mastEl.offsetHeight : 0;
+  const stillDark = screenEl.getBoundingClientRect().bottom > edge + 1;
+  document.documentElement.classList.toggle("at-hero", stillDark);
+}
+addEventListener("scroll",()=>{
+  if(mastEl) mastEl.classList.toggle("is-stuck", scrollY > 4);
+  syncHeroTheme();
+},{passive:true});
+
+/* ══ 郵件預約單 ═══════════════════════════════════════════
+   靜態站沒有後端，純 HTML 表單本身寄不了信。這裡改用 mailto：
+   把內容組好交給使用者自己的郵件軟體寄出，零後端、零第三方。
+   沒設定郵件軟體的人（常見於桌機）則用「複製內容」備援。
+   ═══════════════════════════════════════════════════════ */
+const bkEl  = id => document.getElementById(id);
+const bkVal = id => (bkEl(id) ? bkEl(id).value.trim() : "");
+/* 郵件內文不需要標籤後面的「（選填）」 */
+const bkLabel = s => String(s).replace(/\s*[（(][^）)]*[)）]\s*$/, "");
+
+/* 人數與店型雙向綁定 st：預約單改了，附帶的試算也跟著改，
+   避免信裡出現「表單寫 4 位店家店、試算卻是 2 位禮服店」這種互相打架的內容 */
+[["bkGuests","guests"],["bkGirls","girls"]].forEach(([id,key])=>{
+  const el = bkEl(id);
+  if(!el) return;
+  el.addEventListener("change",()=>{
+    const [lo,hi] = LIM[key];
+    let v = parseInt(el.value,10);
+    if(!isFinite(v)) v = st[key];
+    v = Math.min(hi, Math.max(lo, v));
+    el.value = v; st[key] = v; calc();
+  });
+});
+if(bkEl("bkType")) bkEl("bkType").addEventListener("change",()=>{
+  const v = bkEl("bkType").value;
+  if(!RATE[v]) return;                       /* 「請你建議」不動試算 */
+  st.type = v;
+  document.querySelectorAll("#tabs button")
+    .forEach(b=>b.setAttribute("aria-selected", String(b.dataset.k === v)));
+  calc();
+});
+
+function syncBooking(){
+  const t = L();
+  if(!bkEl("bookForm") || !lastEst) return;
+
+  /* 正在輸入的欄位不動，避免打字打到一半被覆寫 */
+  const put = (el,v)=>{ if(el && el !== document.activeElement && el.value != v) el.value = v; };
+  put(bkEl("bkGuests"), st.guests);
+  put(bkEl("bkGirls"),  st.girls);
+  const ty = bkEl("bkType");
+  if(ty && ty.value !== st.type) ty.value = st.type;
+
+  const note = bkEl("bkEstNote");
+  if(note) note.textContent =
+    `${lastEst.venue} · ${st.hours}${t.unitH} · ${t.fGuests} ${st.guests} · ` +
+    `${t.fGirls} ${st.girls} · ${st.pay === "cash" ? t.payCash : t.payCard} · ${nt(lastEst.sum)}`;
+}
+
+function bookingSubject(){
+  const t = L();
+  const when = [bkVal("bkDate"), bkVal("bkTime")].filter(Boolean).join(" ");
+  const pax  = bkVal("bkGuests") ? bkVal("bkGuests") + t.unitP : "";
+  return [t.bkSubject, when, bkVal("bkName"), pax].filter(Boolean).join(" · ");
+}
+
+function bookingBody(){
+  const t = L(), s = t.sep, ty = bkEl("bkType");
+  const rows = [
+    [t.bkName,    bkVal("bkName")],
+    [t.bkEmail,   bkVal("bkEmail")],
+    [t.bkContact, bkVal("bkContact")],
+    [t.bkDate,    bkVal("bkDate")],
+    [t.bkTime,    bkVal("bkTime")],
+    [t.bkGuests,  bkVal("bkGuests")],
+    [t.bkGirls,   bkVal("bkGirls")],
+    [t.bkType,    ty ? ty.options[ty.selectedIndex].textContent : ""],
+    [t.bkBudget,  bkVal("bkBudget")],
+    [t.bkRemark,  bkVal("bkRemark")]
+  ];
+  let body = t.bkGreet + "\n\n" +
+    rows.filter(r => r[1]).map(r => bkLabel(r[0]) + s + r[1]).join("\n");
+
+  if(bkEl("bkAttach") && bkEl("bkAttach").checked && lastEst){
+    body += "\n\n── " + t.bkEstHead + " ──\n"
+          + lastEst.venue + " / " + st.hours + t.unitH + " / "
+          + (st.pay === "cash" ? t.payCash : t.payCard) + "\n"
+          + lastEst.items.map(i => `${i[0]} (${i[1]})${s}${nt(i[2])}`).join("\n") + "\n"
+          + t.totLabel + s + nt(lastEst.sum);
+  }
+  return body + "\n\n" + t.bkSign;
+}
+
+function bkSay(text, ok){
+  const el = bkEl("bkMsg");
+  if(!el) return;
+  el.textContent = text;
+  el.classList.toggle("is-ok", !!ok);
+}
+
+const bookForm = bkEl("bookForm");
+if(bookForm){
+  /* 送出：交給瀏覽器做必填驗證，通過後才組 mailto */
+  bookForm.addEventListener("submit", e=>{
+    e.preventDefault();
+    const url = "mailto:" + MAIL_TO
+      + "?subject=" + encodeURIComponent(bookingSubject())
+      + "&body="    + encodeURIComponent(bookingBody());
+    bkSay(url.length > 1900 ? L().bkTooLong : L().bkSent, true);
+    location.href = url;
+  });
+
+  /* 備援：複製整封內容，讓使用者自己貼到任何信箱 */
+  bkEl("bkCopy").addEventListener("click", async ()=>{
+    const t = L();
+    const text = t.bkMailTo + t.sep + MAIL_TO + "\n"
+               + t.bkSubject + t.sep + bookingSubject() + "\n\n"
+               + bookingBody();
+    let ok = false;
+    try{
+      if(navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(text);
+        ok = true;
+      }
+    }catch(err){ ok = false; }
+    if(!ok){                                  /* file:// 或舊瀏覽器 */
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;top:-1000px;opacity:0";
+      document.body.appendChild(ta);
+      ta.select();
+      try{ ok = document.execCommand("copy"); }catch(err){ ok = false; }
+      ta.remove();
+    }
+    bkSay(ok ? t.bkCopied : t.bkCopyFail, ok);
+  });
+
+  /* 不能挑到過去的日期，預設帶今天 */
+  const dIn = bkEl("bkDate"), now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  dIn.min = now.toISOString().slice(0,10);
+  if(!dIn.value) dIn.value = dIn.min;
+}
+
+/* ── 整頁渲染 ── */
+function paint(){
+  const t = L();
+  document.documentElement.lang = lang === "en" ? "en" : "zh-Hant";
+  document.querySelectorAll("[data-t]").forEach(el=>{ if(t[el.dataset.t]) el.innerHTML = t[el.dataset.t]; });
+
+  document.getElementById("svcGrid").innerHTML = SVC.map((s,i)=>{
+    const [a,b] = s[lang];
+    return `<div><i>${String(i+1).padStart(2,"0")}</i><b>${a}</b><span>${b}</span></div>`;
+  }).join("");
+
+  document.getElementById("occBody").innerHTML = OCC.map(o=>{
+    const [a,b,c,d] = o[lang];
+    return `<tr><td class="c1">${a}</td><td class="c2">${b}</td><td class="c3">${c}</td><td class="c4">${d}</td></tr>`;
+  }).join("");
+
+  document.getElementById("flowList").innerHTML = FLOW.map((f,i)=>{
+    const [a,b] = f[lang];
+    return `<div><i>${String(i+1).padStart(2,"0")}</i><div><b>${a}</b><p>${b}</p></div></div>`;
+  }).join("");
+
+  const acc = arr => arr.map(x=>{
+    const [q,a] = x[lang];
+    return `<details><summary>${q}</summary><div class="bd">${a}</div></details>`;
+  }).join("");
+  document.getElementById("gloList").innerHTML = acc(GLO);
+  document.getElementById("faqList").innerHTML = acc(FAQ);
+
+  document.querySelectorAll("#tabs button").forEach(b=>{ b.textContent = RATE[b.dataset.k][lang]; });
+  document.querySelectorAll("#vTabs button").forEach(b=>{ b.textContent = t.venTabs[+b.dataset.v]; });
+
+  /* 預約單：placeholder、店型選項、收件信箱 */
+  document.querySelectorAll("[data-ph]").forEach(el=>{ if(t[el.dataset.ph]) el.placeholder = t[el.dataset.ph]; });
+  document.querySelectorAll("#bkType option[data-k]").forEach(o=>{ o.textContent = RATE[o.dataset.k][lang]; });
+  document.getElementById("bkAddr").textContent = MAIL_TO;
+
+  document.getElementById("footLine").textContent = "LINE：" + LINE_ID;
+  const d = new Date();
+  const serial = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
+  document.getElementById("slipNo").textContent = `NO. ${serial}`;
+  document.getElementById("bkNo").textContent   = `FORM ${serial}`;
+
+  calc(); renderLinesToggle(); lockTypedHeight(); lockMastHeight(); typeHero();
+}
+
+/* ── 事件 ── */
+document.querySelectorAll(".lang button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    lang = b.dataset.l;
+    document.querySelectorAll(".lang button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+    const u = new URL(location); lang==="en" ? u.searchParams.set("lang","en") : u.searchParams.delete("lang");
+    history.replaceState(null,"",u);
+    paint();
+  });
+});
+document.querySelectorAll(".step button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    const k = b.dataset.f, [lo,hi] = LIM[k];
+    st[k] = Math.min(hi, Math.max(lo, st[k] + +b.dataset.d)); calc();
+  });
+});
+document.querySelectorAll("#tabs button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected","false"));
+    b.setAttribute("aria-selected","true"); st.type = b.dataset.k; calc();
+  });
+});
+document.querySelectorAll("#pay button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("#pay button").forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true"); st.pay = b.dataset.p; calc();
+  });
+});
+function venues(i){ document.getElementById("venList").innerHTML = VENUES[i].map(v=>`<li>${v}</li>`).join(""); }
+document.querySelectorAll("#vTabs button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("#vTabs button").forEach(x=>x.setAttribute("aria-selected","false"));
+    b.setAttribute("aria-selected","true"); venues(+b.dataset.v);
+  });
+});
+
+["ctaLine","ctaLine2"].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.href = "https://line.me/ti/p/~" + LINE_ID;
+});
+
+document.querySelector('.lang button[data-l="'+lang+'"]').setAttribute("aria-pressed","true");
+document.querySelector('.lang button[data-l="'+(lang==="zh"?"en":"zh")+'"]').setAttribute("aria-pressed","false");
+paint(); venues(0);
+
+/* 字型載入完成／視窗寬度改變後重新量一次預留高度 */
+function remeasure(){ lockTypedHeight(); lockMastHeight(); }
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
+let rszTimer;
+addEventListener("resize",()=>{ clearTimeout(rszTimer); rszTimer = setTimeout(remeasure,150); });
+</script>
+</body>
+</html>

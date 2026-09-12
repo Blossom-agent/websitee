@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- 首頁：年齡認證入口 + 路徑選擇 -->
+  <url>
+    <loc>https://blossom-agent.com/</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://blossom-agent.com/assets/seal-fanhua.png</image:loc>
+      <image:title>繁花 BLOSSOM AGENT 朱印</image:title>
+    </image:image>
+  </url>
+
+  <!-- 收入規劃 -->
+  <url>
+    <loc>https://blossom-agent.com/main_profit</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://blossom-agent.com/assets/Stamp_Vert.png</image:loc>
+      <image:title>繁花酒店經紀公司 收入規劃</image:title>
+    </image:image>
+  </url>
+
+  <!-- 培育計劃 -->
+  <url>
+    <loc>https://blossom-agent.com/main_cultivate</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 常見問答（長尾關鍵字主力） -->
+  <url>
+    <loc>https://blossom-agent.com/faq</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 理念與培育旅程 -->
+  <url>
+    <loc>https://blossom-agent.com/journey</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 花格測驗 -->
+  <url>
+    <loc>https://blossom-agent.com/quiz</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- 花格類型介紹 -->
+  <url>
+    <loc>https://blossom-agent.com/types</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- 酒精計算機（工具型流量入口） -->
+  <url>
+    <loc>https://blossom-agent.com/alcohol-calculator</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blossom-agent.com/assets/ALC_route.png</image:loc>
+      <image:title>酒精代謝路徑圖</image:title>
+    </image:image>
+  </url>
+
+  <!-- ============ 繁花酒桌・骰子遊戲（長尾玩法關鍵字） ============ -->
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-lobby</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-18la</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-liardice</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-niuniu</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-huapei</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-redblack</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-toothpull</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-789</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-350</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-knock</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://blossom-agent.com/dice_games/game-wugu</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>
